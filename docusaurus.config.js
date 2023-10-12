@@ -33,7 +33,18 @@ const config = {
         defaultLocale: 'en',
         locales: ['en'],
     },
-
+    markdown: {
+        format: 'detect',
+        mermaid: true,
+        preprocessor: ({filePath, fileContent}) => {
+            return fileContent.replaceAll('{{MY_VAR}}', 'MY_VALUE');
+        },
+        mdx1Compat: {
+            comments: true,
+            admonitions: true,
+            headingIds: true,
+        },
+    },
     presets: [
         [
             'classic',
@@ -83,20 +94,25 @@ const config = {
                         position: 'right',
                     },
                     {to: '/blog', label: 'Blog', position: 'left'},
+
                     {
-                        href: 'https://github.com/facebook/docusaurus',
-                        label: 'GitHub',
+                        type: 'dropdown',
+                        label: '备忘录',
                         position: 'right',
+                        items: [
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'memorandum',
+                                label: 'sg',
+                            },
+                            // ... more items
+                        ],
                     },
                     {
                         type: 'dropdown',
                         label: 'Community',
                         position: 'left',
                         items: [
-                            {
-                                label: 'Facebook',
-                                href: 'https://www.facebook.com',
-                            },
                             {
                                 type: 'docSidebar',
                                 label: 'Social',
@@ -105,7 +121,12 @@ const config = {
                             {to: '/blog', label: 'Blog'}
                             // ... more items
                         ],
-                    }
+                    },
+                    {
+                        href: 'https://github.com/facebook/docusaurus',
+                        label: 'GitHub',
+                        position: 'right',
+                    },
                 ],
             },
             footer: {
