@@ -1,6 +1,5 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
@@ -36,9 +35,9 @@ const config = {
     markdown: {
         format: 'detect',
         mermaid: true,
-        preprocessor: ({filePath, fileContent}) => {
-            return fileContent.replaceAll('{{MY_VAR}}', 'MY_VALUE');
-        },
+        // preprocessor: ({filePath, fileContent}) => {
+        //     return fileContent.replaceAll('{{MY_VAR}}', 'MY_VALUE');
+        // },
         mdx1Compat: {
             comments: true,
             admonitions: true,
@@ -69,9 +68,9 @@ const config = {
             // Replace with your project's social card
             image: 'img/docusaurus-social-card.jpg',
             navbar: {
-                title: 'My Site',
+                title: 'Yuikij\'s  blog',
                 logo: {
-                    alt: 'My Site Logo',
+                    alt: 'to be kibou',
                     src: 'img/logo.svg',
                 },
                 items: [
