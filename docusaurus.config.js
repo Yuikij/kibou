@@ -36,9 +36,9 @@ const config = {
     markdown: {
         format: 'detect',
         mermaid: true,
-        // preprocessor: ({filePath, fileContent}) => {
-        //     return fileContent.replaceAll('{{MY_VAR}}', 'MY_VALUE');
-        // },
+        preprocessor: ({filePath, fileContent}) => {
+            return fileContent.replaceAll('{{MY_VAR}}', 'MY_VALUE');
+        },
         mdx1Compat: {
             comments: true,
             admonitions: true,
