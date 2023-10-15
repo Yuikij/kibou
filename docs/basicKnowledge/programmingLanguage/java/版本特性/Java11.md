@@ -2,9 +2,9 @@
 
 ### 增强 Java 启动器
 
- ```shell
-    java HelloWorld.java
-  ```
+```bash
+   java HelloWorld.java
+```
 
 ### Java Flight Recorder（JFR）
 
@@ -12,15 +12,17 @@
 
 * jvm启动后录制
 
-  ```shell
+  ```bash
     -XX:StartFlightRecording=duration=60s,filename=myrecording.jfr
   ```
 * 运行时收集
-  ```shell
+
+  ```bash
   jcmd <pid> JFR.start
   jcmd <pid> JFR.dump filename=recording.jfr
   jcmd <pid> JFR.stop
   ```
+
 ### 时间工具
 
 ### 接口的默认方法

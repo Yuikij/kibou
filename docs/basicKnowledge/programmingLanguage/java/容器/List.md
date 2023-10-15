@@ -34,26 +34,20 @@
 
 * 容器实体
 
-```jsx
-function HelloCodeTitle(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-```
-
   ```java
     /**
      * Pointer to first node.
      * Invariant: (first == null && last == null) ||
      *            (first.prev == null && first.item != null)
      */
-    transient Node\<E> first;
+    transient Node<E> first;
 
     /**
      * Pointer to last node.
      * Invariant: (first == null && last == null) ||
      *            (last.next == null && last.item != null)
      */
-    transient Node\<E> last;
+    transient Node<E> last;
   ```
 
 ### 扩容
