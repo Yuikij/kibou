@@ -1,0 +1,37 @@
+
+>   extends AbstractSequentialList\<E>
+implements [List](../List)\<E>, [Deque](../Queue#deque)\<E>, Cloneable, java.io.Serializable
+
+* 容器实体
+
+```java
+  /**
+   * Pointer to first node.
+   * Invariant: (first == null && last == null) ||
+   *            (first.prev == null && first.item != null)
+   */
+
+  transient Node<E> first;
+
+  /**
+   * Pointer to last node.
+   * Invariant: (first == null && last == null) ||
+   *            (last.next == null && last.item != null)
+   */
+  transient Node<E> last;
+  ```
+
+### 用途
+
+* 队列
+
+```java
+// 1.8
+int newCapacity = oldCapacity + (oldCapacity >> 1);
+  ```
+* 方式
+
+```java
+// 1.8
+elementData = Arrays.copyOf(elementData, newCapacity);
+  ```

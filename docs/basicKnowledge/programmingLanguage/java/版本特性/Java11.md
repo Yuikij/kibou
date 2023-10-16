@@ -22,7 +22,3 @@
   jcmd <pid> JFR.dump filename=recording.jfr
   jcmd <pid> JFR.stop
   ```
-
-### 时间工具
-
-### 接口的默认方法
