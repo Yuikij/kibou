@@ -23,15 +23,23 @@ implements [List](../List)\<E>, [Deque](../Queue#deque)\<E>, Cloneable, java.io.
 
 ### 用途
 
-* 队列
+#### 基于 Deque
+* 队列 (FIFO)
 
 ```java
-// 1.8
-int newCapacity = oldCapacity + (oldCapacity >> 1);
+LinkedList<String> queue = new LinkedList<>();
+queue.offer("A");       // 将元素添加到队列末尾
+queue.offer("B");
+String head = queue.poll();  // 从队列头部移除并返回元素，此处返回"A"
+String peek = queue.peek();  // 查看队列头部元素而不移除它，此处返回"B"
+
   ```
-* 方式
+* 堆栈(LIFO)
 
 ```java
-// 1.8
-elementData = Arrays.copyOf(elementData, newCapacity);
+LinkedList<String> stack = new LinkedList<>();
+stack.push("A");       // 将元素推到堆栈上
+stack.push("B");
+String top = stack.pop();   // 从堆栈顶部移除并返回元素，此处返回"B"
+
   ```

@@ -105,6 +105,12 @@ const config = {
                         position: 'left',
                         label: '分布式系统',
                     },
+                    {
+                        type: 'docSidebar',
+                        sidebarId: 'algorithm',
+                        position: 'left',
+                        label: '算法和数据结构',
+                    },
 
 
 
