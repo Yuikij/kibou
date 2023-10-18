@@ -1,0 +1,14 @@
+{
+  "position": 2.5,
+  "label": "编程语言",
+  "collapsible": true,
+  "collapsed": true,
+  "className": "red",
+  "link": {
+    "type": "generated-index",
+    "title": "编程语言"
+  },
+  "customProps": {
+    "description": "This description can be used in the swizzled DocCard"
+  }
+}

@@ -15,7 +15,7 @@ const config = {
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/kibou/',
-    themes: ["@docusaurus/theme-live-codeblock"],
+    themes: ["@docusaurus/theme-live-codeblock","@docusaurus/theme-mermaid"],
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
@@ -78,7 +78,7 @@ const config = {
                     {
                         type: 'dropdown',
                         label: '基础知识',
-                        to: '/docs/basicKnowledge',
+                        to: '/docs/category/基础知识',
                         position: 'left',
                         items: [
                             {

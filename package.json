@@ -17,6 +17,7 @@
     "@docusaurus/core": "0.0.0-5709",
     "@docusaurus/preset-classic": "0.0.0-5709",
     "@docusaurus/theme-live-codeblock": "0.0.0-5709",
+    "@docusaurus/theme-mermaid": "0.0.0-5709",
     "@mdx-js/react": "^2.3.0",
     "clsx": "^1.2.1",
     "prism-react-renderer": "^2.1.0",
