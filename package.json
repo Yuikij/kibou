@@ -14,11 +14,13 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@docusaurus/core": "0.0.0-5709",
     "@docusaurus/preset-classic": "0.0.0-5709",
     "@docusaurus/theme-live-codeblock": "0.0.0-5709",
     "@docusaurus/theme-mermaid": "0.0.0-5709",
     "@mdx-js/react": "^2.3.0",
+    "antd": "^5.10.1",
     "clsx": "^1.2.1",
     "prism-react-renderer": "^2.1.0",
     "react": "^18.0.0",

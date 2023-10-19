@@ -113,9 +113,14 @@ const config = {
                     },
 
 
-
+                    {
+                        type: 'docSidebar',
+                        sidebarId: 'naturalLanguage',
+                        position: 'right',
+                        label: '语言学习',
+                    },
                     // right
-                    {to: '/blog', label: 'Blog', position: 'right'},
+                    {to: '/blog', label: '日记', position: 'right'},
                     {
                         type: 'dropdown',
                         label: '备忘录',
@@ -124,7 +129,7 @@ const config = {
                             {
                                 type: 'docSidebar',
                                 sidebarId: 'memorandum',
-                                label: 'sg',
+                                label: 'SuperGame',
                             },
                             // ... more items
                         ],
@@ -134,7 +139,12 @@ const config = {
                         position: 'right',
                     },
                     {
-                        href: 'https://github.com/facebook/docusaurus',
+                        href: 'https://books.yuisama.top',
+                        label: '图书馆',
+                        position: 'right',
+                    },
+                    {
+                        href: 'https://github.com/Yuikij',
                         label: 'GitHub',
                         position: 'right',
                     },
