@@ -112,7 +112,12 @@ const config = {
                         label: '算法和数据结构',
                     },
 
-
+                    {
+                        type: 'docSidebar',
+                        sidebarId: 'prepareExam',
+                        position: 'right',
+                        label: '备考',
+                    },
                     {
                         type: 'docSidebar',
                         sidebarId: 'naturalLanguage',

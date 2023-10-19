@@ -3,6 +3,7 @@ import { Card, Tag } from 'antd';
 import { spring, Motion } from 'react-motion';
 import { DoublyLinkedList } from './DataModel/LinkedList';
 import DoubleArrow from "./VisualModel/DoubleArrow";
+import NodeViewer from "./VisualModel/NodeViewer";
 
 export default function Linked(props) {
     const [list] = useState(new DoublyLinkedList());
@@ -32,12 +33,7 @@ export default function Linked(props) {
                             {index !== 0 && (
                                 <DoubleArrow direction="both" />
                             )}
-                            <Card style={{ borderRadius: '50%', width: 50, height: 50, display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid black' }}>
-                                <Tag color="blue">{node}</Tag>
-                            </Card>
-                            {/*{index < nodes.length - 1 && (*/}
-                            {/*    <DoubleArrow direction="right" color="blue" size={30} />*/}
-                            {/*)}*/}
+                            <NodeViewer value={node}/>
                         </div>
                     )}
                 </Motion>

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { spring, Motion } from 'react-motion';
+import React, {useState} from 'react';
+import {spring, Motion} from 'react-motion';
+import NodeViewer from "./VisualModel/NodeViewer";
+import {Card} from "antd";
 
 export default function ArrayComponent(props) {
     const [items, setItems] = useState(props.initialItems || []);
@@ -19,18 +21,37 @@ export default function ArrayComponent(props) {
         add,
         remove,
     }));
+    const gridStyle = {
+        width: "60px",
+        height: "60px",
+        textAlign: 'center',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+    };
+
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <Card bodyStyle={{padding: 0, display: "flex", flexDirection: "row", width: "100%",borderColor:"black"}}>
             {items.map((item, index) => (
-                <Motion key={index} defaultStyle={{ x: 0 }} style={{ x: spring(1) }}>
+                <Motion key={index} defaultStyle={{x: 0}} style={{x: spring(1)}}>
                     {value =>
-                        <div style={{ transform: `scale(${value.x})`, margin: '5px', padding: '10px', border: '1px solid black', borderRadius: '4px' }}>
-                            {item}
-                        </div>
+                        <Card.Grid style={{...gridStyle, transform: `scale(${value.x})`}}>{item}</Card.Grid>
                     }
                 </Motion>
             ))}
-        </div>
-    );
+        </Card>
+    )
+
+    // return (
+    //     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+    //         {items.map((item, index) => (
+    //             <Motion key={index} defaultStyle={{ x: 0 }} style={{ x: spring(1) }}>
+    //                 {value =>
+    //                     <NodeViewer value={item} transform={ `scale(${value.x})`}/>
+    //                 }
+    //             </Motion>
+    //         ))}
+    //     </div>
+    // );
 }
