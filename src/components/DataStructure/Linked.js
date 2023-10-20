@@ -25,7 +25,8 @@ export default function Linked(props) {
     }));
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <div className="scroll-box" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',
+            height: "80px",margin:"20px 0",width:"100%" ,overflowX:"inherit",overflowY:"hidden"}}>
             {nodes.map((node, index) => (
                 <Motion key={index} defaultStyle={{ x: 0 }} style={{ x: spring(1) }}>
                     {value => (
