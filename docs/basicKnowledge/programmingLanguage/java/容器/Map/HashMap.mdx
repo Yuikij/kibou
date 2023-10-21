@@ -140,10 +140,11 @@ graph TD
 ```
 </details>
 
+* #### 源码
+
 <details>
     <summary>展开</summary>
 
-* ### 源码
 ```java
     /**
      * @from 1.8
@@ -185,15 +186,20 @@ graph TD
         }
         threshold = newThr;
         @SuppressWarnings({"rawtypes","unchecked"})
+        // 产生新的桶数组
         Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
         table = newTab;
         if (oldTab != null) {
+            //遍历旧桶
             for (int j = 0; j < oldCap; ++j) {
                 Node<K,V> e;
+                //找到每个桶，遍历桶（链表或者树）
                 if ((e = oldTab[j]) != null) {
                     oldTab[j] = null;
+                    //桶里只有一个元素
                     if (e.next == null)
                         newTab[e.hash & (newCap - 1)] = e;
+                    //树的情况
                     else if (e instanceof TreeNode)
                         ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
                     else { // preserve order
@@ -242,7 +248,7 @@ graph TD
 
 
 
-1. #### 和HashTable的异同
+1. ### 和HashTable的异同
 
 
 
@@ -321,8 +327,6 @@ graph TD
 >  `HashMap` 是 Java 2 (Java 1.2) 之后引入的，而 `Hashtable` 在早期版本中已经存在（`@since JDK1.0`）。随着时间的推移，`HashMap` 在大多数应用中已经替代了 `Hashtable`，尤其是当线程安全不是关键要求时。在需要线程安全的场景中，通常更推荐使用 `ConcurrentHashMap`，因为它提供了更高的并发性能。
 
 
-
-
-* #### 1.7和1.8的异同
+* ### 1.7和1.8的异同
 
 
