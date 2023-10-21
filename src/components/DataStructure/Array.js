@@ -3,6 +3,7 @@ import {spring, Motion} from 'react-motion';
 import NodeViewer from "./VisualModel/NodeViewer";
 import {Card} from "antd";
 import {centerStyle} from "../Css";
+import {ThreadSleep} from "../Tools/Thread";
 
 export default function ArrayComponent(props) {
     const [items, setItems] = useState(props.initialItems || []);
@@ -22,15 +23,16 @@ export default function ArrayComponent(props) {
         setItems([...items, item]);
     };
 
-    const addIndex = (item, index) => {
-        console.log(`item`,item)
-        console.log(`index`,index)
+    async function addIndex(item, index) {
+        console.log(`item`, item)
+        console.log(`index`, index)
         const newItems = [...items];
         const itemEle = document.getElementById("arrayItem" + index);
         blinkElement(itemEle);
         newItems[index] = item;
-        console.log(`newItems`,newItems)
+        console.log(`newItems`, newItems)
         setItems([...newItems]);
+        await ThreadSleep(500);
     };
     const remove = (index) => {
         const newItems = [...items];
@@ -69,20 +71,30 @@ export default function ArrayComponent(props) {
 
 
     return (
-        <Card className="scroll-box" style={{
+        <div >
+        <Card title={123} className="scroll-box" style={{
             borderColor: "black", height: "70px",
             ...centerStyle, overflowX: "inherit", overflowY: "hidden", margin: "20px 0"
         }}
               bodyStyle={{padding: 0, display: "flex", flexDirection: "row", width: "100%"}}>
             {items.map((item, index) => (
-                <Motion key={index} defaultStyle={{x: 0}} style={{x: spring(1)}}>
-                    {value =>
-                        <Card.Grid id={"arrayItem" + index}
-                                   style={{...gridStyle, transform: `scale(${value.x})`}}>{item}</Card.Grid>
-                    }
-                </Motion>
+                <div>
+                    {/*<Motion key={index} defaultStyle={{x: 0}} style={{x: spring(1)}}>*/}
+                    {/*    {value =>*/}
+                    {/*        <Card.Grid id={"arrayItem" + index}*/}
+                    {/*                   style={{...gridStyle, transform: `scale(${value.x})`,position:"relative",top:"10px"}}>{item}</Card.Grid>*/}
+                    {/*    }*/}
+                    {/*</Motion>*/}
+                    <Motion key={index} defaultStyle={{x: 0}} style={{x: spring(1)}}>
+                        {value =>
+                            <Card.Grid id={"arrayItem" + index}
+                                       style={{...gridStyle, transform: `scale(${value.x})`}}>{item}</Card.Grid>
+                        }
+                    </Motion>
+                </div>
             ))}
         </Card>
+        </div>
     )
 
     // return (

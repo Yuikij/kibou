@@ -40,10 +40,10 @@ export default function BubbleSort({arr}) {
                     // 交换元素
                     let temp = arr[j];
                     console.log("arr:" + arr);
-                    arrayRef.current.addIndex(arr[j + 1],j)
+                    await arrayRef.current.addIndex(arr[j + 1],j)
 
                     arr[j] = arr[j + 1];
-                    arrayRef.current.addIndex(temp,j + 1)
+                    await arrayRef.current.addIndex(temp,j + 1)
                     arr[j + 1] = temp;
                     console.log( arrayRef.current.getArr())
                     console.log( arr)
