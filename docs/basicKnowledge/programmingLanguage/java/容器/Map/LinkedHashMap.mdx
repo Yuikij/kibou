@@ -1,0 +1,42 @@
+> extends HashMap\<K,V> implements Map\<K,V>
+
+* #### 容器实体
+
+```java
+
+    /**
+     * HashMap.Node subclass for normal LinkedHashMap entries.
+     * 变成了双向链表
+     */
+    static class Entry<K,V> extends HashMap.Node<K,V> {
+        Entry<K,V> before, after;
+        Entry(int hash, K key, V value, Node<K,V> next) {
+            super(hash, key, value, next);
+        }
+    }
+    
+    /**
+     * The head (eldest) of the doubly linked list.
+     */
+    transient LinkedHashMap.Entry<K,V> head;
+
+    /**
+     * The tail (youngest) of the doubly linked list.
+     */
+    transient LinkedHashMap.Entry<K,V> tail;
+    
+```
+
+### 用途
+
+#### LRU（Least Recent Used）
+* 队列 (FIFO)
+
+```java
+LinkedList<String> queue = new LinkedList<>();
+queue.offer("A");       // 将元素添加到队列末尾
+queue.offer("B");
+String head = queue.poll();  // 从队列头部移除并返回元素，此处返回"A"
+String peek = queue.peek();  // 查看队列头部元素而不移除它，此处返回"B"
+
+  ```
