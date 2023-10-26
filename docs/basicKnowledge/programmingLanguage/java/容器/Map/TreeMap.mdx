@@ -1,0 +1,171 @@
+`extends AbstractMap<K,V> implements NavigableMap<K,V>, Cloneable, java.io.Serializable`
+
+> **用红黑树实现的，有序的，性能可靠的（O(log n)）的，kv型的数据结构，可以通过传入比较器Comparator，满足key排序的场景。**
+
+* #### 容器实体
+
+```java
+    private transient Entry<K,V> root;   
+```
+* #### 树节点的定义
+
+<details>
+
+<summary>展开</summary>
+
+```java
+    // Red-black mechanics
+
+    private static final boolean RED   = false;
+    private static final boolean BLACK = true;
+
+    /**
+     * Node in the Tree.  Doubles as a means to pass key-value pairs back to
+     * user (see Map.Entry).
+     */
+
+    static final class Entry<K,V> implements Map.Entry<K,V> {
+        K key;
+        V value;
+        Entry<K,V> left;
+        Entry<K,V> right;
+        Entry<K,V> parent;
+        boolean color = BLACK;
+
+        /**
+         * Make a new cell with given key, value, and parent, and with
+         * {@code null} child links, and BLACK color.
+         */
+        Entry(K key, V value, Entry<K,V> parent) {
+            this.key = key;
+            this.value = value;
+            this.parent = parent;
+        }
+
+        /**
+         * Returns the key.
+         *
+         * @return the key
+         */
+        public K getKey() {
+            return key;
+        }
+
+        /**
+         * Returns the value associated with the key.
+         *
+         * @return the value associated with the key
+         */
+        public V getValue() {
+            return value;
+        }
+
+        /**
+         * Replaces the value currently associated with the key with the given
+         * value.
+         *
+         * @return the value associated with the key before this method was
+         *         called
+         */
+        public V setValue(V value) {
+            V oldValue = this.value;
+            this.value = value;
+            return oldValue;
+        }
+
+        public boolean equals(Object o) {
+            if (!(o instanceof Map.Entry))
+                return false;
+            Map.Entry<?,?> e = (Map.Entry<?,?>)o;
+
+            return valEquals(key,e.getKey()) && valEquals(value,e.getValue());
+        }
+
+        public int hashCode() {
+            int keyHash = (key==null ? 0 : key.hashCode());
+            int valueHash = (value==null ? 0 : value.hashCode());
+            return keyHash ^ valueHash;
+        }
+
+        public String toString() {
+            return key + "=" + value;
+        }
+    }
+    
+    
+```
+
+</details>
+
+
+
+### 用途
+
+* ####  存储有序的key
+
+```java
+TreeMap<Integer, String> map = new TreeMap<>();
+map.put(3, "Three");
+map.put(1, "One");
+map.put(2, "Two");
+System.out.println(map.keySet());  // 输出：[1, 2, 3]
+
+```
+
+* ####  LRU 缓存
+
+```java
+// 用时间戳作为键，每次访问更新时间戳，并在达到容量限制时删除最老的条目。
+TreeMap<Long, String> lruCache = new TreeMap<>();
+```
+* ####  范围查询（可用作统计）
+
+```java
+// 返回键在1（包括）和3（不包括）之间的子映射
+map.subMap(1, 3);  
+```
+* ####  快速查找
+
+```java
+// 找到最小和最大的键
+map.firstKey();  // 返回 1
+map.lastKey();   // 返回 3
+// 找到下一个或上一个键
+map.higherKey(1);  // 返回 2
+map.lowerKey(2);   // 返回 1
+
+```
+
+### 实现的ADT
+
+* #### NavigableMap
+`...extends SortedMap<K,V>`
+
+
+> **SortedMap 的扩展，并为导航操作提供了一系列方法，使得用户可以高效地找到与特定搜索键相关的键/值对**
+
+```java
+    //返回严格小于给定键的键值对，或返回 null。
+    lowerEntry(K key)
+    //返回严格小于给定键的键，或返回 null。
+    lowerKey(K key)
+    //返回小于或等于给定键的键值对，或返回 null。
+    floorEntry(K key)
+    //返回小于或等于给定键的键，或返回 null。    
+    floorKey(K key)
+    ...
+```
+
+* #### SortedMap
+`extends Map<K,V>`
+
+
+> **为键的有序集合提供了范围视图操作**
+
+* 范围视图操作：
+  * subMap(K fromKey, K toKey): 返回此映射的部分视图，其键范围从 fromKey（包含）到 toKey（排除）。
+  * headMap(K toKey): 返回此映射的部分视图，其键小于 toKey。
+  * tailMap(K fromKey): 返回此映射的部分视图，其键大于或等于 fromKey。  
+* 端点操作：
+  * firstKey(): 返回映射中当前的第一个（最小的）键。
+  * lastKey(): 返回映射中当前的最后一个（最大的）键。
