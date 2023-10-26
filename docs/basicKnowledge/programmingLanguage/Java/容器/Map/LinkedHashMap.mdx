@@ -1,0 +1,111 @@
+> extends HashMap\<K,V> implements Map\<K,V>
+
+LinkedHashMap继承了HashMap，通过重写HashMap的插入访问的后置方法，实现了可以按照访问顺序排序的容器
+
+* #### 容器实体
+
+```java
+
+    /**
+     * HashMap.Node subclass for normal LinkedHashMap entries.
+     * 变成了双向链表
+     */
+    static class Entry<K,V> extends HashMap.Node<K,V> {
+        Entry<K,V> before, after;
+        Entry(int hash, K key, V value, Node<K,V> next) {
+            super(hash, key, value, next);
+        }
+    }
+    
+    /**
+     * The head (eldest) of the doubly linked list.
+     */
+    transient LinkedHashMap.Entry<K,V> head;
+
+    /**
+     * The tail (youngest) of the doubly linked list.
+     */
+    transient LinkedHashMap.Entry<K,V> tail;
+    
+```
+
+### 用途
+
+#### LRU（Least Recent Used）
+
+```java
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class LRUCache<K, V> extends LinkedHashMap<K, V> {
+    private final int capacity;
+
+    public LRUCache(int capacity) {
+        // 设置accessOrder为true，这样在get()时也会改变元素顺序，使之成为最近访问的。
+        super(capacity, 0.75f, true);
+        this.capacity = capacity;
+    }
+
+    // 每次添加的后置处理
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        return size() > capacity;
+    }
+
+    public static void main(String[] args) {
+        LRUCache<Integer, String> lru = new LRUCache<>(5);
+
+        lru.put(1, "one");
+        lru.put(2, "two");
+        lru.put(3, "three");
+        lru.put(4, "four");
+        lru.put(5, "five");
+
+        System.out.println(lru.get(2));  // Outputs: "two"
+        
+        lru.put(6, "six"); // This will remove the key "1" from the cache because of the capacity limit.
+
+        System.out.println(lru.get(1));  // Outputs: null
+    }
+}
+
+
+  ```
+
+### LRU的实现
+
+```java
+    //将被访问的节点放到最后
+    void afterNodeAccess(Node<K,V> e) { // move node to last
+        LinkedHashMap.Entry<K,V> last;
+        if (accessOrder && (last = tail) != e) {
+            //找到访问节点的前后节点
+            LinkedHashMap.Entry<K,V> p =
+                (LinkedHashMap.Entry<K,V>)e, b = p.before, a = p.after;
+            p.after = null;
+            
+            //当前节点是头节点，不做处理，设置一下新的头节点
+            if (b == null)
+                head = a;
+            //连接头尾
+            else
+                b.after = a;
+            //判断当前节点是不是尾节点    
+            if (a != null)
+                a.before = b;
+            else
+                last = b;
+                
+            if (last == null)
+                head = p;
+            else {
+                p.before = last;
+                last.after = p;
+            }
+            
+            tail = p;
+            ++modCount;
+        }
+    }
+
+```
