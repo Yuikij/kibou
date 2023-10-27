@@ -1,16 +1,16 @@
 # 线程
-# Go 命令
 
-| 命令 | 参数 | 含义 |
-|---|---|---|
-| go run | -race | 开启竞争检测 |
-| go build | -race | 开启竞争检测 |
-| go test | -race | 开启竞争检测 |
+```mermaid
+stateDiagram-v2
+    [*] --> New: 创建
+    New --> Runnable: start()
+    Runnable --> Blocked: 等待锁
+    Blocked --> Runnable: 获取锁
+    Runnable --> Waiting: wait()
+    Waiting --> Runnable: notify()/notifyAll()
+    Runnable --> TimedWaiting: sleep()/wait(time)/join(time)
+    TimedWaiting --> Runnable: 时间到/notify()/notifyAll()
+    Runnable --> Terminated: 运行完成/出现未处理异常
 
-# 其他工具命令
 
-| 工具 | 命令 | 参数              | 含义 |
-|---|---|-----------------|---|
-| git | clone | -b \<branch>    | 克隆指定分支 |
-| docker | build | -t \<tag>       | 构建镜像并指定标签 |
-| helm | install | -n \<namespace> | 安装应用到指定命名空间 |
+```
