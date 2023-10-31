@@ -59,4 +59,18 @@
     animation: blink 1s linear;
 }
 
+.annotated-word {
+    display: inline-block;
+    margin-right: 5px; /* 调整这个值来控制单词之间的间距 */
+}
+
+.annotation {
+    height: 30px;
+    min-height: 30px;
+    background-color: #fff;
+    padding: 5px;
+    font-size: 12px; /* 字体大小 */
+    color: #888; /* 灰色 */
+}
+
 

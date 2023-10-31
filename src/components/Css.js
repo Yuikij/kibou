@@ -3,3 +3,8 @@ export const centerStyle={
     alignItems: "center",
     justifyContent: "center"
 }
+
+export const columnCenterStyle={
+    ...centerStyle,
+    flexDirection:"column",
+}
