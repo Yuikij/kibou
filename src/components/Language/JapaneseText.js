@@ -15,9 +15,9 @@ function JapaneseText({text, annotations, translations}) {
                 part = word;
             }
             return (<div className={"annotated-word"} key={index}>
-                    {translation === "fix" ? <dev key={index}>
+                    {translation === "fix" ? <div key={index}>
                             {renderAnnotatedText(part, annotations)}
-                        </dev> :
+                        </div> :
                         <div>
                             <div className={"translation-word"} style={{display: "block"}}>
                                 {translation}
@@ -48,9 +48,7 @@ function JapaneseText({text, annotations, translations}) {
                         <ruby>
                             {part}
                             <rt>
-                                {/*<div style={{position:"absolute"}}>*/}
                                 {annotation}
-                                {/*</div>*/}
                             </rt>
                         </ruby>
                     }
