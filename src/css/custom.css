@@ -50,9 +50,16 @@
 }
 
 @keyframes blink {
-    0% { background-color: transparent; }
-    50% { background-color: #656363; } /* 这里选择您希望的颜色 */
-    100% { background-color: transparent; }
+    0% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: #656363;
+    }
+    /* 这里选择您希望的颜色 */
+    100% {
+        background-color: transparent;
+    }
 }
 
 .blinking {
@@ -60,17 +67,35 @@
 }
 
 .annotated-word {
-    display: inline-block;
-    margin-right: 5px; /* 调整这个值来控制单词之间的间距 */
+    display: inline;
+    line-height: 35px;
+
+    /*white-space: pre-line;*/
 }
 
-.annotation {
-    height: 30px;
-    min-height: 30px;
-    background-color: #fff;
-    padding: 5px;
-    font-size: 12px; /* 字体大小 */
-    color: #888; /* 灰色 */
+.annotated-word ruby {
+    line-height: 50px;
+    border-bottom: 1px dotted #000;
+    text-decoration: none;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
+.annotated-word rt {
+    /* 自定义样式，比如字体样式和颜色 */
+    font-size: 80%;
+    color: #666;
+    height: 100px;
+
+}
+
+.translation-word {
+    background: rgba(0, 0, 0, 0.13);
+    border-radius: 6px;
+    opacity: 1;
+    padding: 12px;
+    white-space: pre-line;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
 
