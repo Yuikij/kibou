@@ -27,7 +27,7 @@ function MultipleChoiceQuestion({question, options, correctAnswers, image, expla
     }
 
     return (
-        <Card style={{marginBottom: '30px'}}>
+        <Card style={{marginBottom: '30px',marginTop:"10px"}}>
             {
                 question&&<p style={{fontWeight: 'bold', marginBottom: '20px'}}>{question}</p>
             }

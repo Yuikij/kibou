@@ -1,17 +1,41 @@
+---
+title: A doc with tags
+tags:
+  - 软考
+---
+
 import MultipleChoiceQuestion from '@site/src/components/Quiz/MultipleChoiceQuestion';
+import React from 'react';
+import { Tag } from 'antd';
 
 [//]: # (import proimg from  "@site/static/img/docusaurus.png";)
 
-#### What is the capital of France
+#### 以下关于冯诺依曼计算机的叙述中，不正确的是（）。
+
+<Tag color="orange">计算机体系结构</Tag>
 
 <MultipleChoiceQuestion
-options={["程序计数器", "指令寄存器", "主存地址寄存器", "Rome"]}
-correctAnswers={["Paris"]}
-explanation="Paris is the capital and most populous city of France."
+options={["A.程序指令和数据都采用二进制表示", "B.程序指令总是存储在主存中，而数据则存储在高速缓存中"
+, "C.程序的功能都由中央处理器(CPU)", "D.程序的执行工作由指令进行自动控制"]}
+correctAnswers={["B.程序指令总是存储在主存中，而数据则存储在高速缓存中"]}
+explanation="冯诺依曼结构中，程序指令和数据存在同一个存储器中"
 optionExplanations={[
-"Berlin is the capital of Germany.",
-"Madrid is the capital of Spain.",
-"Paris is the capital of France.",
-"Rome is the capital of Italy."
+"",
+"主存（RAM）基本等同内存，和cpu通过总线传输。高速缓存（Cache），在cpu或者主板",
+"",
+""
 ]}
+/>
+
+#### 以下关于SRAM和DRAM储存器的叙述中正确的是（）
+
+<Tag color="orange">计算机体系结构</Tag>
+
+<MultipleChoiceQuestion
+options={["A.与DRAM相比，SRAM集成率低，功率大、不需要动态刷新"
+, "B.与DRAM相比，SRAM集成率高，功率小、需要动态刷新"
+, "C.与SRAM相比，DRAM集成率高，功率大、不需要动态刷新"
+, "D.与SRAM相比，DRAM集成率低，功率大、需要动态刷新"]}
+correctAnswers={["D.与SRAM相比，DRAM集成率低，功率大、需要动态刷新"]}
+explanation="SRAM（Static ...）：静态存储，因此访问速度更快。DRAM（（Dynamic Random-Access Memory））"
 />
