@@ -1,5 +1,3 @@
-# 线程
-
 ### 线程状态
 
 * 新建（New）
@@ -133,28 +131,101 @@
 
 ```mermaid
 stateDiagram-v2
-    state "New(新建)" as New
-    state "Runnable(就绪)" as Runnable
-    state "Blocked(阻塞)" as Blocked
-    state "Waiting(等待)" as Waiting
-    state "Terminated(销毁)" as Terminated
-    [*] --> New: 创建
-    New --> Runnable: Thread.start()
-    Blocked --> Runnable: 获取锁
-    Runnable --> Waiting: [wait()]
-    Runnable --> TimedWaiting: [sleep()/wait(time)/join(time)]
-    Waiting --> Runnable: [notify()/notifyAll()]
-    TimedWaiting --> Runnable: [时间到或者被唤醒：notify()/notifyAll()]
-%%  Blocked
-    Runnable --> Blocked: [等待锁:synchronized]
-%%  Terminated
-    Runnable --> Terminated: [运行完成/Execption]
-    Waiting --> Terminated: Execption
-    Blocked --> Terminated: Execption
-    TimedWaiting --> Terminated: Execption
-    Terminated --> [*]
+  state "New(新建)" as New
+  state "Runnable(就绪)" as Runnable
+  state "Blocked(阻塞)" as Blocked
+  state "Waiting(等待)" as Waiting
+  state "Terminated(销毁)" as Terminated
+  [*] --> New: 创建
+  New --> Runnable: Thread.start()
+  Blocked --> Runnable: 获取锁
+  Waiting --> Runnable: [notify()/notifyAll()]
+  Runnable --> Waiting: [wait()]
+  Runnable --> TimedWaiting: [sleep()/wait(time)/join(time)]
+  TimedWaiting --> Runnable: [时间到或者被唤醒：notify()/notifyAll()]
+  Runnable --> Blocked: [等待锁：synchronized]
+  Runnable --> Terminated: [运行完成/Execption]
+  Waiting --> Terminated: Execption
+  Blocked --> Terminated: Execption
+  TimedWaiting --> Terminated: Execption
+  Terminated --> [*]
 
 ```
 
 </details>
-## 线程创建方式
+
+#### 例子
+
+<details>
+
+<summary>展开</summary>
+
+```java
+
+    private static final Object object = new Object();
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            Thread thread1 = Thread.currentThread();
+            Utils.print("进入run的线程状态", thread1.getState());
+            Utils.sleep(1000, () -> {
+                Utils.print("sleep中线程状态", thread1.getState());
+            });
+            Utils.print("结束sleep线程状态", thread1.getState());
+            // 阻塞某个对象的锁，执行run方法，前后sleep一秒
+            Utils.block(object,()->{
+                Utils.print("尝试获取锁线程状态", thread1.getState());
+            });
+            Utils.sleep(100);
+            synchronized (object){
+                Utils.print("获取到锁线程状态", thread1.getState());
+                Utils.iWait(object,()->{
+                    Utils.print("wait后锁线程状态", thread1.getState());
+                });
+            }
+        });
+        Utils.print("start之前线程状态", thread.getState());
+        thread.start();
+        //阻塞主线程，等到thread结束
+        thread.join();
+        Utils.print("start结束线程状态", thread.getState());
+    }
+    
+//     输出：
+//             ------start之前线程状态 : NEW------
+//             ------进入run的线程状态 : RUNNABLE------
+//             ------sleep中线程状态 : TIMED_WAITING------
+//             ------结束sleep线程状态 : RUNNABLE------
+//             ------尝试获取锁线程状态 : BLOCKED------
+//             ------获取到锁线程状态 : RUNNABLE------
+//             ------wait后锁线程状态 : WAITING------
+//             ------start结束线程状态 : TERMINATED------
+
+```
+</details>
+
+### 线程创建方式
+* 创建一个Thread类的对象
+  * 实现runnable
+    * 实现callable,然后交给FutureTask包装一下（FutureTask也是实现了runnable的类）,用法：
+    ```java
+        FutureTask<String> task = new FutureTask<>(() -> {
+            Utils.sleep(1000);
+            System.out.println("开始执行任务，计划返回：123");
+            return "123";
+        });
+        //创建线程
+        new Thread(task).start();
+        System.out.println("当前执行"+(task.isDone()?"已完成":"未完成"));
+        //调用get()方法阻塞主线程
+        String str = task.get();
+        System.out.println("执行结果 :" + str);
+    ```
+* 创建一个继承Thread类的对象
+* 使用线程池
+  * 注解：@Async，@Schedules
+  * Executors
+
+### Thread的一些方法
+* yield()：让渡，让出执行优先级，让可能的线程抢占，感觉属于微操了。（实践的示例：todo）
+* join(long millis)：暂停当前线程，等到被调用线程执行结束（有一个等待时间）
