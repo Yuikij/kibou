@@ -2,29 +2,43 @@
 
 ## 线程状态
 
-* 新建（NEW）
-* 就绪
-* 运行
-* 阻塞
-* 等待
-* 超时等待
-* 死亡
+* 新建（New） 
+  * 创建一个线程对象
+* 就绪（Runnable）
+  * start()，yield()方法，该线程处于就绪状态，等待获取cpu的使用权。
+* 运行（running）
+  * 可运行状态的线程获得了cpu时间片（timeslice），执行程序代码。注：就绪状态是进入到运行状态的唯一入口
+* 阻塞（Blocked）
+  * 等待获取阻塞锁
+* 等待（Waiting）
+* 超时等待（TimedWaiting）
+* 死亡（Terminated）
 
-
+#### 枚举
 
 
 
 ```mermaid
 stateDiagram-v2
-    [*] --> New: 创建
-    New --> Runnable: start()
-    Runnable --> Blocked: 等待锁
-    Blocked --> Runnable: 获取锁
-    Runnable --> Waiting: wait()
-    Waiting --> Runnable: notify()/notifyAll()
-    Runnable --> TimedWaiting: sleep()/wait(time)/join(time)
-    TimedWaiting --> Runnable: 时间到/notify()/notifyAll()
-    Runnable --> Terminated: 运行完成/出现未处理异常
-
+  state "New(新建)" as New
+  state "Runnable(就绪)" as Runnable
+  state "Blocked(阻塞)" as Blocked
+  state "Waiting(等待)" as Waiting
+  state "Terminated(销毁)" as Terminated
+  [*] --> New: 创建
+  New --> Runnable: Thread.start()
+  Runnable --> Blocked: 等待锁,synchronized
+  Blocked --> Runnable: 获取锁
+  Runnable --> Waiting: wait()
+  Waiting --> Runnable: [notify()/notifyAll()]
+  Runnable --> TimedWaiting: [sleep()/wait(time)/join(time)]
+  TimedWaiting --> Runnable: [时间到/notify()/notifyAll()]
+%%    Terminated
+  Runnable --> Terminated: [运行完成/Execption]
+  Waiting --> Terminated: Execption
+  Blocked --> Terminated: Execption
+  TimedWaiting --> Terminated: Execption
+  Terminated --> [*]
 
 ```
+## 线程创建方式
