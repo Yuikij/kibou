@@ -75,7 +75,7 @@
 
 .annotated-word ruby {
     line-height: 50px;
-    border-bottom: 1px dotted #000;
+    /*border-bottom: 1px dotted #000;*/
     text-decoration: none;
     margin-left: 5px;
     margin-right: 5px;
@@ -85,7 +85,6 @@
     /* 自定义样式，比如字体样式和颜色 */
     font-size: 80%;
     color: #666;
-    height: 100px;
 
 }
 

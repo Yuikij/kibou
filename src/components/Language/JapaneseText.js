@@ -42,7 +42,7 @@ function JapaneseText({text, annotations, translations}) {
             }
 
             return (<div className={"annotated-word"} key={index}>
-                    {annotation === "fix" ? <span key={index}>
+                    {annotation === "fix" ? <span key={index}  style={{ whiteSpace: 'pre-line' }}>
                                  {part}
                         </span> :
                         <ruby>
