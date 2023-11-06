@@ -1,0 +1,25 @@
+
+
+> extends AbstractList\<E>
+> implements List\<E>, RandomAccess, Cloneable, java.io.Serializable
+
+* 容器实体
+
+```java
+transient Object[] elementData
+  ```
+
+### 扩容
+
+* 倍数：1.5n
+
+```java
+// 1.8
+int newCapacity = oldCapacity + (oldCapacity >> 1);
+  ```
+* 方式
+
+```java
+// 1.8
+elementData = Arrays.copyOf(elementData, newCapacity);
+  ```
