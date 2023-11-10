@@ -2,7 +2,61 @@
 title: Redo log
 ---
 
-# 基本概念
+## 基本概念
 > The redo log is a disk-based data structure used during crash recovery to correct data written by incomplete transactions
 
-  用于崩溃恢复的，基于磁盘的数据结构
+  基于磁盘的数据结构，保证了崩溃恢复，保证已提交事务的恢复，并且通过WAL加快了写入的效率。
+
+## 如何工作的
+> 基于事务
+
+* **事务开始**： 当事务启动时，MySQL会为该事务分配一个唯一的事务ID，同时在内存中为该事务分配一个Redo Log Buffer。
+* **数据修改**：在事务执行过程中，当对数据进行修改（插入、更新、删除）时，这些修改操作会首先被写入到事务的Redo Log Buffer中。这是一个很快的操作，因为它涉及的是在内存中的缓冲区。
+刷入磁盘
+* **Redo Log Buffer满或事务提交**： Redo Log Buffer可能在事务未提交时就满了，也可能在事务提交时才满。一旦Redo Log Buffer满了，或者当事务提交时，MySQL会将Redo Log Buffer中的日志记录写入到Redo Log文件中
+移动checkpoint
+* **Redo Log文件的物理写入（刷盘的时机）**： Redo Log文件位于磁盘上，MySQL使用一种称为Write-Ahead Logging（WAL）的机制，即在修改数据之前，必须先将对应的Redo Log写入磁盘。这确保了在数据被持久化之前，相应的Redo Log已经在磁盘上可用。这个过程是异步的，以提高性能。
+
+## 特点
+预写日志（WAL）
+崩溃恢复
+## 作用
+
+## Redo log files
+* Ordinary redo log files
+  * 普通的redo log文件，正在使用的，使用#ib_redoN命名
+* Spare redo log files
+  * 空闲的redo log文件，使用#ib_redoN_tmp命名
+```
+'#ib_redo582'  '#ib_redo590'  '#ib_redo598'      '#ib_redo606_tmp'
+'#ib_redo583'  '#ib_redo591'  '#ib_redo599'      '#ib_redo607_tmp'
+'#ib_redo584'  '#ib_redo592'  '#ib_redo600'      '#ib_redo608_tmp'
+'#ib_redo585'  '#ib_redo593'  '#ib_redo601'      '#ib_redo609_tmp'
+'#ib_redo586'  '#ib_redo594'  '#ib_redo602'      '#ib_redo610_tmp'
+'#ib_redo587'  '#ib_redo595'  '#ib_redo603_tmp'  '#ib_redo611_tmp'
+'#ib_redo588'  '#ib_redo596'  '#ib_redo604_tmp'  '#ib_redo612_tmp'
+'#ib_redo589'  '#ib_redo597'  '#ib_redo605_tmp'  '#ib_redo613_tmp'
+```
+
+
+## 配置
+```ini
+
+# MySQL 8.0.30 or Higher
+# redo log的磁盘空间,默认值: 104857600 字节 (100MB)。最大重做日志容量为128GB。
+innodb_redo_log_capacity = 8589934592;
+# 
+innodb_log_file_size = 256M
+# redo log buffer的大小，默认值为 16MB，如果经常执行大的事务，那不妨增大这个值，这样就可以在事务提交之前避免写入磁盘
+# The size in bytes of the buffer that InnoDB uses to write to the log files on disk. The default is 16MB. A large log buffer enables large transactions to run without the need to write the log to disk before the transactions commit. 
+# Thus, if you have transactions that update, insert, or delete many rows, making the log buffer larger saves disk I/O
+innodb_log_buffer_size = 16MB
+# 刷入磁盘的时机
+# 1：每次事务提交时都会将日志写入并刷新到磁盘。（默认）
+# 0：每秒将日志写入并刷新到磁盘一次。未刷新日志的事务可能会在崩溃中丢失。
+# 2：日志会在每次事务提交后写入（把 redo log buffer 里的数据写入到 os buffer 中，但不立即执行fsync () ），并每秒刷新到磁盘一次。未刷新日志的事务可能会在崩溃中丢失。
+innodb_flush_log_at_trx_commit = 1
+# redo log的目录
+innodb_log_group_home_dir = 
+
+```
