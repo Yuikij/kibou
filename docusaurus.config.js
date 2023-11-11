@@ -7,7 +7,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
     title: 'Yuikij\'s  blog',
-    tagline: 'Dinosaurs are cool',
+    tagline: '来和我一起弹奏春日影吧！',
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
@@ -203,7 +203,7 @@ const config = {
             prism: {
                 theme: prismThemes.github,
                 darkTheme: prismThemes.dracula,
-                additionalLanguages: ['powershell','java','bash','ini'],
+                additionalLanguages: ['powershell','java','bash','ini','sql'],
             },
         },
 };

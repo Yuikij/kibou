@@ -18,7 +18,7 @@ title: Redo log
 * **Redo Log文件的物理写入（刷盘的时机）**： Redo Log文件位于磁盘上，MySQL使用一种称为Write-Ahead Logging（WAL）的机制，即在修改数据之前，必须先将对应的Redo Log写入磁盘。这确保了在数据被持久化之前，相应的Redo Log已经在磁盘上可用。这个过程是异步的，以提高性能。
 
 ## 特点
-预写日志（WAL）
+预写日志（WAL, write-ahead log）
 崩溃恢复
 ## 作用
 
@@ -27,6 +27,7 @@ title: Redo log
   * 普通的redo log文件，正在使用的，使用#ib_redoN命名
 * Spare redo log files
   * 空闲的redo log文件，使用#ib_redoN_tmp命名
+
 ```
 '#ib_redo582'  '#ib_redo590'  '#ib_redo598'      '#ib_redo606_tmp'
 '#ib_redo583'  '#ib_redo591'  '#ib_redo599'      '#ib_redo607_tmp'
@@ -37,16 +38,20 @@ title: Redo log
 '#ib_redo588'  '#ib_redo596'  '#ib_redo604_tmp'  '#ib_redo612_tmp'
 '#ib_redo589'  '#ib_redo597'  '#ib_redo605_tmp'  '#ib_redo613_tmp'
 ```
-
+## 优化
 
 ## 配置
 ```ini
 
-# MySQL 8.0.30 or Higher
+# --- MySQL 8.0.30 or Higher ---
 # redo log的磁盘空间,默认值: 104857600 字节 (100MB)。最大重做日志容量为128GB。
 innodb_redo_log_capacity = 8589934592;
-# 
+# --- Before MySQL 8.0.30 ---
+# 每个日志文件的大小
 innodb_log_file_size = 256M
+# 日志文件的数量
+innodb_log_files_in_group = 2 
+
 # redo log buffer的大小，默认值为 16MB，如果经常执行大的事务，那不妨增大这个值，这样就可以在事务提交之前避免写入磁盘
 # The size in bytes of the buffer that InnoDB uses to write to the log files on disk. The default is 16MB. A large log buffer enables large transactions to run without the need to write the log to disk before the transactions commit. 
 # Thus, if you have transactions that update, insert, or delete many rows, making the log buffer larger saves disk I/O
@@ -58,5 +63,23 @@ innodb_log_buffer_size = 16MB
 innodb_flush_log_at_trx_commit = 1
 # redo log的目录
 innodb_log_group_home_dir = 
+
+```
+## 查询
+```sql
+--redo log capacity resize mechanism的状态
+SHOW STATUS LIKE 'Innodb_redo_log_resize_status';
++-------------------------------+-------+
+| Variable_name                 | Value |
++-------------------------------+-------+
+| Innodb_redo_log_resize_status | OK    |
++-------------------------------+-------+
+--redo log 容量限制
+mysql> SHOW STATUS LIKE 'Innodb_redo_log_capacity_resized';
+ +----------------------------------+-----------+
+| Variable_name                    | Value     |
++----------------------------------+-----------+
+| Innodb_redo_log_capacity_resized | 104857600 |
++----------------------------------+-----------+
 
 ```
