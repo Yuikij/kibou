@@ -1,3 +1,16 @@
 ---
 title: Undo log
 ---
+
+## 基本概念
+> An undo log is a collection of undo log records associated with a single read-write transaction. An undo log record contains information about how to undo the latest change by a transaction to a clustered index record
+
+记录了一条事务里对数据的操作，包含了如何撤销每个操作的信息，并且给mvcc提供了可追溯的历史版本的视图
+
+## 配置
+```ini
+#定义了分配给每个undo表空间和生成undo记录的事务的全局临时表空间的回滚段的数量。每个回滚段支持的事务数量取决于 InnoDB 页面大小和分配给每个事务的撤消日志数量
+innodb_rollback_segments = 128
+#创建undo tablespaces的路径 
+innodb_undo_directory = 
+```

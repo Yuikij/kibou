@@ -12,17 +12,32 @@ title: Redo log
 
 * **事务开始**： 当事务启动时，MySQL会为该事务分配一个唯一的事务ID，同时在内存中为该事务分配一个Redo Log Buffer。
 * **数据修改**：在事务执行过程中，当对数据进行修改（插入、更新、删除）时，这些修改操作会首先被写入到事务的Redo Log Buffer中。这是一个很快的操作，因为它涉及的是在内存中的缓冲区。
-刷入磁盘
-* **Redo Log Buffer满或事务提交**： Redo Log Buffer可能在事务未提交时就满了，也可能在事务提交时才满。一旦Redo Log Buffer满了，或者当事务提交时，MySQL会将Redo Log Buffer中的日志记录写入到Redo Log文件中
-移动checkpoint
-* **Redo Log文件的物理写入（刷盘的时机）**： Redo Log文件位于磁盘上，MySQL使用一种称为Write-Ahead Logging（WAL）的机制，即在修改数据之前，必须先将对应的Redo Log写入磁盘。这确保了在数据被持久化之前，相应的Redo Log已经在磁盘上可用。这个过程是异步的，以提高性能。
+* **持久化磁盘**：一旦Redo Log Buffer满了，或者当事务提交时，MySQL会将Redo Log Buffer中的日志记录写入到Redo Log文件中，
+这个过程是在修改实际数据之前，也就是WAL。然后更新write pos，当前写入的位置。
+* **更新Checkpoint**：当Redo Log的记录被写入到数据页，更新Checkpoint，Checkpoint包括了LSN的信息，Checkpoint往前的都可以删了
+* **文件循环**：当一个Redo Log文件写满或达到一定条件时，MySQL会切换到下一个Redo Log文件
+:::tip
+ * Redo Log Buffer：存储事务中的修改操作的内存缓冲区，用于事务的持久性和恢复，异步写入磁盘，和磁盘的数据页没有直接的关系。  
+ * InnoDB Buffer Pool：包含了表和索引的实际数据。从而减少了磁盘 I/O 操作，提高了数据读写的效率（刷新脏页...）。
+:::
+
+## 崩溃恢复的流程 
+-- （todo：需要完善）
+* 通过redo log找到最近一次checkpoint的位置，然后根据checkpoint相对应的LSN开始，获取需要重做的日志。
+* 确定需要回滚和需要提交的事务id，XID（Transaction ID）
+* redo log回放，读取记录并应用到已提交的事务
+  * 找到 XID： 从 prepare 记录中找到 XID，即事务标识符
+  * 如果碰到既有prepare、又有commit的redo log，就直接提交
+  * 如果碰到只有prepare、而没有commit的redo log，就拿着XID去binlog找对应的事务
 
 ## 特点
-预写日志（WAL, write-ahead log）
-崩溃恢复
-## 作用
+* 顺序的磁盘写入，按照事务提交顺序写入（？有待加深理解）
+* WAL：Write-Ahead Logging
+  * 在事务对数据库进行修改之前，先将修改的操作记录到一个持久的日志文件中
+* 崩溃恢复：恢复未持久化的内存数据
 
-## Redo log files
+
+## 结构
 * Ordinary redo log files
   * 普通的redo log文件，正在使用的，使用#ib_redoN命名
 * Spare redo log files
@@ -39,6 +54,15 @@ title: Redo log
 '#ib_redo589'  '#ib_redo597'  '#ib_redo605_tmp'  '#ib_redo613_tmp'
 ```
 ## 优化
+* todo
+
+## Q&A
+* 为什么只用binlog不行
+  * binlog不知道数据页刷入磁盘对应的点（redolog的checkpoint）
+  * 如果恢复的话，只能恢复没有提交的数据，先回滚（undo log）再应用
+* 只用redo log的问题
+  * 生态问题，很多中间件用到了binlog
+  * 没法记录历史数据，只有内存的数据，起不到归档的作用
 
 ## 配置
 ```ini
