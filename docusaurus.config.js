@@ -7,7 +7,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
     title: 'Yuikij\'s  blog',
-    tagline: '来和我一起弹奏春日影吧！',
+    tagline: '一起弹奏春日影吧！',
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
@@ -33,6 +33,11 @@ const config = {
         defaultLocale: 'en',
         locales: ['en'],
     },
+    // plugins: [
+    //
+    //         'docusaurus-plugin-2dlive',
+    //
+    // ],
     markdown: {
         format: 'detect',
         mermaid: true,
@@ -111,7 +116,24 @@ const config = {
                         position: 'left',
                         label: '算法和数据结构',
                     },
-
+                    {
+                        type: 'dropdown',
+                        label: '基础软件',
+                        to: '/docs/basicSoftware/基础软件',
+                        position: 'left',
+                        items: [
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'git',
+                                label: 'Git',
+                            },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'operation',
+                                label: '运维相关',
+                            },
+                        ],
+                    },
                     {
                         type: 'docSidebar',
                         sidebarId: 'prepareExam',

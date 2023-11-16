@@ -1,0 +1,13 @@
+---
+title: GitLab  CI/CD
+---
+
+### gitlab-ci.yml 和仓库分离
+
+```yaml
+include:
+#  - group名/仓库名
+  - project: 'my-group/my-cicd-repo'
+    ref: master
+    file: '.gitlab-ci.yml'
+```

@@ -1,0 +1,63 @@
+# CTE
+> Recursive Common Table Expressions:递归公共表达式
+
+
+
+> ## Excerpt
+> A conversational AI system that listens, learns, and challenges
+
+---
+要通过一个给定的 `id` 查询所有上级，你通常需要使用递归查询。在 MySQL 8.0 及以上版本，可以使用递归公共表达式 (Recursive Common Table Expressions, CTE) 来完成这个任务。
+
+假设你的表名为 `my_table`，并且它的结构如下：
+
+```
+sqlCopy codeCREATE TABLE my_table (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    fid INT
+);
+
+```
+
+下面是使用递归 CTE 从给定的 `id` 查找所有上级的 SQL 查询：
+
+```
+sqlCopy codeWITH RECURSIVE cte AS (
+    SELECT id, name, fid
+    FROM my_table
+    WHERE id = ?  -- 这里的 ? 是你要查询的起始 id
+    UNION ALL
+    SELECT m.id, m.name, m.fid
+    FROM my_table m
+    JOIN cte ON m.id = cte.fid
+)
+SELECT * FROM cte;
+
+```
+
+你可以将此查询与 MyBatis 集成。以下是一个示例的 MyBatis Mapper 文件片段：
+
+```
+xmlCopy code<mapper namespace="YourMapperNamespace">
+
+    <select id="selectAllAncestors" parameterType="int" resultType="YourResultType">
+        WITH RECURSIVE cte AS (
+            SELECT id, name, fid
+            FROM my_table
+            WHERE id = #{id}
+            UNION ALL
+            SELECT m.id, m.name, m.fid
+            FROM my_table m
+            JOIN cte ON m.id = cte.fid
+        )
+        SELECT * FROM cte;
+    </select>
+
+</mapper>
+
+```
+
+请注意，你需要对上述代码进行适当的调整，以适应你的数据库结构和 MyBatis 配置。
+
+另外，不是所有的 MySQL 版本都支持 CTE。如果你的 MySQL 版本低于 8.0，你需要考虑其他方法，例如在应用代码中进行递归查询。

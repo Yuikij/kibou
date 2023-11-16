@@ -1,11 +1,24 @@
 import React from 'react';
 import clsx from 'clsx';
+import { loadOhMyLive2D } from 'oh-my-live2d';
+
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
 import styles from './index.module.css';
+
+// loadOhMyLive2D({
+//     sayHello: false,
+//     transitionTime: 2000,
+//     source: 'https://cdn.jsdelivr.net',
+//     models: {
+//         scale: 1.5,
+//         path: '/gh/QiShaoXuan/live2DModel@1.0.0/live2d-widget-model-hijiki/assets/hijiki.model.json'
+//     }
+//     // ...more
+// });
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();

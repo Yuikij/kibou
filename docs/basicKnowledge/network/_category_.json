@@ -1,11 +1,11 @@
 {
-  "position": 2.5,
-  "label": "编程语言",
+  "position": 2,
+  "label": "网络知识",
 
   "className": "red",
   "link": {
     "type": "generated-index",
-    "title": "编程语言"
+    "title": "网络知识"
   },
   "customProps": {
     "description": "This description can be used in the swizzled DocCard"
