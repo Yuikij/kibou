@@ -7,7 +7,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
     title: 'Yuikij\'s  blog',
-    tagline: '一起弹奏春日影吧！',
+    tagline: 'おとといはウサギお见たの、昨日は鹿、今日はあなた',
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
