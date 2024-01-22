@@ -2,11 +2,39 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://your-docusaurus-test-site.com/kibou/blog</id>
     <title>Yuikij's  blog Blog</title>
-    <updated>2021-08-26T00:00:00.000Z</updated>
+    <updated>2023-11-17T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://your-docusaurus-test-site.com/kibou/blog"/>
     <subtitle>Yuikij's  blog Blog</subtitle>
     <icon>https://your-docusaurus-test-site.com/kibou/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[编程经验]]></title>
+        <id>https://your-docusaurus-test-site.com/kibou/blog/2023/11/17/code-experience</id>
+        <link href="https://your-docusaurus-test-site.com/kibou/blog/2023/11/17/code-experience"/>
+        <updated>2023-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[简洁性（Keep It Simple, Stupid - KISS）*：一个好的代码应该是简单的。这意味着代码容易被他人理解，容易维护，且避免了不必要的复杂性。]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li>
+<p><strong>简洁性（Keep It Simple, Stupid - KISS）</strong>：一个好的代码应该是简单的。这意味着代码容易被他人理解，容易维护，且避免了不必要的复杂性。</p>
+</li>
+<li>
+<p><strong>减少琐事</strong>：</p>
+<blockquote>
+<p>“Toil is the kind of work that tends to be manual, repetitive, automatable,
+tactical, devoid of enduring value, and that scales linearly as a service grows.”
+-- <a href="https://sre.google/sre-book/eliminating-toil/" target="_blank" rel="noopener noreferrer">Site Reliability Engineering book</a></p>
+</blockquote>
+<p>琐事往往是手动的、重复性的、自动化的、战术性的，缺乏持久价值，并且随着服务的增长而线性扩展</p>
+</li>
+<li>
+<p><strong>快速失败（Fail Fast）</strong>：
+当检测到问题时，尽早抛出错误或异常，而不是让程序在错误的状态下继续运行。</p>
+</li>
+</ul>]]></content>
+        <author>
+            <name>Yuikji</name>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Welcome]]></title>
         <id>https://your-docusaurus-test-site.com/kibou/blog/welcome</id>

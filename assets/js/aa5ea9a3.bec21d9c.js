@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[7933],{78416:e=>{e.exports=JSON.parse('{"title":"\u7f16\u7a0b\u8bed\u8a00","slug":"/category/\u7f16\u7a0b\u8bed\u8a00-1","permalink":"/kibou/docs/category/\u7f16\u7a0b\u8bed\u8a00-1","navigation":{"next":{"title":"Java","permalink":"/kibou/docs/category/java-2"}}}')}}]);
