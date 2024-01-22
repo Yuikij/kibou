@@ -119,7 +119,7 @@ const config = {
                     {
                         type: 'dropdown',
                         label: '基础软件',
-                        to: '/docs/basicSoftware/基础软件',
+                        // to: '/docs/basicSoftware/基础软件',
                         position: 'left',
                         items: [
                             {
