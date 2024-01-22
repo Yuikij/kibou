@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { loadOhMyLive2D } from 'oh-my-live2d';
 
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
