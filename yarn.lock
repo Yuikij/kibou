@@ -7189,11 +7189,6 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://r2.cnpmjs.org/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-oh-my-live2d@^0.3.0:
-  version "0.3.0"
-  resolved "https://r.cnpmjs.org/oh-my-live2d/-/oh-my-live2d-0.3.0.tgz#3ad1545273b00e9924b8183fc0897e7ee6262186"
-  integrity sha512-QN8dEWz0VmL8hFgNv/no25CuBflHPj75om6wU5E88dbUN8bVrm/i4D7tMDFkj8u5+DUSqzdEUpzb5Xi6qyGCew==
-
 on-finished@2.4.1:
   version "2.4.1"
   resolved "https://r.cnpmjs.org/on-finished/-/on-finished-2.4.1.tgz#58c8c44116e54845ad57f14ab10b03533184ac3f"
