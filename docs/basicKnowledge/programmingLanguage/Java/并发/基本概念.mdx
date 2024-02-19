@@ -1,13 +1,33 @@
-## 线程（Thread）
-## 进程（Process
-## 并发（Concurrency）
-并发是指系统中同时存在多个线程（或进程）在执行。在多核CPU上，并发可以通过真正的并行执行来提高程序的性能。
-## 同步（Synchronization）
-## 异步（Asynchronization）
-## 原子性（Atomicity）
+### 线程（Thread）
+* 线程是操作系统中能够进行运算调度的最小单位，它被包含在进程之中，是进程中的实际运作单位。  
+* 在JVM中，线程有独立的程序计数器和栈空间，多个线程共享方法区和堆空间
+### 进程（Process）
+* 进程是操作系统中正在运行的一个程序实例。每个进程都拥有独立的内存空间，包含程序的代码、数据和运行时资源。Java程序本身也是一个进程，而Java虚拟机（JVM）则是在操作系统进程中运行的。
+### 并发（Concurrency）
+* 并发是指系统中同时存在多个线程（或进程）在执行。在多核CPU上，并发可以通过真正的并行执行来提高程序的性能。
+### 同步（Synchronization）
+* 同步是指多个线程之间按照一定的顺序执行，以确保共享资源的正确访问，用锁来实现
+### 异步（Asynchronization）
+* 异步是指多个任务之间相互独立，不需要按照固定的顺序执行
+### 原子性（Atomicity）
+* 原子性是指操作不可分割，要么全部执行成功，要么全部不执行。在并发编程中，原子操作是指一个或一组操作在执行过程中不会被中断的特性。
+### 可见性（Visibility）
+* 可见性是指一个线程对共享变量的修改能够及时地被其他线程看到。在Java中，可以使用volatile关键字来保证变量的可见性。
+### 有序性（Ordering）
+* 有序性是指程序执行的顺序和代码的编写顺序一致。在多线程环境下，由于指令重排序等优化，可能会导致代码执行顺序与预期不符，因此需要通过同步机制来保证有序性。
+### Java内存模型
+> The Java memory model describes how threads in the Java programming language interact through memory. Together with the description of single-threaded execution of code, the memory model provides the semantics of the Java programming language.
 
-原子性是指操作不可分割，要么全部执行成功，要么全部不执行。在并发编程中，原子操作是指一个或一组操作在执行过程中不会被中断的特性。
-## 可见性（Visibility）
-可见性是指一个线程对共享变量的修改能够及时地被其他线程看到。在Java中，可以使用volatile关键字来保证变量的可见性。
-## 有序性（Ordering）
-有序性是指程序执行的顺序和代码的编写顺序一致。在多线程环境下，由于指令重排序等优化，可能会导致代码执行顺序与预期不符，因此需要通过同步机制来保证有序性。
+> The Java Memory Model describes what behaviors are legal in multithreaded code, and how threads may interact through memory. 
+> It describes the relationship between variables in a program and the low-level details of storing and retrieving them to and from memory or registers in a real computer system. 
+> It does this in a way that can be implemented correctly using a wide variety of hardware and a wide variety of compiler optimizations.  https://www.cs.umd.edu/%7Epugh/java/memoryModel
+
+描述了多线程代码中哪些行为是合法的，以及线程如何通过内存进行交互。
+它描述了程序中变量之间的关系以及在真实计算机系统中的内存或寄存器中存储和检索变量的低级细节。它以一种可以使用各种硬件和各种编译器优化来正确实现的方式来实现这一点。
+* 共享内存和本地内存  
+  * 共享内存对应jvm堆的一部分
+  * 本地内存是一个抽象的概念，覆盖了缓存、写缓冲区、寄存器以及其他的硬件和编译器优化
+* 重排序（reordering）
+* volatile
+* final
+### Q&A
