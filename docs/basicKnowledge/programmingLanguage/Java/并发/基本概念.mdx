@@ -46,8 +46,38 @@
 * volatile
   * 在JSR 133（JDK 5.0）中被加强过语义，保证可见性和**禁止指令重排序**
 * final
-* synchronized
-* 双重校验锁的单例模式
+* 延迟初始化的单例模式（双重校验）
+```java
+  class Foo {
+        private volatile Helper helper = null;
+        public Helper getHelper() {
+        //第一次校验，不是null就直接放过，防止已经初始化的情况下加锁
+            if (helper == null) {
+            //防止分配多个对象
+                synchronized(this) {
+                //第二次校验，同步保证只有一个对象
+                    if (helper == null)
+                    //伪代码：
+                    //1.分配对象的内存空间，2.初始化对象，3.设置对象指向分配的内存地址
+                    //会乱序所以加上volatile，防止第一次校验后helper没有被赋值
+                        helper = new Helper();
+                }
+            }
+            return helper;
+        }
+    }
+```
+*基于内部类实现的单例
+```java
+class Foo {
+    private static class HelperHolder {
+        public static Helper helper = new Helper();
+    }
+    public static Helper getHelper() {
+        return HelperHolder.helper ;　　// 这里将导致HelperHolder类被初始化,类加载器是线程安全的
+    }
+}
+```
 
- * 
+
 ### Q&A
