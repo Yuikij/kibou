@@ -1,9 +1,60 @@
-## 流程
-## 参数
-### corePoolSize
-            核心线程数，线程池中始终维护的，存活的线程数，核心线程数,核心线程数一旦创建就不销毁
-            ○ 存活是指不断调用阻塞队列的take方法，如果队列里也没有值就会阻塞
+## 为什么使用线程池
 
+## 流程
+<details>
+
+<summary>展开</summary>
+
+```mermaid
+graph TD
+  Submit[提交任务] 
+  CorePoolSize[判断核心线程数] 
+  Create[创建线程] 
+  Add[将任务存储到队列] 
+  WorkQueue[判断阻塞队列剩余容量]  
+  MaximumPoolSize[判断最大线程数] 
+  Handler[拒绝策略] 
+  
+  Submit -->  CorePoolSize
+  CorePoolSize --> |满了|WorkQueue
+  CorePoolSize --> |没满|Create
+  WorkQueue --> |无界或者没满|Add
+  WorkQueue --> |满了|MaximumPoolSize
+  MaximumPoolSize --> |满了|Handler
+  MaximumPoolSize --> |没满|Create
+
+
+```
+
+</details>
+
+## 状态
+<details>
+
+<summary>展开</summary>
+
+```mermaid
+graph TD
+  RUNNING
+  SHUTDOWN
+  STOP
+  TIDYING
+  TERMINATED
+
+  RUNNING -->  SHUTDOWN
+  SHUTDOWN --> |"调用shutdown()，不再接收新任务，处理剩余任务"|TIDYING
+  RUNNING --> |"shutdownNow()，不再接收新任务，中断剩余任务"|STOP
+  STOP --> |"剩余任务已经终止，准备调用terminated()，这个方法需要自己去重写"|TIDYING
+  TIDYING --> |"调用完钩子函数terminated()"|TERMINATED
+
+```
+</details>
+
+## 参数
+
+### corePoolSize
+    核心线程数，线程池中始终维护的，存活的线程数，核心线程数,核心线程数一旦创建就不销毁
+    存活是指不断调用阻塞队列的take方法，如果队列里也没有值就会阻塞
 ### maximumPoolSize
     最大线程数，在corePooSize已满、队列也满的情况下，扩充线程至此值。
 ### keepAliveTime
@@ -12,7 +63,7 @@
     单位
 ### workQueue（BlockingQueue）：
     阻塞队列，当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，任务就会被存放在队列中。
-* BlockingQueue<Runnable>：
+* BlockingQueue\<Runnable>：
   * put和take：阻塞式的
 * ArrayBlockingQueue ：是一个用数组实现的环形队列，在构造函数中，会要求传入数组的容量
 * LinkedBlockingQueue：是一种基于单向链表的阻塞队列。
@@ -24,10 +75,11 @@
 * LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。与SynchronousQueue类似，还含有非阻塞方法。
 * LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。
 ### threadFactory
-          线程工厂，主要用来创建线程，默认为正常优先级、非守护线程。
-### handler ：
+    线程工厂，主要用来创建线程，默认为正常优先级、非守护线程。
+### handler
     线程池任务队列超过 maxinumPoolSize 之后的拒绝策略
 *   AbortPolicy：拒绝并抛出异常。
 *   CallerRunsPolicy：使用当前调用的线程来执行此任务。
 *   DiscardOldestPolicy：抛弃队列头部（最旧）的一个任务，并执行当前任务。
 *   DiscardPolicy：忽略并抛弃当前任务。
+## Executor框架
