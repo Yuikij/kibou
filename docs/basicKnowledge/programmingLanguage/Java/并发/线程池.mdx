@@ -1,4 +1,12 @@
+---
+sidebar_position: 3
+---
+
 ## 为什么使用线程池
+* 将执行机制和工作单元分离
+* 减少创建和销毁线程对象的开销
+* 可控性强，可对线程池进行配置，监控
+* 可扩展性强，如优先级，可延迟，定时线程池
 
 ## 流程
 <details>
@@ -53,7 +61,7 @@ graph TD
 ## 参数
 
 ### corePoolSize
-    核心线程数，线程池中始终维护的，存活的线程数，核心线程数,核心线程数一旦创建就不销毁
+    核心线程数，线程池中始终维护的，存活的线程数，核心线程数,核心线程一旦创建就不销毁
     存活是指不断调用阻塞队列的take方法，如果队列里也没有值就会阻塞
 ### maximumPoolSize
     最大线程数，在corePooSize已满、队列也满的情况下，扩充线程至此值。
@@ -82,4 +90,22 @@ graph TD
 *   CallerRunsPolicy：使用当前调用的线程来执行此任务。
 *   DiscardOldestPolicy：抛弃队列头部（最旧）的一个任务，并执行当前任务。
 *   DiscardPolicy：忽略并抛弃当前任务。
-## Executor框架
+## 几种Executor
+### ForkJoinPool
+### ScheduledThreadPoolExecutor
+### Executors大家庭
+> 工具类，调用的ThreadPoolExecutor,ForkJoinPool的构造函数
+* FixedThreadPool
+  * corePoolSize
+    * nThreads 固定大小（fixed），线程数有上限
+  * maximumPoolSize
+    * nThreads 没啥用，反正会进队列
+  * keepAliveTime
+  * workQueue
+    * LinkedBlockingQueue 无界的，多出来的会一直塞到队列
+  * handler
+    * AbortPolicy 没有触发条件
+* WorkStealingPool
+* CachedThreadPool
+* SingleThreadScheduled
+* ScheduledThreadPool
