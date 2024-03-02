@@ -7,6 +7,7 @@ sidebar_position: 3
 * 减少创建和销毁线程对象的开销
 * 可控性强，可对线程池进行配置，监控
 * 可扩展性强，如优先级，可延迟，定时线程池
+## 用法
 
 ## 流程
 <details>
@@ -78,7 +79,11 @@ graph TD
   * 可以无界
 * PriorityQueue：是按照元素的优先级从小到大出队列的二叉堆。正因为如此，PriorityQueue中的2个元素之间需要可以比较大小，并实现Comparable接口（在构造方法传比较器），当元素个数超出数组长度时，执行扩容操作。
 * DelayQueue：即延迟队列，也就是一个按延迟时间从小到大出队的PriorityQueue。
-* SynchronousQueue：一个不存储元素的阻塞队列
+* **SynchronousQueue**：一个不存储元素的阻塞队列
+  * 相当于把元素先存在调用线程的堆栈中
+  * put和take：会阻塞调用线程，知道有对应的存或取操作
+  * offer和poll：如果有对应的存取操作在等待，则消费完返回true，如果没有就直接返回false
+    * 仅使用无法阻塞的offer和poll，是无效的，都会失败
   * 直接转发给maxPoolSize策略
 * LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。与SynchronousQueue类似，还含有非阻塞方法。
 * LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。
@@ -90,12 +95,15 @@ graph TD
 *   CallerRunsPolicy：使用当前调用的线程来执行此任务。
 *   DiscardOldestPolicy：抛弃队列头部（最旧）的一个任务，并执行当前任务。
 *   DiscardPolicy：忽略并抛弃当前任务。
+
+
 ## 几种Executor
 ### ForkJoinPool
 ### ScheduledThreadPoolExecutor
 ### Executors大家庭
 > 工具类，调用的ThreadPoolExecutor,ForkJoinPool的构造函数
-* FixedThreadPool
+#### FixedThreadPool
+  > 可配置的，固定大小的，无界队列的
   * corePoolSize
     * nThreads 固定大小（fixed），线程数有上限
   * maximumPoolSize
@@ -105,7 +113,30 @@ graph TD
     * LinkedBlockingQueue 无界的，多出来的会一直塞到队列
   * handler
     * AbortPolicy 没有触发条件
-* WorkStealingPool
-* CachedThreadPool
-* SingleThreadScheduled
-* ScheduledThreadPool
+#### SingleThreadScheduled
+  > 只有一个线程，固定大小的，无界队列的
+  * corePoolSize
+    * 1 最多就一个线程
+  * maximumPoolSize
+    * 1 没啥用，反正会进队列
+  * keepAliveTime
+  * workQueue
+    * LinkedBlockingQueue 无界的，多出来的会一直塞到队列
+  * handler
+    * AbortPolicy 没有触发条件
+#### CachedThreadPool
+> 只有一个线程，固定大小的，无界队列的
+* corePoolSize
+  * 0
+* maximumPoolSize
+  * Integer.MAX_VALUE
+* keepAliveTime
+  * 60s
+* workQueue
+  * SynchronousQueue
+* handler
+  * AbortPolicy 没有触发条件
+#### WorkStealingPool
+
+
+#### ScheduledThreadPool
