@@ -213,7 +213,7 @@ graph TD
                     !wt.isInterrupted())
                     wt.interrupt();
                 try {
-                    beforeExecute(wt, task);
+                    beforeExecute(wt, task);                   
                     Throwable thrown = null;
                     try {
                         task.run();
@@ -272,8 +272,10 @@ graph TD
             int wc = workerCountOf(c);
 
             // Are workers subject to culling?
+            // allowCoreThreadTimeOut，一般都是false，除非方法改过
             boolean timed = allowCoreThreadTimeOut || wc > corePoolSize;
 
+            // 空闲，并且上次在队列里没拿到worker，淘汰
             if ((wc > maximumPoolSize || (timed && timedOut))
                 && (wc > 1 || workQueue.isEmpty())) {
                 if (compareAndDecrementWorkerCount(c))
@@ -339,7 +341,7 @@ graph TD
 * PriorityQueue：是按照元素的优先级从小到大出队列的二叉堆。正因为如此，PriorityQueue中的2个元素之间需要可以比较大小，并实现Comparable接口（在构造方法传比较器），当元素个数超出数组长度时，执行扩容操作。
 * DelayQueue：即延迟队列，也就是一个按延迟时间从小到大出队的PriorityQueue。
 * **SynchronousQueue**：一个不存储元素的阻塞队列
-  * 相当于把元素先存在调用线程的堆栈中
+  * 相当于把元素先存在TransferQueue或者TransferStack
   * put和take：会阻塞调用线程，知道有对应的存或取操作
   * offer和poll：如果有对应的存取操作在等待，则消费完返回true，如果没有就直接返回false
     * 仅使用无法阻塞的offer和poll，是无效的，都会失败
@@ -384,7 +386,7 @@ graph TD
   * handler
     * AbortPolicy 没有触发条件
 #### CachedThreadPool
-> 只有一个线程，固定大小的，无界队列的
+> 如果已创建线程没跑完，后面提交任务会创建一个线程。如果没生产者了，线程60s后会被淘汰
 * corePoolSize
   * 0
 * maximumPoolSize
@@ -392,10 +394,12 @@ graph TD
 * keepAliveTime
   * 60s
 * workQueue
-  * SynchronousQueue
+  * SynchronousQueue 
+    * 开始先offer肯定是失败的，所以开始的时候用不到这个队列，直接addWorkers了
+    * 后面有线程在poll(timeout)队列了，再offer的话会直接让等待的线程取走任务
 * handler
   * AbortPolicy 没有触发条件
 #### WorkStealingPool
 
 
-#### ScheduledThreadPool
+### ScheduledThreadPool
