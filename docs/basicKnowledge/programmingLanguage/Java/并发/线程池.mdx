@@ -7,7 +7,7 @@ sidebar_position: 3
 * 减少创建和销毁线程对象的开销
 * 可控性强，可对线程池进行配置，监控
 * 可扩展性强，如优先级，可延迟，定时线程池
-## 用法
+
 
 ## 流程
 <details>
@@ -333,21 +333,21 @@ graph TD
     单位
 ### workQueue（BlockingQueue）：
     阻塞队列，当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，任务就会被存放在队列中。
-* BlockingQueue\<Runnable>：
+* **BlockingQueue**：
   * put和take：阻塞式的
-* ArrayBlockingQueue ：是一个用数组实现的环形队列，在构造函数中，会要求传入数组的容量
-* LinkedBlockingQueue：是一种基于单向链表的阻塞队列。
+* **ArrayBlockingQueue** ：是一个用数组实现的环形队列，在构造函数中，会要求传入数组的容量
+* **LinkedBlockingQueue**：是一种基于单向链表的阻塞队列。
   * 可以无界
-* PriorityQueue：是按照元素的优先级从小到大出队列的二叉堆。正因为如此，PriorityQueue中的2个元素之间需要可以比较大小，并实现Comparable接口（在构造方法传比较器），当元素个数超出数组长度时，执行扩容操作。
-* DelayQueue：即延迟队列，也就是一个按延迟时间从小到大出队的PriorityQueue。
+* **PriorityQueue**：是按照元素的优先级从小到大出队列的二叉堆。正因为如此，PriorityQueue中的2个元素之间需要可以比较大小，并实现Comparable接口（在构造方法传比较器），当元素个数超出数组长度时，执行扩容操作。
+* **DelayQueue**：即延迟队列，也就是一个按延迟时间从小到大出队的PriorityQueue。
 * **SynchronousQueue**：一个不存储元素的阻塞队列
   * 相当于把元素先存在TransferQueue或者TransferStack
   * put和take：会阻塞调用线程，知道有对应的存或取操作
   * offer和poll：如果有对应的存取操作在等待，则消费完返回true，如果没有就直接返回false
     * 仅使用无法阻塞的offer和poll，是无效的，都会失败
   * 直接转发给maxPoolSize策略
-* LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。与SynchronousQueue类似，还含有非阻塞方法。
-* LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。
+* **LinkedTransferQueue**：一个由链表结构组成的无界阻塞队列。与SynchronousQueue类似，还含有非阻塞方法。
+* **LinkedBlockingDeque**：一个由链表结构组成的双向阻塞队列。
 ### threadFactory
     线程工厂，主要用来创建线程，默认为正常优先级、非守护线程。
 ### handler
@@ -357,10 +357,20 @@ graph TD
 *   DiscardOldestPolicy：抛弃队列头部（最旧）的一个任务，并执行当前任务。
 *   DiscardPolicy：忽略并抛弃当前任务。
 
-
+## Callable与Future
 ## 几种Executor
 ### ForkJoinPool
+
 ### ScheduledThreadPoolExecutor
+> 用了DelayedWorkQueue 延迟队列
+* 延迟队列无界，maximumPoolSize没用到
+* DelayedWorkQueue take的时候会调用Condition.await，等待延迟时间
+* 方法：
+  * schedule
+  * scheduleAtFixedRate(Runnable command, long initialDelay,long period,TimeUnit unit)
+    * 不考虑任务时间（任务时间小于设置的间隔时间），如：任务3s,设置间隔2s -> 实际间隔3s
+  * scheduleWithFixedDelay(Runnable command,long initialDelay, ong delay,TimeUnit unit)
+    * 考虑任务时间：如：任务3s,设置间隔2s -> 实际间隔5s
 ### Executors大家庭
 > 工具类，调用的ThreadPoolExecutor,ForkJoinPool的构造函数
 #### FixedThreadPool
@@ -402,4 +412,4 @@ graph TD
 #### WorkStealingPool
 
 
-### ScheduledThreadPool
+
