@@ -5,7 +5,7 @@
 <meta name="generator" content="Docusaurus v0.0.0-5709">
 <title data-rh="true">线程池 | Yuikij&#x27;s  blog</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://your-docusaurus-test-site.com/kibou/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://your-docusaurus-test-site.com/kibou/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://your-docusaurus-test-site.com/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/线程池"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="线程池 | Yuikij&#x27;s  blog"><meta data-rh="true" name="description" content="为什么使用线程池"><meta data-rh="true" property="og:description" content="为什么使用线程池"><link data-rh="true" rel="icon" href="/kibou/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://your-docusaurus-test-site.com/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/线程池"><link data-rh="true" rel="alternate" href="https://your-docusaurus-test-site.com/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/线程池" hreflang="en"><link data-rh="true" rel="alternate" href="https://your-docusaurus-test-site.com/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/线程池" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/kibou/blog/rss.xml" title="Yuikij&#39;s  blog RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/kibou/blog/atom.xml" title="Yuikij&#39;s  blog Atom Feed"><link rel="stylesheet" href="/kibou/assets/css/styles.ce703ba6.css">
-<script src="/kibou/assets/js/runtime~main.4536adea.js" defer="defer"></script>
+<script src="/kibou/assets/js/runtime~main.a9c6aa39.js" defer="defer"></script>
 <script src="/kibou/assets/js/main.f3128f15.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -16,7 +16,6 @@
 <li>可控性强，可对线程池进行配置，监控</li>
 <li>可扩展性强，如优先级，可延迟，定时线程池</li>
 </ul>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="用法">用法<a href="#用法" class="hash-link" aria-label="Direct link to 用法" title="Direct link to 用法">​</a></h2>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="流程">流程<a href="#流程" class="hash-link" aria-label="Direct link to 流程" title="Direct link to 流程">​</a></h2>
 <details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开</summary><div><div class="collapsibleContent_i85q"></div></div></details>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="部分源码">部分源码<a href="#部分源码" class="hash-link" aria-label="Direct link to 部分源码" title="Direct link to 部分源码">​</a></h2>
@@ -37,24 +36,24 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="workqueueblockingqueue">workQueue（BlockingQueue）：<a href="#workqueueblockingqueue" class="hash-link" aria-label="Direct link to workQueue（BlockingQueue）：" title="Direct link to workQueue（BlockingQueue）：">​</a></h3>
 <p>阻塞队列，当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，任务就会被存放在队列中。</p>
 <ul>
-<li>BlockingQueue&lt;Runnable&gt;：<!-- -->
+<li><strong>BlockingQueue</strong>：<!-- -->
 <ul>
 <li>put和take：阻塞式的</li>
 </ul>
 </li>
-<li>ArrayBlockingQueue ：是一个用数组实现的环形队列，在构造函数中，会要求传入数组的容量</li>
-<li>LinkedBlockingQueue：是一种基于单向链表的阻塞队列。<!-- -->
+<li><strong>ArrayBlockingQueue</strong> ：是一个用数组实现的环形队列，在构造函数中，会要求传入数组的容量</li>
+<li><strong>LinkedBlockingQueue</strong>：是一种基于单向链表的阻塞队列。<!-- -->
 <ul>
 <li>可以无界</li>
 </ul>
 </li>
-<li>PriorityQueue：是按照元素的优先级从小到大出队列的二叉堆。正因为如此，PriorityQueue中的2个元素之间需要可以比较大小，并实现Comparable接口（在构造方法传比较器），当元素个数超出数组长度时，执行扩容操作。</li>
-<li>DelayQueue：即延迟队列，也就是一个按延迟时间从小到大出队的PriorityQueue。</li>
+<li><strong>PriorityQueue</strong>：是按照元素的优先级从小到大出队列的二叉堆。正因为如此，PriorityQueue中的2个元素之间需要可以比较大小，并实现Comparable接口（在构造方法传比较器），当元素个数超出数组长度时，执行扩容操作。</li>
+<li><strong>DelayQueue</strong>：即延迟队列，也就是一个按延迟时间从小到大出队的PriorityQueue。</li>
 <li><strong>SynchronousQueue</strong>：一个不存储元素的阻塞队列<!-- -->
 <ul>
 <li>相当于把元素先存在TransferQueue或者TransferStack</li>
 <li>put和take：会阻塞调用线程，知道有对应的存或取操作</li>
-<li>offer和poll：如果有对应的存取操作在  等待，则消费完返回true，如果没有就直接返回false<!-- -->
+<li>offer和poll：如果有对应的存取操作在等待，则消费完返回true，如果没有就直接返回false<!-- -->
 <ul>
 <li>仅使用无法阻塞的offer和poll，是无效的，都会失败</li>
 </ul>
@@ -62,8 +61,8 @@
 <li>直接转发给maxPoolSize策略</li>
 </ul>
 </li>
-<li>LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。与SynchronousQueue类似，还含有非阻塞方法。</li>
-<li>LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。</li>
+<li><strong>LinkedTransferQueue</strong>：一个由链表结构组成的无界阻塞队列。与SynchronousQueue类似，还含有非阻塞方法。</li>
+<li><strong>LinkedBlockingDeque</strong>：一个由链表结构组成的双向阻塞队列。</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="threadfactory">threadFactory<a href="#threadfactory" class="hash-link" aria-label="Direct link to threadFactory" title="Direct link to threadFactory">​</a></h3>
 <p>线程工厂，主要用来创建线程，默认为正常优先级、非守护线程。</p>
@@ -75,9 +74,32 @@
 <li>DiscardOldestPolicy：抛弃队列头部（最旧）的一个任务，并执行当前任务。</li>
 <li>DiscardPolicy：忽略并抛弃当前任务。</li>
 </ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="callable与future">Callable与Future<a href="#callable与future" class="hash-link" aria-label="Direct link to Callable与Future" title="Direct link to Callable与Future">​</a></h2>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="几种executor">几种Executor<a href="#几种executor" class="hash-link" aria-label="Direct link to 几种Executor" title="Direct link to 几种Executor">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="forkjoinpool">ForkJoinPool<a href="#forkjoinpool" class="hash-link" aria-label="Direct link to ForkJoinPool" title="Direct link to ForkJoinPool">​</a></h3>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="scheduledthreadpoolexecutor">ScheduledThreadPoolExecutor<a href="#scheduledthreadpoolexecutor" class="hash-link" aria-label="Direct link to ScheduledThreadPoolExecutor" title="Direct link to ScheduledThreadPoolExecutor">​</a></h3>
+<blockquote>
+<p>用了DelayedWorkQueue 延迟队列</p>
+</blockquote>
+<ul>
+<li>延迟队列无界，maximumPoolSize没用到</li>
+<li>DelayedWorkQueue take的时候会调用Condition.await，等待延迟时间</li>
+<li>方法：<!-- -->
+<ul>
+<li>schedule</li>
+<li>scheduleAtFixedRate(Runnable command, long initialDelay,long period,TimeUnit unit)<!-- -->
+<ul>
+<li>不考虑任务时间（任务时间小于设置的间隔时间），如：任务3s,设置间隔2s -&gt; 实际间隔3s</li>
+</ul>
+</li>
+<li>scheduleWithFixedDelay(Runnable command,long initialDelay, ong delay,TimeUnit unit)<!-- -->
+<ul>
+<li>考虑任务时间：如：任务3s,设置间隔2s -&gt; 实际间隔5s</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="executors大家庭">Executors大家庭<a href="#executors大家庭" class="hash-link" aria-label="Direct link to Executors大家庭" title="Direct link to Executors大家庭">​</a></h3>
 <blockquote>
 <p>工具类，调用的ThreadPoolExecutor,ForkJoinPool的构造函数</p>
@@ -138,7 +160,7 @@
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="cachedthreadpool">CachedThreadPool<a href="#cachedthreadpool" class="hash-link" aria-label="Direct link to CachedThreadPool" title="Direct link to CachedThreadPool">​</a></h4>
 <blockquote>
-<p>如果已创建线程没  跑完，后面提交任务会创建一个线程。如果没生产者了，线程60s后会被淘汰</p>
+<p>如果已创建线程没跑完，后面提交任务会创建一个线程。如果没生产者了，线程60s后会被淘汰</p>
 </blockquote>
 <ul>
 <li>corePoolSize<!-- -->
@@ -172,7 +194,6 @@
 </ul>
 </li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="workstealingpool">WorkStealingPool<a href="#workstealingpool" class="hash-link" aria-label="Direct link to WorkStealingPool" title="Direct link to WorkStealingPool">​</a></h4>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="scheduledthreadpool">ScheduledThreadPool<a href="#scheduledthreadpool" class="hash-link" aria-label="Direct link to ScheduledThreadPool" title="Direct link to ScheduledThreadPool">​</a></h3></div></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/线程"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">线程</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/锁"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">锁</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#为什么使用线程池" class="table-of-contents__link toc-highlight">为什么使用线程池</a></li><li><a href="#用法" class="table-of-contents__link toc-highlight">用法</a></li><li><a href="#流程" class="table-of-contents__link toc-highlight">流程</a></li><li><a href="#部分源码" class="table-of-contents__link toc-highlight">部分源码</a><ul><li><a href="#threadpoolexecutor" class="table-of-contents__link toc-highlight">ThreadPoolExecutor</a></li></ul></li><li><a href="#状态" class="table-of-contents__link toc-highlight">状态</a></li><li><a href="#参数" class="table-of-contents__link toc-highlight">参数</a><ul><li><a href="#corepoolsize" class="table-of-contents__link toc-highlight">corePoolSize</a></li><li><a href="#maximumpoolsize" class="table-of-contents__link toc-highlight">maximumPoolSize</a></li><li><a href="#keepalivetime" class="table-of-contents__link toc-highlight">keepAliveTime</a></li><li><a href="#unit" class="table-of-contents__link toc-highlight">unit:</a></li><li><a href="#workqueueblockingqueue" class="table-of-contents__link toc-highlight">workQueue（BlockingQueue）：</a></li><li><a href="#threadfactory" class="table-of-contents__link toc-highlight">threadFactory</a></li><li><a href="#handler" class="table-of-contents__link toc-highlight">handler</a></li></ul></li><li><a href="#几种executor" class="table-of-contents__link toc-highlight">几种Executor</a><ul><li><a href="#forkjoinpool" class="table-of-contents__link toc-highlight">ForkJoinPool</a></li><li><a href="#scheduledthreadpoolexecutor" class="table-of-contents__link toc-highlight">ScheduledThreadPoolExecutor</a></li><li><a href="#executors大家庭" class="table-of-contents__link toc-highlight">Executors大家庭</a></li><li><a href="#scheduledthreadpool" class="table-of-contents__link toc-highlight">ScheduledThreadPool</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/kibou/docs/intro">Tutorial</a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/kibou/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 My Project, Inc. Built with Docusaurus.</div></div></div></footer></div>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="workstealingpool">WorkStealingPool<a href="#workstealingpool" class="hash-link" aria-label="Direct link to WorkStealingPool" title="Direct link to WorkStealingPool">​</a></h4></div></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/线程"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">线程</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/kibou/docs/basicKnowledge/programmingLanguage/Java/并发/锁"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">锁</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#为什么使用线程池" class="table-of-contents__link toc-highlight">为什么使用线程池</a></li><li><a href="#流程" class="table-of-contents__link toc-highlight">流程</a></li><li><a href="#部分源码" class="table-of-contents__link toc-highlight">部分源码</a><ul><li><a href="#threadpoolexecutor" class="table-of-contents__link toc-highlight">ThreadPoolExecutor</a></li></ul></li><li><a href="#状态" class="table-of-contents__link toc-highlight">状态</a></li><li><a href="#参数" class="table-of-contents__link toc-highlight">参数</a><ul><li><a href="#corepoolsize" class="table-of-contents__link toc-highlight">corePoolSize</a></li><li><a href="#maximumpoolsize" class="table-of-contents__link toc-highlight">maximumPoolSize</a></li><li><a href="#keepalivetime" class="table-of-contents__link toc-highlight">keepAliveTime</a></li><li><a href="#unit" class="table-of-contents__link toc-highlight">unit:</a></li><li><a href="#workqueueblockingqueue" class="table-of-contents__link toc-highlight">workQueue（BlockingQueue）：</a></li><li><a href="#threadfactory" class="table-of-contents__link toc-highlight">threadFactory</a></li><li><a href="#handler" class="table-of-contents__link toc-highlight">handler</a></li></ul></li><li><a href="#callable与future" class="table-of-contents__link toc-highlight">Callable与Future</a></li><li><a href="#几种executor" class="table-of-contents__link toc-highlight">几种Executor</a><ul><li><a href="#forkjoinpool" class="table-of-contents__link toc-highlight">ForkJoinPool</a></li><li><a href="#scheduledthreadpoolexecutor" class="table-of-contents__link toc-highlight">ScheduledThreadPoolExecutor</a></li><li><a href="#executors大家庭" class="table-of-contents__link toc-highlight">Executors大家庭</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/kibou/docs/intro">Tutorial</a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/kibou/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 My Project, Inc. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
