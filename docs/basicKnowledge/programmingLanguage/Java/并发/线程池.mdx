@@ -358,9 +358,79 @@ graph TD
 *   DiscardPolicy：忽略并抛弃当前任务。
 
 ## Callable与Future
+### Callable
+```java
+@FunctionalInterface
+public interface Callable<V> {
+    /**
+     * Computes a result, or throws an exception if unable to do so.
+     *
+     * @return computed result
+     * @throws Exception if unable to compute a result
+     */
+    V call() throws Exception;
+}
+```
+* 有返回值的Runnable，本身是一个相对独立的函数式接口
+### Future
+#### FutureTask
+> implements RunnableFuture\<V>
+> interface RunnableFuture\<V> extends Runnable, Future\<V>
+* FutureTask 接收一个Callable，并且在run的时候调用call，接收返回值。用get去拿返回值
+* FutureTask可以直接传递给Thread
+### CompletableFuture
+> implements Future\<T>, CompletionStage\<T>
+* 处理异步任务的结果,多任务
+* 各种方法
+  * supplyAsync: 异步立刻执行
+  * completedFuture: 不执行任务，直接返回 T
+  * thenApplyAsync: 在当前线程中异步处理上个任务，并返回结果
+  * thenApply: 同步
+  * henAccept: 执行完成后，接收返回结果，不返回
+    * 上个任务抛出异常就不执行下一个then*
+  * get:　阻塞获取异步结果
+  * complete(T):  主动完成
+  * completeExceptionally: 主动抛出异常
+  * exceptionally((ex) -> ()): thenApplyAsync等如果异常了会进入
+  * handle((result, fail) -> ()): 都会进入
+  * thenComplete: 没有返回值
 ## 几种Executor
 ### ForkJoinPool
+```java
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 
+public class FibonacciCalculator extends RecursiveTask<Integer> {
+    private final int n;
+
+    public FibonacciCalculator(int n) {
+        this.n = n;
+    }
+
+    @Override
+    protected Integer compute() {
+        // 终止条件
+        if (n <= 1) {
+            return n;
+        } else {
+            FibonacciCalculator fib1 = new FibonacciCalculator(n - 1);
+            fib1.fork(); // 在新的线程中异步执行 fib(n-1)
+
+            FibonacciCalculator fib2 = new FibonacciCalculator(n - 2);
+            // 合并任务，在当前线程中计算 fib(n-2)，然后等待 fib(n-1) 完成并获取其结果
+            return fib2.compute() + fib1.join(); 
+        }
+    }
+
+    public static void main(String[] args) {
+        int n = 10;
+        ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
+        FibonacciCalculator calculator = new FibonacciCalculator(n);
+        int result = forkJoinPool.invoke(calculator);
+        System.out.println("The " + n + "th Fibonacci number is: " + result);
+    }
+}
+```
 ### ScheduledThreadPoolExecutor
 > 用了DelayedWorkQueue 延迟队列
 * 延迟队列无界，maximumPoolSize没用到
@@ -409,7 +479,6 @@ graph TD
     * 后面有线程在poll(timeout)队列了，再offer的话会直接让等待的线程取走任务
 * handler
   * AbortPolicy 没有触发条件
-#### WorkStealingPool
 
 
 
