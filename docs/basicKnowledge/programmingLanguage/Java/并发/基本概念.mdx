@@ -36,10 +36,11 @@ sidebar_position: 1
   * 重排序会导致代码执行顺序与预期不符，因此需要通过同步机制来保证有序性。
   * 或者通过Happens-Before机制来保证有序性。
 * Happens-Before
+<a id="lock-monitor"></a>
   * Each action in a thread happens before every action in that thread that comes later in the program's order.
     单一线程中的每个操作都发生在该线程中按程序顺序排列较晚的每个操作之前。
     （仅仅是保证语义上的结果的正确性）
-  * <a name="my-section"></a>An unlock on a monitor happens before every subsequent lock on that same monitor.
+  * An unlock on a monitor happens before every subsequent lock on that same monitor.
     监视器上的解锁发生在同一监视器上的每个后续锁定之前。
   * A write to a volatile field happens before every subsequent read of that same volatile.
     对volatile字段的写入发生在每次后续读取同一volatile字段之前。

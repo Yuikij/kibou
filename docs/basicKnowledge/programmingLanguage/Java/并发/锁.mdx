@@ -6,7 +6,7 @@ sidebar_position: 4
 ## Synchronized
 > 对象锁，悲观锁
 ### 作用
-* [可见性，清空工作区内存，同步主内存](/docs/basicKnowledge/programmingLanguage/Java/并发/基本概念#my-section)
+* [可见性，清空工作区内存，同步主内存](/docs/basicKnowledge/programmingLanguage/Java/并发/基本概念#lock-monitor)
 * 有序性，原子性：同一时刻只允许一条线程访问资源，知道方法或代码块结束
 ### 使用和原理
 * 对于非静态成员函数，锁加在对象上面的（方法上的访问标志）
@@ -15,6 +15,7 @@ sidebar_position: 4
 * 综上，synchronized是在对象头的Mark Word区，存2个重要字段：锁标志位和占用该锁的thread ID
 ### Q&A
 ### 优化
+#### 重量级锁
 ## Lock
 ## 一些具体的类
 ## 一些分类 
