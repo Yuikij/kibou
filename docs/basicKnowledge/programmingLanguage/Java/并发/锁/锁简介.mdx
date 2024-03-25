@@ -1,0 +1,12 @@
+---
+sidebar_position: 1
+---
+
+
+## 线程的协作
+* Condition
+> lock接口的newCondition，得到一个Condition类。Condition有阻塞和唤醒两个方法，一个lock可以new多个。AQS里有一个具体的实现
+  * void signal();
+  * void await() throws InterruptedException;
+*  wait()与notify()
+> 配合synchronized一起使用，针对锁住的对象，调用对象的wait()与notify()

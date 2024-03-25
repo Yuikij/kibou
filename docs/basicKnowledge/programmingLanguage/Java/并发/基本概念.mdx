@@ -35,8 +35,8 @@ sidebar_position: 1
   * 编译器和处理器为了优化程序性能而对指令序列进行重新排序的一种手段。
   * 重排序会导致代码执行顺序与预期不符，因此需要通过同步机制来保证有序性。
   * 或者通过Happens-Before机制来保证有序性。
-* Happens-Before
 <a id="lock-monitor"></a>
+* Happens-Before
   * Each action in a thread happens before every action in that thread that comes later in the program's order.
     单一线程中的每个操作都发生在该线程中按程序顺序排列较晚的每个操作之前。
     （仅仅是保证语义上的结果的正确性）
@@ -62,11 +62,11 @@ sidebar_position: 1
   class Foo {
         private volatile Helper helper = null;
         public Helper getHelper() {
-        //第一次校验，不是null就直接放过，防止已经初始化的情况下加锁
+        //第一次校验，不是null就直接放过，防止已经初始化的情况下加锁，这样能在无锁的低成本下，过滤掉大多数情况
             if (helper == null) {
             //防止分配多个对象
                 synchronized(this) {
-                //第二次校验，同步保证只有一个对象
+                //第二次校验，同步保证只有一个对象，防止在第一次校验到同步中间，helper已经被赋值了
                     if (helper == null)
                     //伪代码：
                     //1.分配对象的内存空间，2.初始化对象，3.设置对象指向分配的内存地址

@@ -1,0 +1,87 @@
+> 重入锁
+> * 可重入
+> * 有公平锁的实现，按照申请事件获取锁
+> * 可以绑定多个条件，这就意味着可以精准的唤醒某个线程，而不是像Synchronized那样只能用notifyall
+> * 提供了tryLock()方法，可以在不阻塞线程的情况下尝试获取锁资源，避免死锁问题
+
+## 源码实现
+### AbstractQueuedSynchronizer
+#### 基本流程
+* 尝试获取锁（待子类实现）
+* 尝试加入队尾
+* 尝试检查是否排到队头， 尝试获取锁（待子类实现）
+* 检查前置节点状态，自旋或者阻塞
+#### 阻塞和唤醒线程
+LockSupport工具类：对Unsafe类中原语进行了封装
+```java title="阻塞"
+    public static void park(Object blocker) {
+        Thread t = Thread.currentThread();
+        setBlocker(t, blocker);
+        UNSAFE.park(false, 0L);
+        setBlocker(t, null);
+    }
+```
+```java title="唤醒"
+    public static void unpark(Thread thread) {
+        if (thread != null)
+            UNSAFE.unpark(thread);
+    }
+```
+#### 多线程的管理
+> 利用双向链表和CAS实现了一个阻塞队列
+```java
+    public final void acquire(int arg) {
+    //尝试一次获取锁
+        if (!tryAcquire(arg) &&
+//        acquireQueued：等待并尝试获取锁
+//        addWaiter：向队尾添加当前线程的node节点
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+```
+```java
+    final boolean acquireQueued(final Node node, int arg) {
+        boolean failed = true;
+        try {
+            boolean interrupted = false;
+            for (;;) {
+                final Node p = node.predecessor();
+                if (p == head && tryAcquire(arg)) {
+                    // 获取到锁之后，删掉当前线程的节点
+                    setHead(node);
+                    p.next = null; // help GC
+                    failed = false;
+                    return interrupted;
+                }
+                //阻塞等待
+                if (shouldParkAfterFailedAcquire(p, node) &&
+                    parkAndCheckInterrupt())
+                    interrupted = true;
+            }
+        } finally {
+            if (failed)
+                cancelAcquire(node);
+        }
+    }
+```
+#### 公平和非公平的实现
+非公平只是在排队之前去尝试获取一次锁，公平就老老实实排队，先进先出
+```java title="NonfairSync"
+        final void lock() {
+            if (compareAndSetState(0, 1))
+                setExclusiveOwnerThread(Thread.currentThread());
+            else
+                acquire(1);
+        }
+```
+#### tryLock的实现
+直接调用tryAcquire，尝试一次
+```java
+    public boolean tryLock() {
+        return sync.nonfairTryAcquire(1);
+    }
+```
+
+## Q&A
+1. 为什么AQS需要双向队列
+为了获取前置节点的状态，在尝试获取锁的过程中，需要先判断前置节点是否是head节点，因为只有获取锁之后，该线程节点才会被设置成head
