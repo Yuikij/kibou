@@ -44,6 +44,7 @@ LockSupport工具类：对Unsafe类中原语进行了封装
         boolean failed = true;
         try {
             boolean interrupted = false;
+            // 自旋
             for (;;) {
                 final Node p = node.predecessor();
                 if (p == head && tryAcquire(arg)) {
@@ -63,6 +64,36 @@ LockSupport工具类：对Unsafe类中原语进行了封装
                 cancelAcquire(node);
         }
     }
+```
+```java
+    private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
+        int ws = pred.waitStatus;
+        if (ws == Node.SIGNAL)
+            /*
+             * This node has already set status asking a release
+             * to signal it, so it can safely park.
+             */
+            return true;
+        if (ws > 0) {
+            /*
+             * Predecessor was cancelled. Skip over predecessors and
+             * indicate retry.
+             */
+            do {
+                node.prev = pred = pred.prev;
+            } while (pred.waitStatus > 0);
+            pred.next = node;
+        } else {
+            /*
+             * waitStatus must be 0 or PROPAGATE.  Indicate that we
+             * need a signal, but don't park yet.  Caller will need to
+             * retry to make sure it cannot acquire before parking.
+             */
+            compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
+        }
+        return false;
+    }
+
 ```
 #### 公平和非公平的实现
 非公平只是在排队之前去尝试获取一次锁，公平就老老实实排队，先进先出
@@ -86,3 +117,12 @@ LockSupport工具类：对Unsafe类中原语进行了封装
 1. 为什么AQS需要双向队列
 为了获取前置节点的状态，在尝试获取锁的过程中，需要先判断前置节点是否是head节点，因为只有获取锁之后，该线程节点才会被设置成head
 2. AQS在java18做了哪些改进
+tryLock加上了时间参数
+3. AQS在哪些地方用了cas和自旋
+* cas
+  * 设置节点状态
+  * 设置头尾节点
+* 自旋
+  * 添加队尾
+  * 尝试获取锁
+  * 阻塞线程

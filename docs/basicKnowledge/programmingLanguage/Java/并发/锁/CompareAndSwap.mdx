@@ -1,7 +1,66 @@
+---
+sidebar_position: 3
+---
+
 # CAS
 > 非阻塞同步，Compare-And-Swap，先比较再交换
+> 通过比较共享变量的当前值与期望值，确定读写之间是否有竞争线程干预，实现无锁的并发操作
 > 类似sql里面的 update set f1 = 2 from t1 where f1 = 1 
 
 ## 大致流程
+* 三个操作数：内存位置（V），预期原值（A），新值（B）
+* 先读A，进行一些操作后，准备代写入的B，比较A和当前的V，若相等，就认为读A之后没有其他线程干预，把B写入到V的位置
 ## java中的原语
+unsafe类中的
+* compareAndSwapObject
+* compareAndSwapInt
+* compareAndSwapLong
 ## ABA问题
+> 旧的预期值A在多次修改之后修改回了A
+
+解决：通过控制变量值的版本来保证正确性，每次修改版本+1  
+如AtomicStampedReference
+
+## 示例
+```java
+public class CASDemo {
+
+    private static int count = 0;
+
+    public static void main(String[] args) throws InterruptedException {
+
+        Thread thread1 = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                int expectedValue = count;
+                int newValue = expectedValue + 1;
+                if (CAS.compareAndSwapInt(CASDemo.class, "count", expectedValue, newValue)) {
+                    // CAS 操作成功
+                } else {
+                    // CAS 操作失败，重试
+                }
+            }
+        });
+
+        Thread thread2 = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                int expectedValue = count;
+                int newValue = expectedValue + 1;
+                if (CAS.compareAndSwapInt(CASDemo.class, "count", expectedValue, newValue)) {
+                    // CAS 操作成功
+                } else {
+                    // CAS 操作失败，重试
+                }
+            }
+        });
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
+
+        System.out.println("count = " + count); // 20000
+    }
+}
+
+```
