@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[6032],{40898:e=>{e.exports=JSON.parse('{"title":"git","slug":"/category/git-1","permalink":"/kibou/docs/category/git-1","navigation":{"next":{"title":"shell","permalink":"/kibou/docs/category/shell-2"}}}')}}]);
