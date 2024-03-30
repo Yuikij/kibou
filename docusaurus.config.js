@@ -83,7 +83,6 @@ const config = {
                     {
                         type: 'dropdown',
                         label: '基础知识',
-                        // to: '/docs/category/基础知识',
                         position: 'left',
                         items: [
                             {
@@ -91,15 +90,6 @@ const config = {
                                 sidebarId: 'programmingLanguage',
                                 label: '编程语言',
                             },
-                            // {
-                            //     type: 'html',
-                            //     value: '<hr class="dropdown-separator">',
-                            // },
-                            // {
-                            //     type: 'html',
-                            //     className: 'dropdown-archived-versions',
-                            //     value: '<b>网络知识大标题</b>',
-                            // },
                             {
                                 type: 'docSidebar',
                                 sidebarId: 'network',
@@ -129,7 +119,6 @@ const config = {
                     {
                         type: 'dropdown',
                         label: '基础软件',
-                        // to: '/docs/basicSoftware/基础软件',
                         position: 'left',
                         items: [
                             {
