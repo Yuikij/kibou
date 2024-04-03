@@ -116,8 +116,6 @@ static final class Segment<K,V> extends ReentrantLock implements Serializable {
         }
 ```
 
-#### 扩容
-
 ### JDK1.8
 #### 容器实体
 ```java
@@ -199,10 +197,69 @@ static final class Segment<K,V> extends ReentrantLock implements Serializable {
 ```
 
 ### 扩容
+> 1.8: 分段扩容，用ForwardingNode记录旧桶用来get，并且当其他线程遇到了ForwardingNode的时候，根据transferIndex找到下一个待扩容段
+
+
+
+
 
 ### Q&A
 * 1.7和1.8的区别
   * 1.7是分段锁，用ReentrantLock。1.8的锁粒度是node节点，并且阻塞锁用的是Synchronized，并且在添加节点，修改状态的时候用了cas
 * 在调用put之后，在实际替换node的value之前，调用get，那不是获取到旧值了
   * 有可能，不提供强一致性
-## 
+## CopyOnWriteArrayList
+容器实体:
+```java
+ private transient volatile Object[] array;
+```
+
+* 只在写的时候加锁
+* 写时复制的机制，修改共享数据的时候会先复制旧的数组再修改
+* 写写之间阻塞
+* 扩容：每次add的时候copy新数组容量+1
+* 适合读多写少的场景
+
+## CountDownLatch
+```java
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchExample {
+    public static void main(String[] args) throws InterruptedException {
+        // 创建一个 CountDownLatch，初始计数为 3
+        CountDownLatch latch = new CountDownLatch(3);
+
+        // 创建三个工作线程
+        Thread thread1 = new Thread(new Worker(latch, "Thread 1"));
+        Thread thread2 = new Thread(new Worker(latch, "Thread 2"));
+        Thread thread3 = new Thread(new Worker(latch, "Thread 3"));
+
+        // 启动工作线程
+        thread1.start();
+        thread2.start();
+        thread3.start();
+
+        // 等待所有工作线程完成
+        latch.await();
+
+        System.out.println("All workers have finished!");
+    }
+}
+
+class Worker implements Runnable {
+    private final CountDownLatch latch;
+    private final String name;
+
+    public Worker(CountDownLatch latch, String name) {
+        this.latch = latch;
+        this.name = name;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(name + " is working");
+        latch.countDown();
+    }
+}
+
+```
