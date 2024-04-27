@@ -2,6 +2,33 @@
 sidebar_position: 1
 ---
 
+import 基本结构 from '@site/static/img/jvm/基本结构.png';
+
+import { Image } from "antd";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 > 对操作系统的抽象，通过应用层来实现语言的平台无关的特性，能解释编译运行class字节码文件
 
-![img.png](img.png)
+<Image width={500} src={基本结构}
+/>
+
+<Tabs
+defaultValue="apple"
+values={[
+{label: 'Apple', value: 'apple'},
+{label: 'Orange', value: 'orange'},
+{label: 'Banana', value: 'banana'},
+]}>
+<TabItem value="apple">
+* 启动时建立
+  * 垃圾回收机的重点工作区
+存放对象实例
+根据垃圾回收机制的不同，Java堆有可能拥有不同的结构
+</TabItem>
+<TabItem value="orange">This is an orange 🍊</TabItem>
+<TabItem value="banana">This is a banana 🍌</TabItem>
+</Tabs>
+
+
+## 对象的创建
