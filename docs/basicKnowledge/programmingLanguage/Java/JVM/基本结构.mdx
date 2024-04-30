@@ -7,28 +7,136 @@ import 基本结构 from '@site/static/img/jvm/基本结构.png';
 import { Image } from "antd";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import React from 'react';
+import { Card, Col, Row } from 'antd';
 
 > 对操作系统的抽象，通过应用层来实现语言的平台无关的特性，能解释编译运行class字节码文件
 
-<Image width={500} src={基本结构}
-/>
+[//]: # (通过应用层来实现语言的平台无关的特性<Tabs)
 
-<Tabs
-defaultValue="apple"
-values={[
-{label: 'Apple', value: 'apple'},
-{label: 'Orange', value: 'orange'},
-{label: 'Banana', value: 'banana'},
-]}>
-<TabItem value="apple">
-* 启动时建立
-  * 垃圾回收机的重点工作区
-存放对象实例
-根据垃圾回收机制的不同，Java堆有可能拥有不同的结构
-</TabItem>
-<TabItem value="orange">This is an orange 🍊</TabItem>
-<TabItem value="banana">This is a banana 🍌</TabItem>
-</Tabs>
+[//]: # (defaultValue="share")
+
+[//]: # (values={[)
+
+[//]: # ({label: '线程共享', value: 'share'},)
+
+[//]: # ({label: '线程私有', value: 'private'},)
+
+[//]: # (]}>)
+
+[//]: # (<TabItem value="share">)
+
+[//]: # ()
+[//]: # (<Card title="方法区" bordered={false}>)
+
+[//]: # ()
+[//]: # (* 组成)
+
+[//]: # (  * 类信息（字段，方法）)
+
+[//]: # (  * 运行时常量池)
+
+[//]: # (    * 字符串常量和数字常量)
+
+[//]: # (    * 字面量与符号引用)
+
+[//]: # (    * 可在运行期间存入，如intern&#40;&#41;)
+
+[//]: # (    * 每一个类和接口都对应一个常量池)
+
+[//]: # (  * 静态变量)
+
+[//]: # (  * 即时编译器编译后的代码缓存等数据)
+
+[//]: # (* 实现方法)
+
+[//]: # (  * 永久代（1.7）)
+
+[//]: # (    * 大小有限，-XX：M axPermSize 设置)
+
+[//]: # (    * 垃圾回收会导致full GC （待验证）)
+
+[//]: # (    * 使用jvm堆内存，为了和堆分来取了个名字)
+
+[//]: # (  * 元空间（1.8）)
+
+[//]: # (    * 无限制，直到消耗掉可用系统内存)
+
+[//]: # (* 垃圾回收)
+
+[//]: # (  * 主要回收常量池中废弃的常量和不再使用的类型)
+
+[//]: # ()
+[//]: # (</Card>)
+
+[//]: # (<Row gutter={16}>)
+
+[//]: # (<Col span={8}><Card title="方法区" bordered={false}>)
+
+[//]: # ()
+[//]: # (* 组成)
+
+[//]: # (  * 类信息（字段，方法）)
+
+[//]: # (  * 运行时常量池)
+
+[//]: # (    * 字符串常量和数字常量)
+
+[//]: # (    * 字面量与符号引用)
+
+[//]: # (    * 可在运行期间存入，如intern&#40;&#41;)
+
+[//]: # (    * 每一个类和接口都对应一个常量池)
+
+[//]: # (  * 静态变量)
+
+[//]: # (  * 即时编译器编译后的代码缓存等数据)
+
+[//]: # (* 实现方法)
+
+[//]: # (  * 永久代（1.7）)
+
+[//]: # (    * 大小有限，-XX：M axPermSize 设置)
+
+[//]: # (    * 垃圾回收会导致full GC （待验证）)
+
+[//]: # (    * 使用jvm堆内存，为了和堆分来取了个名字)
+
+[//]: # (  * 元空间（1.8）)
+
+[//]: # (    * 无限制，直到消耗掉可用系统内存)
+
+[//]: # (* 垃圾回收)
+
+[//]: # (  * 主要回收常量池中废弃的常量和不再使用的类型)
+
+[//]: # ()
+[//]: # (</Card></Col>)
+
+[//]: # (</Row>)
+
+[//]: # (</TabItem>)
+
+[//]: # (<TabItem value="private">)
+
+[//]: # ()
+[//]: # (<Row gutter={16}><Col span={8}><Card title="Card title" bordered={false}>)
+
+[//]: # ()
+[//]: # (* 启动时建立)
+
+[//]: # (  * 垃圾回收机的重点工作区)
+
+[//]: # (存放对象实例)
+
+[//]: # (根据垃圾回收机制的不同，Java堆有可能拥有不同的结构)
+
+[//]: # ()
+[//]: # (</Card></Col></Row>)
+
+[//]: # ()
+[//]: # (</TabItem></Tabs>)
+
 
 
 ## 对象的创建
