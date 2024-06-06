@@ -140,6 +140,12 @@ const config = {
                     },
                     {
                         type: 'docSidebar',
+                        sidebarId: 'publishClass',
+                        position: 'left',
+                        label: '公开课笔记',
+                    },
+                    {
+                        type: 'docSidebar',
                         sidebarId: 'prepareExam',
                         position: 'right',
                         label: '备考',
