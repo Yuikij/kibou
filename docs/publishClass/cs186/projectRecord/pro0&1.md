@@ -1,4 +1,3 @@
-# project记录
 ## Project 0: Setup
 * 一些基本配置，没啥好说的
 
