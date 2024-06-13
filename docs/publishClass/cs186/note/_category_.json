@@ -1,12 +1,12 @@
 {
   "position": 2.5,
-  "label": "Project记录",
+  "label": "Note记录",
   "collapsible": true,
   "collapsed": true,
   "className": "red",
   "link": {
     "type": "generated-index",
-    "title": "Project记录"
+    "title": "Note记录"
   },
   "customProps": {
     "description": "This description can be used in the swizzled DocCard"
