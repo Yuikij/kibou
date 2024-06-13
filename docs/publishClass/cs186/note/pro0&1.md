@@ -41,9 +41,10 @@
 
 * 磁盘空间管理
   * 磁盘空间管理是 DBMS 的最低层。它负责管理磁盘空间。其主要用途包括将页面映射到磁盘上的位置、将页面从磁盘加载到内存以及将页面保存回磁盘并确保写入。
-    ![alt text](image.png)
+    
+  ![alt text](image.png)
 ### Files, Pages, Records
-* 关系型数据库系统的基本单位是record (row)，record被组织成relations (tables) ，可以在内存中被增删改查。
+* 关系型数据库系统的基本单位是**record (row)**，record被组织成**relations (tables)** ，可以在内存中被增删改查。
 * 磁盘数据的基本单位是page，每张表被被组织成多个page形成了一个file，file被组织成database。
 *  Based on the relation’s schema and access pattern, the database will determine: (1) type of file used, (2) how pages are organized in the file, (3) how records are organized on each page, (4) and how each record is formatted.
   
@@ -52,9 +53,44 @@
 * There are two main types of files: Heap Files and Sorted Files.
 * 对于每张表，数据库将通过I/O成本来选择类型，1I/O相当于读或者写一页
 #### Heap File
+* 一种文件类型，没有特定的页面顺序
+##### 链表实现
+* 每个数据页包含了records(很多行)， free space tracker，上下页指针
+  * 数据页分为完整页和空闲页，full pages and free page。
+* 有一个 header page
 
+![img.png](img.png)
+##### Page Directory Implementation 页目录实现
+* 和链表实现的不同在于：using a linked list for header pages，在标头页使用链表 
+* 标头页包含指针和可用空间
+* 数据页仅存数据
+> 相对链表的优点是插入快
+> 搜索相对都比较慢，需要完整扫描
+![img_1.png](img_1.png)
 #### Sorted Files
+* 页是按照key有序排序的
+* 没说实现，但是查找用二分，复杂度：logN I/Os
+* 插入可能会移动后面的页， logN + N I/O
 ### A Note on Counting Header Pages
+* 关于需不需要计算Header的IO成本
 ### Record Types
+> 行的格式
+  * 固定长度记录（FLR）和可变长度记录（VLR）
+  * VLR的时候，Header要记录Record的尾部
 ### Page Formats
+> 页的格式
+* Pages with Fixed Length Records
+* Pages with Variable Length Records
 ### Field Types
+> cs186的约定
+
+| Type     | Data Type  | Size (B) |
+|----------|------------|----------|
+| Fixed    | Integer    | 4        |
+| Fixed    | Float      | 4        |
+| Fixed    | Boolean    | 1        |
+| Fixed    | Byte       | 1        |
+| Fixed    | Char(N)    | N        |
+| Variable | Varchar(N) | <= N     |
+| Variable | Text       | >= 0     |
+
