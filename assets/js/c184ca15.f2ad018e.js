@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[2258],{88151:e=>{e.exports=JSON.parse('{"title":"Note\u8bb0\u5f55","slug":"/category/note\u8bb0\u5f55-1","permalink":"/kibou/docs/category/note\u8bb0\u5f55-1","navigation":{"next":{"title":"pro0&1","permalink":"/kibou/docs/publishClass/cs186/note/pro0&1"}}}')}}]);
