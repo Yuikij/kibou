@@ -80,7 +80,10 @@
 ### Page Formats
 > 页的格式
 * Pages with Fixed Length Records
+  * 用page headers去存储当前的records数量
+  * 因为知道了record的数量和长度，所以插入很容易
 * Pages with Variable Length Records
+  * 有一个page footer去维护 a slot directory 用来跟踪 slot count, a free space pointer, and entries
 ### Field Types
 > cs186的约定
 
@@ -94,3 +97,8 @@
 | Variable | Varchar(N) | <= N     |
 | Variable | Text       | >= 0     |
 
+## 总结和问题
+* 每个文件包含了多页，每页里面有多行
+* 是不是一个文件对应一张表
+* 对于索引来说，索引是file之上的东西，还是说index file也是一种file，和sorted file是同级的概念
+* 什么是页的packed和unpacked

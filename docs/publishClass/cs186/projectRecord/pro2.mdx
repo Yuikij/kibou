@@ -1,0 +1,33 @@
+import projView from '@site/static/img/cs186/image.webp';
+import { Image } from "antd";
+
+## Project 2
+### 熟悉框架和概念
+<Image width={500} src={projView}
+/>
+> * Green Boxes: functions that you need to implement
+> * White boxes: next to each function, contains a quick summary of the important points that you need to consider for that function. To find more detailed descriptions look at the comments of each method.
+> * Orange boxes: hints for each function which may point you to helper functions.
+
+#### DataBox
+* DB支持的数据类型: Boolean (1 byte), Int (4 bytes), Float (4 bytes), Long (8 bytes) and String(N) (N bytes)
+#### RecordId
+* A record（表里的一行记录） 由 page number (确定页的位置) and its entry number (确定record在页的位置) 唯一确定
+* 在叶子节点中，通过 record IDs 作为指向record的指针
+#### Index
+* index 目录包含了B+树的实现
+    * BPlusTree.java
+    > keys 是DataBox类型的对象
+    * BPlusNode.java
+        * LeafNode.java
+        > 存储了keys和recordIds，没有子节点
+        * InnerNode.java
+        > 存储了keys和叶子节点的指针（就是页码）
+    * BPlusTreeMetadata.java
+    > 存储有树的顺序和高度等有用信息
+##### 实现细节
+* 不支持重复的key
+* 节点和page对应，不需要一个节点跨多个page
+* 删除元素不必重新平衡树（简单起见）
+#### LockContext objects
+* 锁对象，目前不需要关心，无脑传递
