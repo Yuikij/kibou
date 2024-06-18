@@ -42,7 +42,7 @@
 * 磁盘空间管理
   * 磁盘空间管理是 DBMS 的最低层。它负责管理磁盘空间。其主要用途包括将页面映射到磁盘上的位置、将页面从磁盘加载到内存以及将页面保存回磁盘并确保写入。
     
-  ![alt text](image.png)
+  ![alt text](img/disk.png)
 ### Files, Pages, Records
 * 关系型数据库系统的基本单位是**record (row)**，record被组织成**relations (tables)** ，可以在内存中被增删改查。
 * 磁盘数据的基本单位是page，每张表被被组织成多个page形成了一个file，file被组织成database。
@@ -59,14 +59,14 @@
   * 数据页分为完整页和空闲页，full pages and free page。
 * 有一个 header page
 
-![img.png](img.png)
+![img.png](img/linked.png)
 ##### Page Directory Implementation 页目录实现
 * 和链表实现的不同在于：using a linked list for header pages，在标头页使用链表 
 * 标头页包含指针和可用空间
 * 数据页仅存数据
 > 相对链表的优点是插入快
 > 搜索相对都比较慢，需要完整扫描
-![img_1.png](img_1.png)
+![img_1.png](img/page.png)
 #### Sorted Files
 * 页是按照key有序排序的
 * 没说实现，但是查找用二分，复杂度：logN I/Os
