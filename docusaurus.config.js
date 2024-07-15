@@ -1,6 +1,6 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from 'prism-react-renderer';
 // const lightCodeTheme = require('prism-react-renderer/themes/github');
 // const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
@@ -235,7 +235,7 @@ const config = {
             prism: {
                 theme: prismThemes.github,
                 darkTheme: prismThemes.dracula,
-                additionalLanguages: ['powershell','java','bash','ini','sql'],
+                additionalLanguages: ['powershell','java','bash','ini','sql','python'],
             },
         },
 };
