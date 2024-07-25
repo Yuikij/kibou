@@ -136,6 +136,11 @@ const config = {
                                 sidebarId: 'operation',
                                 label: '运维相关',
                             },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'design',
+                                label: '软件设计',
+                            },
                         ],
                     },
                     {

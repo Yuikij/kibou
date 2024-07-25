@@ -28,8 +28,15 @@ iter.next();     // returns 3
 #### Task1:
 ##### 理解QueryOperator
 ##### 理解Simple Nested Loop Join
+* 重要的就是实现迭代器，嵌套的两个for循环
 ##### Block Nested Loop Join
 * 需要实现的方法：
   * fetchNextLeftBlock
   * fetchNextRightPage
   * fetchNextRecord
+#### Task 2: Hash Joins
+##### Simple Hash Join
+##### Grace Hash Join
+### 问题和总结
+##### Block Nested Loop Join
+* 如何保证getBlockIterator，一次获取n页，这个操作是一次io的，没看懂

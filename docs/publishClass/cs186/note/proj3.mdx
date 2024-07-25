@@ -98,7 +98,7 @@ for each page R_P in R:
 * 示例：R join S
 > 假设缓冲区有B页，1个是输出缓冲区，1个用于S，B-2个用于R
 :::tip
-如果有B-2个页，那么一块有B-2个页，一共有PageSize(R)/(B-2)块
+如果有B-2个页，那么一次读B-2个页，一次读一块，一块有B-2个页，一共有PageSize(R)/(B-2)块
 :::
 ``` python
 # 前提:一次读取PageSize(R)
@@ -124,6 +124,7 @@ for each record r in R:
 ```
 * I/O 成本：PageSize(R)+RecordSize(R)*(每次索引查询的消耗)
 ### Hash Join
+#### Naive Hash Join
 ### Sort-Merge Join
 
 ## 总结和问题
