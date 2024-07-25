@@ -3,7 +3,7 @@ exports.id = 687;
 exports.ids = [687];
 exports.modules = {
 
-/***/ 91598:
+/***/ 24247:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 
@@ -13,7 +13,7 @@ __webpack_require__.d(__webpack_exports__, {
   c: () => (/* binding */ computeDimensionOfText)
 });
 
-// NAMESPACE OBJECT: ./node_modules/micromark/lib/constructs.js
+// NAMESPACE OBJECT: ./node_modules/mermaid/node_modules/micromark/lib/constructs.js
 var constructs_namespaceObject = {};
 __webpack_require__.r(constructs_namespaceObject);
 __webpack_require__.d(constructs_namespaceObject, {
@@ -691,7 +691,7 @@ function factorySpace(effects, ok, type, max) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/initialize/content.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/initialize/content.js
 /**
  * @typedef {import('micromark-util-types').InitialConstruct} InitialConstruct
  * @typedef {import('micromark-util-types').Initializer} Initializer
@@ -772,7 +772,7 @@ function initializeContent(effects) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/initialize/document.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/initialize/document.js
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').ContainerState} ContainerState
@@ -1614,7 +1614,7 @@ function tokenizeContinuation(effects, ok, nok) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/initialize/flow.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/initialize/flow.js
 /**
  * @typedef {import('micromark-util-types').InitialConstruct} InitialConstruct
  * @typedef {import('micromark-util-types').Initializer} Initializer
@@ -1684,7 +1684,7 @@ function initializeFlow(effects) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/initialize/text.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/initialize/text.js
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').InitialConstruct} InitialConstruct
@@ -1932,7 +1932,7 @@ function resolveAll(constructs, events, context) {
   return events
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/create-tokenizer.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/create-tokenizer.js
 /**
  * @typedef {import('micromark-util-types').Chunk} Chunk
  * @typedef {import('micromark-util-types').Code} Code
@@ -10731,7 +10731,7 @@ function tokenizeCodeText(effects, ok, nok) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/constructs.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/constructs.js
 /**
  * @typedef {import('micromark-util-types').Extension} Extension
  */
@@ -10818,7 +10818,7 @@ const disable = {
   null: []
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/parse.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/parse.js
 /**
  * @typedef {import('micromark-util-types').Create} Create
  * @typedef {import('micromark-util-types').FullNormalizedExtension} FullNormalizedExtension
@@ -10870,7 +10870,7 @@ function parse(options) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/preprocess.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/preprocess.js
 /**
  * @typedef {import('micromark-util-types').Chunk} Chunk
  * @typedef {import('micromark-util-types').Code} Code
@@ -10982,7 +10982,7 @@ function preprocess() {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/micromark/lib/postprocess.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/micromark/lib/postprocess.js
 /**
  * @typedef {import('micromark-util-types').Event} Event
  */
@@ -11168,7 +11168,7 @@ function index(value) {
   return value && typeof value === 'number' ? value : 1
 }
 
-;// CONCATENATED MODULE: ./node_modules/mdast-util-from-markdown/lib/index.js
+;// CONCATENATED MODULE: ./node_modules/mermaid/node_modules/mdast-util-from-markdown/lib/index.js
 /**
  * @typedef {import('micromark-util-types').Encoding} Encoding
  * @typedef {import('micromark-util-types').Event} Event
@@ -12814,7 +12814,7 @@ const createText = (el, text = "", {
 /* harmony export */   diagram: () => (/* binding */ diagram)
 /* harmony export */ });
 /* harmony import */ var _mermaid_8af3addd_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(97972);
-/* harmony import */ var _createText_62fc7601_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(91598);
+/* harmony import */ var _createText_62fc7601_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24247);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(64218);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(27484);
 /* harmony import */ var _braintree_sanitize_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17967);
