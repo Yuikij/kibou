@@ -1,7 +1,60 @@
 import JapaneseText from '@site/src/components/Language/JapaneseText';
 
+import JapaneseText2 from '@site/src/components/Language/JapaneseText2';
 
+# 明日晴れるかな
 
+<JapaneseText2
+    texts={[
+        "熱い涙や恋の叫びも",
+        "輝ける日はどこへ消えたの?",
+        "明日(あす)もあてなき道を彷徨うなら",
+        "これ以上元には戻れない",
+        "耳を澄ませば心の声は",
+        "僕に何を語り掛けるだろう?",
+        
+    ]}
+    translations={[
+        "无论是热泪还是爱的呼唤",
+        "闪耀的岁月消逝在了何处？",
+        "如果明天仍彷徨于无尽长路",
+        "就再也无法回到过去",
+        "静心聆听自己的心声",
+        "它在对我诉说些什么？",
+    ]}
+    annotations={[
+      {
+        熱: "a tsu",
+        涙: "na mi da",
+        恋: "ko i",
+        叫: "sa ke",
+      },
+      {
+        輝: "ka ga ya",
+        日: "hi",
+        消: "ki",
+      },
+      {
+        あてなき: "当て無き(し)",
+        明日: "a su",
+        道: "mi chi",
+        彷徨: "sa ma yo",
+      },
+      {
+        以上: "i jou",
+        元: "mo to",
+        戻れ: "mo do re",
+   
+      },
+      {
+        耳: "mi mi",
+        澄ま: "su ma",
+        心: "ko ko ro",
+        声:"ko e"
+   
+      },
+    ]}
+/>
 
 
 
@@ -9,7 +62,7 @@ import JapaneseText from '@site/src/components/Language/JapaneseText';
 
 $trans{$anno{熱:熱}い$anno{涙:涙}や$anno{恋:恋}の$anno{叫:叫}びも:[1]}trans
 $trans{$anno{輝:輝}ける$anno{日:日}はどこへ$anno{消:消}えたの?:[2]}trans
-$anno{明日:明日}も$anno{あてなき:あてなき}$anno{道:道}を$anno{彷徨:彷徨}うなら
+$trans{$anno{明日:明日}も$anno{あてなき:あてなき}$anno{道:道}を$anno{彷徨:彷徨}うなら:[3]}trans
 如果明天仍彷徨于无尽长路
 これ以上元には戻れない
 就再也无法回到过去
