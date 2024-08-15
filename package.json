@@ -15,11 +15,12 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
-    "@docusaurus/core": "0.0.0-5709",
-    "@docusaurus/preset-classic": "0.0.0-5709",
-    "@docusaurus/theme-live-codeblock": "0.0.0-5709",
-    "@docusaurus/theme-mermaid": "0.0.0-5709",
-    "@mdx-js/react": "^2.3.0",
+    "@docusaurus/core": "3.5.1",
+    "@docusaurus/preset-classic": "3.5.1",
+    "@docusaurus/theme-live-codeblock": "3.5.1",
+    "@docusaurus/theme-mermaid": "3.5.1",
+    "@easyops-cn/docusaurus-search-local": "^0.44.5",
+    "@mdx-js/react": "^3.0.1",
     "antd": "^5.10.1",
     "clsx": "^1.2.1",
     "markdown-to-jsx": "^7.4.7",
@@ -35,7 +36,7 @@
     "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
-    "@docusaurus/module-type-aliases": "0.0.0-5709"
+    "@docusaurus/module-type-aliases": "3.5.1"
   },
   "browserslist": {
     "production": [

@@ -1,3 +1,5 @@
+
+
 ## Buffer Management
 > * 介于磁盘空间管理和基于页的文件索引管理之间的接口
 > * 负责管理内存中的页，并处理来自file and index manager的请求，同时会处理逐出页面和将新页面读入内存
@@ -52,6 +54,7 @@
 * 特定应用程序缓存数据的模式更适合 MRU 策略，例如某些类型的图形处理或多媒体缓存。
 * 比较适合上述的顺序扫描
 ## Relational Algebra
+## Sorting
 ## Hashing
 ### Motivation 动机
 > 有时候不关心顺序，只想把相同的放在一起（group by），grouping like values together is called hashing
@@ -98,7 +101,7 @@ for each page R_P in R:
 * 示例：R join S
 > 假设缓冲区有B页，1个是输出缓冲区，1个用于S，B-2个用于R
 :::tip
-如果有B-2个页，那么一次读B-2个页，一次读一块，一块有B-2个页，一共有PageSize(R)/(B-2)块
+如果有B-2个页，那么一次读B-2个页，一次读一块，一块有B-2个页，R的大小是PageSize(R)个页，一共有PageSize(R)/(B-2)块
 :::
 ``` python
 # 前提:一次读取PageSize(R)
@@ -127,6 +130,18 @@ for each record r in R:
 #### Naive Hash Join
 > 遍历左表，生成一个hash表，然后遍历右表，在hash表中查找
 #### Grace Hash Join
+:::tip
+* 用page作为计量单位，假设缓冲区共有B个页，可用的是B-2个页
+* 分区的时候，将表分成B-1个分区，这个操作是在磁盘上做的
+* 缺点很明显，例如相同的key的记录过大，hash不能分散到各个分区，那就得抛异常了
+:::
+
+* 把左右表都分区，然后分别去一个进行构建和查找
+* 如果左右表的页大小都大于B-2，就递归run，继续分成更小的分区
+* run的方法就是构建map和匹配连接成一个reccord
+
+
+
 ### Sort-Merge Join
 
 ## 总结和问题

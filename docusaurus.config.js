@@ -15,7 +15,18 @@ const config = {
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/kibou/',
-    themes: ["@docusaurus/theme-live-codeblock","@docusaurus/theme-mermaid"],
+    themes: ["@docusaurus/theme-live-codeblock","@docusaurus/theme-mermaid",   [
+        require.resolve("@easyops-cn/docusaurus-search-local"),
+        ({
+          // ... Your options.
+          // `hashed` is recommended as long-term-cache of index file is possible.
+          hashed: true,
+          // For Docs using Chinese, The `language` is recommended to set to:
+          // ```
+          language: ["en", "zh"],
+          // ```
+        }),
+      ]],
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
