@@ -42,7 +42,7 @@ function JapaneseText2({ texts, translations, annotations }) {
             result.push(text.substring(currentIndex));
         }
 
-        return <div className={"annotated-word"} >{result}</div>;
+        return <div className={"translation-word"} >{result}</div>;
     };
 
     // 渲染每行内容
@@ -54,7 +54,7 @@ function JapaneseText2({ texts, translations, annotations }) {
             return (
                 <div key={index} className="annotated-word">
                     {translation && (
-                        <div className={"translation-word"} style={{display: "block"}}>
+                        <div className={"annotated-word"} style={{display: "block"}}>
                             {translation}
                         </div>
                     )}
