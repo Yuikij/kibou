@@ -1,0 +1,14 @@
+{
+  "position": 2.5,
+  "label": "常用命令",
+  "collapsible": true,
+  "collapsed": true,
+  "className": "red",
+  "link": {
+    "type": "generated-index",
+    "title": "常用命令"
+  },
+  "customProps": {
+    "description": "This description can be used in the swizzled DocCard"
+  }
+}

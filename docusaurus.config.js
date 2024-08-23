@@ -108,6 +108,11 @@ const config = {
                             },
                             {
                                 type: 'docSidebar',
+                                sidebarId: 'framework',
+                                label: '软件框架',
+                            },
+                            {
+                                type: 'docSidebar',
                                 sidebarId: 'network',
                                 label: '网络知识',
                             },
@@ -141,6 +146,11 @@ const config = {
                                 type: 'docSidebar',
                                 sidebarId: 'git',
                                 label: 'Git',
+                            },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'linux',
+                                label: 'Linux',
                             },
                             {
                                 type: 'docSidebar',
