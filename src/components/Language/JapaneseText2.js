@@ -1,7 +1,15 @@
 import React from 'react';
 
 // 传递三个数组：文本、翻译和注释
-function JapaneseText2({ texts, translations, annotations }) {
+function JapaneseText2({ texts, translations, annotations,fullText }) {
+    if(fullText){
+        texts=[],translations=[],annotations=[];
+        fullText.forEach((item) => {
+            texts.push(item[0]);
+            annotations.push(item[1]);
+            translations.push(item[2]);
+        })
+    }
 
     // 渲染带注释的文本
     const renderTextWithAnnotations = (text, annotation) => {
@@ -53,13 +61,12 @@ function JapaneseText2({ texts, translations, annotations }) {
 
             return (
                 <div key={index} className="annotated-word">
+                    {renderTextWithAnnotations(text, annotation)}
                     {translation && (
                         <div className={"annotated-word"} style={{display: "block"}}>
                             {translation}
                         </div>
                     )}
-                        {renderTextWithAnnotations(text, annotation)}
-                    
                 </div>
             );
         });
