@@ -1,6 +1,7 @@
 ---
 title: 编程经验
 authors: [yuikji]
+
 ---
 
 * **简洁性（Keep It Simple, Stupid - KISS）**：一个好的代码应该是简单的。这意味着代码容易被他人理解，容易维护，且避免了不必要的复杂性。

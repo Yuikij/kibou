@@ -15,10 +15,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
-    "@docusaurus/core": "3.5.1",
-    "@docusaurus/preset-classic": "3.5.1",
-    "@docusaurus/theme-live-codeblock": "3.5.1",
-    "@docusaurus/theme-mermaid": "3.5.1",
+    "@docusaurus/core": "3.5.2",
+    "@docusaurus/preset-classic": "3.5.2",
+    "@docusaurus/theme-live-codeblock": "3.5.2",
+    "@docusaurus/theme-mermaid": "3.5.2",
     "@easyops-cn/docusaurus-search-local": "^0.44.5",
     "@mdx-js/react": "^3.0.1",
     "antd": "^5.10.1",
@@ -36,7 +36,7 @@
     "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
-    "@docusaurus/module-type-aliases": "3.5.1"
+    "@docusaurus/module-type-aliases": "3.5.2"
   },
   "browserslist": {
     "production": [
