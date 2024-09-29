@@ -28,6 +28,20 @@
                 .build();
     }
 ```
+
+### 交换机到交换机的绑定
+> 先发到绑定的交换机，再发到交换机，和绑定队列类似，会消费两遍
+```java
+    // 定义交换机到交换机的绑定
+    @Bean
+    public Binding exchangeToExchangeBinding() {
+        // 绑定 sourceExchange 到 destinationExchange，使用 routingKey "my.routing.key"
+        return BindingBuilder.bind(secondExchange())
+                .to(exchange())
+                .with(routingKey)
+                .noargs();
+    }
+```
 ## 队列
 ## 消息
 ### 消息属性
@@ -36,11 +50,13 @@
 
 | 状态 | 描述 |
 | --- | --- |
+| Ready | 消息已经准备 |
 | Unacked | 消息还没有被确认 |
 | Acked | 消息已经被确认 |
 | Rejected | 消息已经被拒绝 |
 
-
+> * 在 Spring AMQP 中，默认的处理方式为自动，区别于 RabbitMQ的autoAck，监听的方法正常返回，则发送ack，抛出异常则发送nack
+> * 拒绝或者之后，可以通过requeue控制是否丢弃，丢弃就会进入死信队列，如果有的话，否则就重新排队
 
 ## Q&A
 * 消息发送之后，监控面板的Message rates 一直有波动，但是 Queued messages没有变化

@@ -70,9 +70,11 @@ const config = {
                     sidebarPath: require.resolve('./sidebars.js'),
                 },
                 blog: {
-                    showReadingTime: true,
                     blogSidebarTitle: 'All posts',
                     blogSidebarCount: 10,
+                    showReadingTime: true, // When set to false, the "x min read" won't be shown
+                    readingTime: ({content, frontMatter, defaultReadingTime}) =>
+                      defaultReadingTime({content, options: {wordsPerMinute: 300}}),
                 },
                 theme: {
                     customCss: require.resolve('./src/css/custom.css'),
