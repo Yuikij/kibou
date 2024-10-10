@@ -14,7 +14,7 @@ const config = {
     url: 'https://your-docusaurus-test-site.com',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
-    baseUrl: '/',
+    baseUrl: '/kibou/',
     themes: ["@docusaurus/theme-live-codeblock","@docusaurus/theme-mermaid",   [
         require.resolve("@easyops-cn/docusaurus-search-local"),
         ({
