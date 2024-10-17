@@ -123,7 +123,7 @@ const config = {
                             {
                                 type: 'docSidebar',
                                 sidebarId: 'network',
-                                label: '网络知识',
+                                label: '网络安全',
                             },
                         ],
                     },
