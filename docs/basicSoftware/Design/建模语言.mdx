@@ -42,8 +42,8 @@ classDiagram
     Course <-- Teacher : 1.关联
     Department o-- Teacher : 2.聚合
     School *-- Department : 4.组合
-    GradeSystem --> Student : 3.依赖
-    GradeSystem --> Course : 3.依赖
+    GradeSystem ..> Student : 3.依赖
+    GradeSystem ..> Course : 3.依赖
 ```
 
 ```java
