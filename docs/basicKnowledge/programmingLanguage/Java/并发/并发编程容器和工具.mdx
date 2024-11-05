@@ -208,6 +208,8 @@ static final class Segment<K,V> extends ReentrantLock implements Serializable {
   * 1.7是分段锁，用ReentrantLock。1.8的锁粒度是node节点，并且阻塞锁用的是Synchronized，并且在添加节点，修改状态的时候用了cas
 * 在调用put之后，在实际替换node的value之前，调用get，那不是获取到旧值了
   * 有可能，不提供强一致性
+* ConcurrentHashMap的key可以是null吗
+  * 不可以
 ## CopyOnWriteArrayList
 容器实体:
 ```java
