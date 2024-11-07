@@ -1,3 +1,5 @@
+## vscode
+* 用ctrl v 或者ctrl t 打开主题设置
 ## docusaurus
 * md中的元数据
 https://docusaurus.io/docs/next/api/plugins/@docusaurus/plugin-content-docs#sidebar_position
@@ -19,6 +21,14 @@ Settings > Languages & Frameworks > Markdown > Show errors in code fences
 * markdown 和 react
 https://docusaurus.io/docs/markdown-features/react#importing-markdown
 
+* 展开详情
+```mdx
+<details>
+<summary>展开</summary>
+...
+</details>
+```
+
 ## mermaid
 * ER图
 > https://mermaid.js.org/syntax/entityRelationshipDiagram.html#attribute-keys-and-comments
@@ -35,6 +45,7 @@ https://docusaurus.io/docs/markdown-features/react#importing-markdown
 
 ## mdx
 * 语法混合
+
 ```mdx
 import React from 'react';
 import { Row, Col } from 'antd';

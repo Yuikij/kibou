@@ -3,6 +3,8 @@ sidebar_position: 4
 ---
 
 ## ConcurrentHashMap
+### 主要用法
+> 确保写入的线程安全，前提是写入的值不能依赖ConcurrentHashMap本身的get结果
 
 ### JDK1.7
 #### 容器实体
@@ -133,10 +135,10 @@ static final class Segment<K,V> extends ReentrantLock implements Serializable {
             Node<K,V> f; int n, i, fh;
             if (tab == null || (n = tab.length) == 0)
                 tab = initTable();
-            // 桶数组里没有这个key对应的hash
+            // 桶数组里没有这个key对应的hash，直接新增新的节点
             else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
                 if (casTabAt(tab, i, null,
-                             new Node<K,V>(hash, key, value, null)))
+                            new Node<K,V>(hash, key, value, null)))
                     break;                   // no lock when adding to empty bin
             }
             // f.hash被用来存状态了？   MOVED=-1
@@ -150,21 +152,21 @@ static final class Segment<K,V> extends ReentrantLock implements Serializable {
                     if (tabAt(tab, i) == f) {
                         if (fh >= 0) {
                             binCount = 1;
-                            // 遍历链表
+                            // 遍历链表，while循环，初始化节点e，每次循环binCount+1
                             for (Node<K,V> e = f;; ++binCount) {
                                 K ek;
                                 if (e.hash == hash &&
                                     ((ek = e.key) == key ||
-                                     (ek != null && key.equals(ek)))) {
+                                    (ek != null && key.equals(ek)))) {
                                     oldVal = e.val;
                                     if (!onlyIfAbsent)
                                         e.val = value;
                                     break;
                                 }
                                 Node<K,V> pred = e;
+                                // 遍历到链表末尾还没找到，创建节点并添加到尾部
                                 if ((e = e.next) == null) {
-                                    pred.next = new Node<K,V>(hash, key,
-                                                              value, null);
+                                    pred.next = new Node<K,V>(hash, key,value, null);
                                     break;
                                 }
                             }
@@ -173,8 +175,7 @@ static final class Segment<K,V> extends ReentrantLock implements Serializable {
                         else if (f instanceof TreeBin) {
                             Node<K,V> p;
                             binCount = 2;
-                            if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key,
-                                                           value)) != null) {
+                            if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key,value)) != null) {
                                 oldVal = p.val;
                                 if (!onlyIfAbsent)
                                     p.val = value;
