@@ -5,7 +5,7 @@ sidebar_position: 4
 ## ConcurrentHashMap
 ### 主要用法
 > 确保写入的线程安全，前提是写入的值不能依赖ConcurrentHashMap本身的get结果
-
+> merge,compute保证的读写的原子性
 ### JDK1.7
 #### 容器实体
 ```java
@@ -159,6 +159,7 @@ static final class Segment<K,V> extends ReentrantLock implements Serializable {
                                     ((ek = e.key) == key ||
                                     (ek != null && key.equals(ek)))) {
                                     oldVal = e.val;
+                                    // 调用putIfAbsent时，不更新，因为这个key找到了node，是存在的
                                     if (!onlyIfAbsent)
                                         e.val = value;
                                     break;

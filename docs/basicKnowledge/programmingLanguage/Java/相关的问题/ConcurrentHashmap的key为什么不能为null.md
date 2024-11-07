@@ -265,5 +265,43 @@ I've come to see it as quite troublesome.
 ```
 
 ## 总结下来
-* value不能是null是可以理解的
-* key为什么不能是null暂时不明白
+* value不能是null是可以理解的，主要是`contains(key)`的不确定性。
+	* contains(key) 这个地方我先是看了ConcurrentHashMap的源码，有点懵，这不又绕回get(key) 了，然后看了下HashMap，人家是getNode，所以确实能判断的出是不是真的存在key。
+    ```java
+	// ConcurrentHashMap
+	public boolean containsKey(Object key) {
+			return get(key) != null;
+		}
+	// HashMap
+	 public boolean containsKey(Object key) {
+        return getNode(hash(key), key) != null;
+    }
+  	 ```
+	* 如果是真想实现判断出即存在key，并且value是某个值，需要实现getNode和getVal之间的原子性，目前没在ConcurrentHashMap找到方法
+	* 还有一个有歧义的地方，merge，compute这些方法，remappingFunction的调用都会传入null或者真实的val，而null这时候明确表示的是key不存在。
+	```java
+    public V compute(K key,
+                     BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+	//.........
+		            else if ((f = tabAt(tab, i = (n - 1) & h)) == null) {
+                Node<K,V> r = new ReservationNode<K,V>();
+                synchronized (r) {
+                    if (casTabAt(tab, i, null, r)) {
+                        binCount = 1;
+                        Node<K,V> node = null;
+                        try {
+                            if ((val = remappingFunction.apply(key, null)) != null) {
+                                delta = 1;
+                                node = new Node<K,V>(h, key, val, null);
+                            }
+                        } finally {
+                            setTabAt(tab, i, node);
+                        }
+                    }
+                }
+                if (binCount != 0)
+                    break;
+            }				
+					 }
+	```	
+* 至于key为什么不能是null暂时不明白，大概是作者不喜欢吧
