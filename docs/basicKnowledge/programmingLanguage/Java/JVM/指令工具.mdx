@@ -1,5 +1,178 @@
-## linux的性能监测指令
-## jmap
+## [linux的性能监测指令](/docs/basicSoftware/Linux/常用命令/性能监控)
+## JDK工具
+### jps
+> 找到java进程
+* -m 输出主进程参数
+* -l 输出主函数完整路径
+* -v 输出jvm参数
+```shell
+root@5b1ba01f81d3:/jdk1.8.0_212/bin# ./jps -m  -l -v
+2624 sun.tools.jps.Jps -m -l -v -Dapplication.home=/jdk1.8.0_212 -Xms8m
+1 enbo-resource.jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dspring.cloud.nacos.config.namespace=57eb8158-8e9c-444a-bb02-9dedb0a59cdd -Xms512m -Xmx512m -Xmn200m
+```
+### jstat
+> `jstat` 是 Java 提供的一个命令行工具，用于监控和分析 Java 虚拟机（JVM）性能。它是 JDK 自带的诊断工具之一，专门用于显示 JVM 的各种运行时统计信息，如内存使用情况、垃圾回收行为和类加载数据。
+
+```bash
+jstat [options] <vmid> [interval] [count]
+```
+
+#### 参数说明：
+1. **`options`**：指定需要查看的统计信息类型。
+2. **`<vmid>`**：目标 JVM 的进程 ID（可以通过 `jps` 工具查看）。
+3. **`[interval]`**：刷新间隔时间（以毫秒为单位）。
+4. **`[count]`**：采样次数。
+##### option
+
+* -class：显示ClassLoader的相关信息。
+* --compiler：显示JIT编译的相关信息。
+* --gc：显示与GC相关的堆信息。
+* --gccapacity：显示各个代的容量及使用情况。
+* --gccause：显示垃圾收集相关信息（同-gcutil），同时显示最后一次或当前正在发生的垃圾收集的诱发原因。
+* --gcnew：显示新生代信息。
+* --gcnewcapacity：显示新生代大小与使用情况。
+* --gcold：显示老年代和永久代的信息。
+* --gcoldcapacity：显示老年代的大小。
+* --gcpermcapacity：显示永久代的大小。
+* --gcutil：显示垃圾收集信息。
+* --printcompilation：输出JIT编译的方法信息。
+* --t参数可以在输出信息前加上一个Timestamp列，显示程序的运行时间。
+* --h参数可以在周期性数据输出时，输出多少行数据后，跟着输出一个表头信息。
+* -interval参数用于指定输出统计数据的周期，单位为毫秒。
+* -count用于指定一共输出多少次数据。
+
+#### 常用选项和解释
+
+#### 1. **`jstat -class`**
+用于显示 JVM 的类加载信息。
+
+输出示例：
+```plaintext
+   Loaded  Bytes  Unloaded  Bytes     Time
+      456  1200.5        10   20.3       5.22
+```
+
+字段解释：
+- **`Loaded`**：当前加载的类数量。
+- **`Bytes`**：加载类占用的字节数。
+- **`Unloaded`**：卸载的类数量。
+- **`Bytes`**：卸载类释放的字节数。
+- **`Time`**：类加载和卸载所用时间（以秒为单位）。
+
+---
+
+#### 2. **`jstat -gc`**
+显示垃圾收集（GC）的统计信息，包括堆内存使用和垃圾收集次数。
+
+输出示例：
+```plaintext
+ S0C    S1C    S0U    S1U      EC       EU        OC       OU      MC      MU     CCSC    CCSU     YGC   YGCT    FGC   FGCT     GCT
+ 2048.0 2048.0  0.0    0.0   8192.0   8192.0   12288.0  10240.0  2048.0  1024.0   1024.0   512.0     10    0.12     2     0.34    0.46
+```
+
+字段解释：
+- **年轻代 (Young Generation)**：
+  - **`S0C, S1C`**：Survivor 区 0 和 1 的容量（KB）。
+  - **`S0U, S1U`**：Survivor 区 0 和 1 的使用量（KB）。
+  - **`EC`**：Eden 区容量（KB）。
+  - **`EU`**：Eden 区使用量（KB）。
+- **老年代 (Old Generation)**：
+  - **`OC`**：老年代容量（KB）。
+  - **`OU`**：老年代使用量（KB）。
+- **元空间 (Metaspace)**：
+  - **`MC`**：元空间容量（KB）。
+  - **`MU`**：元空间使用量（KB）。
+  - **`CCSC`**：压缩类空间容量（KB）。
+  - **`CCSU`**：压缩类空间使用量（KB）。
+- **垃圾回收 (GC)**：
+  - **`YGC`**：年轻代垃圾回收次数。
+  - **`YGCT`**：年轻代垃圾回收时间（秒）。
+  - **`FGC`**：老年代垃圾回收次数。
+  - **`FGCT`**：老年代垃圾回收时间（秒）。
+  - **`GCT`**：垃圾回收总时间（秒）。
+
+---
+
+#### 3. **`jstat -gcutil`**
+显示堆内存和元空间的使用率（以百分比表示）。
+
+输出示例：
+```plaintext
+  S0     S1     E      O      M     CCS   YGC   YGCT    FGC   FGCT     GCT
+  0.00  23.45  78.95  82.35  56.76  45.12   10    0.12     2     0.34    0.46
+```
+
+字段解释：
+- **`S0, S1`**：Survivor 区使用率（%）。
+- **`E`**：Eden 区使用率（%）。
+- **`O`**：老年代使用率（%）。
+- **`M`**：元空间使用率（%）。
+- **`CCS`**：压缩类空间使用率（%）。
+- **`YGC, YGCT`**：年轻代 GC 次数和时间。
+- **`FGC, FGCT`**：老年代 GC 次数和时间。
+- **`GCT`**：总 GC 时间。
+
+---
+
+#### 4. **`jstat -gccapacity`**
+显示堆内存各部分的容量信息。
+
+输出示例：
+```plaintext
+   NGCMN     NGCMX      NGC     S0C     S1C      EC      OGCMN     OGCMX     OGC
+   2048.0   8192.0    6144.0  1024.0  1024.0   4096.0   10240.0   20480.0   12288.0
+```
+
+字段解释：
+- **`NGCMN, NGCMX, NGC`**：年轻代的最小容量、最大容量和当前容量。
+- **`S0C, S1C`**：Survivor 区 0 和 1 的容量。
+- **`EC`**：Eden 区的容量。
+- **`OGCMN, OGCMX, OGC`**：老年代的最小容量、最大容量和当前容量。
+
+---
+
+#### 5. **`jstat -gcnew`**
+显示年轻代垃圾回收的详细信息。
+
+输出示例：
+```plaintext
+  S0C    S1C    S0U    S1U      EC       EU        YGC    YGCT
+  1024.0 1024.0   0.0    0.0   4096.0   2048.0    100     0.85
+```
+
+- **`S0C, S1C`**：Survivor 区 0 和 1 的容量。
+- **`S0U, S1U`**：Survivor 区 0 和 1 的使用量。
+- **`EC`**：Eden 区容量。
+- **`EU`**：Eden 区使用量。
+- **`YGC`**：年轻代 GC 次数。
+- **`YGCT`**：年轻代 GC 总时间（秒）。
+
+---
+
+### **常见使用场景**
+
+1. **观察堆内存使用情况**
+   ```bash
+   jstat -gc <pid> 1000
+   ```
+   每秒钟刷新一次堆内存的使用情况。
+
+2. **快速查看垃圾回收性能**
+   ```bash
+   jstat -gcutil <pid> 1 10
+   ```
+   每秒采样一次，持续 10 次，快速分析垃圾回收频率和堆使用率。
+
+3. **调优类加载问题**
+   ```bash
+   jstat -class <pid>
+   ```
+   检查类加载是否存在瓶颈，例如频繁加载和卸载类。
+
+---
+
+### **总结**
+`jstat` 是 JVM 性能监控的重要工具，它可以帮助你了解堆内存分配、垃圾回收行为和类加载情况。与其他工具（如 `jmap`, `jstack`）结合使用，可以更全面地诊断和优化 Java 应用的性能问题。
 ## arthas
 ### vmtool
 * -x 展开层数
