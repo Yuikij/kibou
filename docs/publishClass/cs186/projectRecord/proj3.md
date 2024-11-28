@@ -122,11 +122,47 @@ iter.next();     // returns 3
 * 判断左右分区哪边符合内存大小
   * 如果都不符合直接把这两个分区看成新的左右表进行递归（**有个关键点：通过hash函数，保证了左右两边代连接列相同的值在一个分区**）
   * 如果有符合内存大小的，就把这个分区取出到内存构件map，另一个遍历，得到连接结果
-### 任务3：EXternal Sort
+### 任务3：External Sort
+* 几个关键词
+  * pass
+    * 传递数据的过程
+    * pass0：conquer phase ，征服阶段，对每页排序
+  * sorted runs
+    * 合并页面的结果
+* 需要多少缓冲页
+  * Analysis of Two Way Merge
+    * 一个缓冲页做pass0
+    * 两页做pass1+，就是去两个sorted runs的第一页
+    * 一页作为输出，pass1+的结果存到一页，这一页存完直接写入磁盘
+  * Full External Sort
+    * 将B页用于pass0
+    * B-1页用于pass1+，多个sorted runs一起排序
+    * 1页用于输出
+* 大致流程
+  * pass0：将每块排序然后写回磁盘（一个run）
+  * 每块去其中一页，一次性可以排序B-1块
+* 需要实现的方法：`SortOperator`的sortRun 、 mergeSortedRuns 、 mergePass和sort方法。
+  * sortRun
+    * 使用内存排序，对应pass0
+  * mergeSortedRuns
+    * 将传入的B-1个runs合并成1个run，对应pass1+
+  * mergePass
+    * 入参是所有的runs，出参是将每B-1个传递给mergeSortedRuns得到的结果的集合
+  * sort
+    * 最后的排序
 ### 任务4：Sort Merge Join
+> Simple Hash Join的进阶版，就是不需要完全遍历两个循环。只有右边要回溯
+> 左右分别比较，较小的推进
+## 第二部分
+### 任务5：Single Table Access Selection 单表查询
+* 关键字
+  * predicate 
+* 需要实现的方法
+  * QueryPlan#minCostSingleAccess
+    * 目的：找到用于扫描表的最佳QueryOperator
+* 完成测试： `TestSingleAccess`
 ### 问题和总结
-#### Block Nested Loop Join
-* 提问：如何保证getBlockIterator，一次获取n页，这个操作是一次io的
-  * 内存操作？
+* 提问：如何保证getBlockIterator，一次获取n页，这个操作是一次io的BacktrackingIterator.next 方法，目前我的理解只能是SNLJ从代码设计上是record级别的，实际上它运行的时候，不一定是每次去record都是一次磁盘io
+  * 这个没看懂，getBlockIterator和SNLJ调用的都是
 * 一般来说，左右表随便拆然后两两join，结果肯定是不对的，因为可能存在ta1的行和tb2的行匹配，但是hash散列之后，和ta1的待join列的值相同的行一定在tb1里
 * join的各种优化都是想办法把磁盘io放一部分到内存

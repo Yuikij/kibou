@@ -1,0 +1,48 @@
+## linux的性能监测指令
+## jmap
+## arthas
+### vmtool
+* -x 展开层数
+* --classLoaderClass 指定类加载器
+* --express 指定表达式
+
+
+
+#### 获取对象实例
+```shell
+vmtool --action getInstances --className org.springframework.context.ApplicationContext -x 2 --limit 10
+```
+
+#### 执行表达式
+```shell
+vmtool --action getInstances --className org.springframework.context.ApplicationContext --express 'instances[0].getBeanDefinitionNames()'
+```
+```shell
+# 获取bean实例并调取方法
+vmtool --action getInstances --className org.springframework.context.ApplicationContext --express 'instances[0].getBean("userController").findUserById(1)'
+```
+```shell
+# 直接通过类获取实例
+vmtool --action getInstances --className com.example.demo.arthas.user.UserController --express 'instances[0].findUserById(1)'
+```
+#### 指定 classloader
+```shell
+# 通过sc 命令查找到加载 class 的 classloader。找到对应classloader的hashcode
+sc -d org.springframework.context.ApplicationContext
+#  返回：class-loader      +-org.springframework.boot.loader.LaunchedURLClassLoader@1efbd816                                                                                                
+#                      +-jdk.internal.loader.ClassLoaders$AppClassLoader@46fbb2c1                                                                                                     
+#                        +-jdk.internal.loader.ClassLoaders$PlatformClassLoader@6e6d5d29 
+```
+```shell
+# 指定类名。
+vmtool --action getInstances --classLoaderClass org.springframework.boot.loader.LaunchedURLClassLoader --className org.springframework.context.ApplicationContext
+```
+```shell
+# 指定hashcode。
+vmtool --action getInstances -c 1efbd816  --className org.springframework.context.ApplicationContext
+```
+
+#### 强制 GC
+```shell
+vmtool --action forceGc
+```

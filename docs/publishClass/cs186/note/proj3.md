@@ -52,8 +52,30 @@
 * MRU(Most Recently Used)：最近被使用，即最近被访问的页面，和LRU相反吗
 * 数据访问模式具有较强的周期性，并且最近访问的数据不太可能再次被访问。
 * 特定应用程序缓存数据的模式更适合 MRU 策略，例如某些类型的图形处理或多媒体缓存。
+
 * 比较适合上述的顺序扫描
+
 ## Relational Algebra
+* 逻辑运算符：
+  * Projection: π
+    * 投影操作，用于选择表中指定的列
+  * Selection: σ
+    * 选择操作，用于从表中选择满足条件的行。
+  * Union: ∪
+    * 并集操作，用于将两个关系中的所有行合并（去重）。
+  * Set Difference: −
+    * 差集操作，用于从一个关系中移除另一个关系中存在的行。
+  * Cross Product: ×
+    * 笛卡尔积操作，将两个关系的每一行组合。
+  * Joins: ⋈
+    * 连接操作，通常用于根据条件连接两个表。
+  * Rename: ρ
+    * 重命名操作，用于给表或列赋新名称。
+  * Group By / Aggregation: γ
+    * 分组聚合操作，用于按指定列分组并执行聚合函数。
+
+
+
 ## Sorting
 ## Hashing
 ### Motivation 动机
@@ -145,6 +167,10 @@ for each record r in R:
 
 
 ### Sort-Merge Join
+### Query Optimization
+* 基本步骤
+  * 流式输出：operator -> iterator  -> another operator
+
 
 ## 总结和问题
 * 帧和页

@@ -14,7 +14,7 @@ boolean offer(E e);
 E remove();
 
 /**
- * 队列为空返回false
+ * 队列为空返回null
  */
 E poll(); 
 
