@@ -123,7 +123,7 @@ const config = {
                             {
                                 type: 'docSidebar',
                                 sidebarId: 'network',
-                                label: '网络安全',
+                                label: '网络',
                             },
                         ],
                     },
@@ -188,7 +188,7 @@ const config = {
                         type: 'docSidebar',
                         sidebarId: 'prepareExam',
                         position: 'right',
-                        label: '备考',
+                        label: '备考面试',
                     },
                     {
                         type: 'docSidebar',
