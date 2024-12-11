@@ -21,8 +21,10 @@ jobs:
           node-version: 18
           cache: yarn
 
+      - name: RM LOCK
+        run: rm yarn.lock
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile  
       - name: Build website
         run: yarn build
 
