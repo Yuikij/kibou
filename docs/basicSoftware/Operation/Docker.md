@@ -9,6 +9,13 @@ docker run -it my_image /bin/bash
 docker run -it --entrypoint /bin/bash my_image
 ```
 
+### 导出现有的容器
+#### docker commit
+```bash
+docker commit [OPTIONS] <container_id> <new_image_name>
+```
+#### tips
+目前的经验是commit比起export可以保留 CMD 和 ENTRYPOINT，没有进一步验证
 ## 运维
 ### 修改存储的路径
 1. 修改Docker配置文件
