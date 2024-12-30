@@ -18425,7 +18425,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
   }
 };
 
-var version = "0.16.18";
+var version = "0.16.19";
 var __domTree = {
   Span,
   Anchor,
