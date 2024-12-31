@@ -168,6 +168,12 @@ for each record r in R:
 
 ### Sort-Merge Join
 ### Query Optimization
+#### 简介
+* 执行查询的模型
+  1. get all the rows in the FROM clause
+  2. filter out columns you don’t need in the WHERE clause
+  3. change the order they execute the operations in order to get the best performance
+  4. 用 I/O 数量来衡量性能
 * 基本步骤
   * 流式输出：operator -> iterator  -> another operator
 

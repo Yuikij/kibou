@@ -155,6 +155,10 @@ iter.next();     // returns 3
 > 左右分别比较，较小的推进
 ## 第二部分
 ### 任务5：Single Table Access Selection 单表查询
+* 基础
+  1. QueryPlan的使用方式
+     1. SelectPredicate 选择谓词
+     2. JoinPredicate 连接谓词
 * 关键字
   * predicate 
 * 需要实现的方法
