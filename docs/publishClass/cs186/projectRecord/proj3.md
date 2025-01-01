@@ -156,9 +156,12 @@ iter.next();     // returns 3
 ## 第二部分
 ### 任务5：Single Table Access Selection 单表查询
 * 基础
-  1. QueryPlan的使用方式
-     1. SelectPredicate 选择谓词
-     2. JoinPredicate 连接谓词
+  * QueryPlan的使用方式
+    1. SelectPredicate 选择谓词
+    2. JoinPredicate 连接谓词
+  * 一次查询的基本流程 
+  * Database.java
+    * 要先启用事务`Database#beginTransaction`，然后在事务中执行查询等操作
 * 关键字
   * predicate 
 * 需要实现的方法
