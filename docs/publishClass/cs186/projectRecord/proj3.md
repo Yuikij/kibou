@@ -157,12 +157,28 @@ iter.next();     // returns 3
 ### 任务5：Single Table Access Selection 单表查询
 * 基础
   * QueryPlan的使用方式
+    * SelectPredicate 选择谓词
+      * tableName
+      * columnName
+      * value
+      * operator
+      > 用于单表查询的过滤条件，例如: SELECT * FROM table WHERE column > value，operator可以是 =, >, <, >=, <=, !=，value是要比较的具体常量值
+    * JoinPredicate 连接谓词
+      * joinTable:要加入的表的名称，仅用于toString()
+      * leftTable:等式左边的表的名称
+      * leftColumn:等式左边的列的名称
+      * rightTable:等式右边的表的名称
+      * rightColumn:等式右边的列的名称
+      > leftTable.leftColumn = rightTable.rightColumn 
+    * 调用join(), select()等方法声明需要查询的信息之后，调用execute()方法执行查询
+  * 一次查询的基本流程 
     1. SelectPredicate 选择谓词
     2. JoinPredicate 连接谓词
   * 一次查询的基本流程
     * 根据Transaction找到QueryPlan，然后调用QueryPlan的join，select等方法
   * Database.java
     * 要先启用事务`Database#beginTransaction`，然后在事务中执行查询等操作
+  * 理解QueryPlan#execute
 * 关键字
   * predicate 
 * 需要实现的方法
