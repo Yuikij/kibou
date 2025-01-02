@@ -159,7 +159,8 @@ iter.next();     // returns 3
   * QueryPlan的使用方式
     1. SelectPredicate 选择谓词
     2. JoinPredicate 连接谓词
-  * 一次查询的基本流程 
+  * 一次查询的基本流程
+    * 根据Transaction找到QueryPlan，然后调用QueryPlan的join，select等方法
   * Database.java
     * 要先启用事务`Database#beginTransaction`，然后在事务中执行查询等操作
 * 关键字
