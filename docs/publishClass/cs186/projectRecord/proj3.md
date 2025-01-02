@@ -169,7 +169,7 @@ iter.next();     // returns 3
       * leftColumn:等式左边的列的名称
       * rightTable:等式右边的表的名称
       * rightColumn:等式右边的列的名称
-      > leftTable.leftColumn = rightTable.rightColumn 
+      > leftTable.leftColumn = rightTable.rightColumn
     * 调用join(), select()等方法声明需要查询的信息之后，调用execute()方法执行查询
   * 一次查询的基本流程 
     1. SelectPredicate 选择谓词
