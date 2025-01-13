@@ -1,6 +1,25 @@
 ## vscode
 * 用ctrl v 或者ctrl t 打开主题设置
 ## docusaurus
+* emoji
+https://symbl.cc/cn/emoji/symbols/
+* 提示
+```js
+import Admonition from '@theme/Admonition';
+
+export default function MyReactPage() {
+  return (
+    <div>
+      <Admonition type="tip" icon="💡" title="Did you know...">
+        Use plugins to introduce shorter syntax for the most commonly used JSX
+        elements in your project.
+      </Admonition>
+    </div>
+  );
+}
+```
+
+
 * md中的元数据
 https://docusaurus.io/docs/next/api/plugins/@docusaurus/plugin-content-docs#sidebar_position
 
