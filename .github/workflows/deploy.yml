@@ -70,4 +70,4 @@ jobs:
 
       - name: Run command on server
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "your-command-here"
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "ls /root"
