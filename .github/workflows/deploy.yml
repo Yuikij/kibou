@@ -57,5 +57,6 @@ jobs:
 
       - name: Run command on server
         run: |
-          scp -r build ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}::/opt/shiori/kibou/kibou
+          ls build
+          scp -r build ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/opt/shiori/kibou/kibou
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "systemctl restart docusaurus.service"
