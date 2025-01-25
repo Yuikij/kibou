@@ -44,11 +44,21 @@ const config = {
         defaultLocale: 'en',
         locales: ['en'],
     },
-    // plugins: [
-    //
-    //         'docusaurus-plugin-2dlive',
-    //
-    // ],
+    plugins: [
+    
+        [
+            './plugins/blog-plugin',
+            {
+                blogSidebarTitle: 'All posts',
+                blogSidebarCount: 10,
+                showReadingTime: true, // When set to false, the "x min read" won't be shown
+                readingTime: ({content, frontMatter, defaultReadingTime}) =>
+                  defaultReadingTime({content, options: {wordsPerMinute: 300}}),
+
+            },
+          ]
+    
+    ],
     markdown: {
         format: 'detect',
         mermaid: true,
@@ -69,13 +79,14 @@ const config = {
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js'),
                 },
-                blog: {
-                    blogSidebarTitle: 'All posts',
-                    blogSidebarCount: 10,
-                    showReadingTime: true, // When set to false, the "x min read" won't be shown
-                    readingTime: ({content, frontMatter, defaultReadingTime}) =>
-                      defaultReadingTime({content, options: {wordsPerMinute: 300}}),
-                },
+                // blog: {
+                //     blogSidebarTitle: 'All posts',
+                //     blogSidebarCount: 10,
+                //     showReadingTime: true, // When set to false, the "x min read" won't be shown
+                //     readingTime: ({content, frontMatter, defaultReadingTime}) =>
+                //       defaultReadingTime({content, options: {wordsPerMinute: 300}}),
+                // },
+                blog: false,
                 theme: {
                     customCss: require.resolve('./src/css/custom.css'),
                 },
@@ -266,7 +277,7 @@ const config = {
                         ],
                     },
                 ],
-                copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+                copyright: `Copyright © ${new Date().getFullYear()} Yuikij's blog, Inc. Built with Docusaurus.`,
             },
             prism: {
                 theme: prismThemes.github,

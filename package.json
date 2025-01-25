@@ -37,7 +37,8 @@
     "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
-    "@docusaurus/module-type-aliases": "3.5.2"
+    "@docusaurus/module-type-aliases": "3.5.2",
+    "@waline/client": "^3.5.1"
   },
   "browserslist": {
     "production": [
