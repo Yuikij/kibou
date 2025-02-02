@@ -194,7 +194,7 @@ function TagsSection() {
 
   return (
     <div style={inlineStyles.tagsContainer}>
-      <h3>标签云</h3>
+      <h3>标签</h3>
       <div style={inlineStyles.tagCloud}>
         {sortedTags.map((tag) => (
           <Link
