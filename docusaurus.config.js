@@ -97,6 +97,9 @@ const config = {
     themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
         {
+            metadata: [
+                {name: 'keywords', content: 'Yuikij\'s  blog, blog, Yuikij'},
+              ],
             // Replace with your project's social card
             image: 'img/avatar.jpg',
             docs: {
