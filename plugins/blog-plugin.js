@@ -15,13 +15,31 @@ async function blogPluginExtended(...pluginArgs) {
      */
     contentLoaded: async function (params) {
       const { content, actions } = params;
-
+      
+      // 获取所有博客文章
       const posts = content.blogPosts
         .filter(shouldBeListed)
         .map(({ content: _, ...post }) => post);
-      actions.createData('blog-posts-metadata.json', posts);
+      
+      // 提取标签信息
+      const tags = {};
+      posts.forEach(post => {
+        post.metadata.tags.forEach(tag => {
+          if (!tags[tag.label]) {
+            tags[tag.label] = {
+              count: 0,
+              items: []
+            };
+          }
+          tags[tag.label].count += 1;
+          tags[tag.label].items.push(post);
+        });
+      });
 
-      // Call the default overridden `contentLoaded` implementation
+      // 保存数据
+      await actions.createData('blog-posts-metadata.json', JSON.stringify(posts));
+      await actions.createData('blog-tags-metadata.json', JSON.stringify(tags));
+
       return blogPluginInstance.contentLoaded(params);
     },
   };

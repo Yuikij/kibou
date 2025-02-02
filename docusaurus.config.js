@@ -8,7 +8,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 const config = {
     title: 'Yuikij\'s  blog',
     tagline: 'おとといはウサギお见たの、昨日は鹿、今日はあなた',
-    favicon: 'img/favicon.ico',
+    favicon: 'img/avatar.jpg',
 
     // Set the production url of your site here
     url: 'https://your-docusaurus-test-site.com',
@@ -98,7 +98,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
         {
             // Replace with your project's social card
-            image: 'img/docusaurus-social-card.jpg',
+            image: 'img/avatar.jpg',
             docs: {
                 sidebar: {
                   hideable: true,
@@ -113,7 +113,7 @@ const config = {
                 title: 'Yuikij\'s  blog',
                 logo: {
                     alt: 'to be kibou',
-                    src: 'img/logo.svg',
+                    src: 'img/avatar.jpg',
                 },
                 items: [
                     {
@@ -240,43 +240,43 @@ const config = {
             },
             footer: {
                 style: 'light',
-                links: [
-                    {
-                        title: 'Docs',
-                        items: [
-                            {
-                                label: 'Tutorial',
-                                to: '/docs/intro',
-                            },
-                        ],
-                    },
-                    {
-                        title: 'Community',
-                        items: [
-                            {
-                                label: 'Stack Overflow',
-                                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-                            },
-                            {
-                                label: 'Discord',
-                                href: 'https://discordapp.com/invite/docusaurus',
-                            }
-                        ],
-                    },
-                    {
-                        title: '更多',
-                        items: [
-                            {
-                                label: 'shiori',
-                                to: '/blog',
-                            },
-                            {
-                                label: 'GitHub',
-                                href: 'https://github.com/facebook/docusaurus',
-                            },
-                        ],
-                    },
-                ],
+                // links: [
+                //     {
+                //         title: 'Docs',
+                //         items: [
+                //             {
+                //                 label: 'Tutorial',
+                //                 to: '/docs/intro',
+                //             },
+                //         ],
+                //     },
+                //     {
+                //         title: 'Community',
+                //         items: [
+                //             {
+                //                 label: 'Stack Overflow',
+                //                 href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                //             },
+                //             {
+                //                 label: 'Discord',
+                //                 href: 'https://discordapp.com/invite/docusaurus',
+                //             }
+                //         ],
+                //     },
+                //     {
+                //         title: '更多',
+                //         items: [
+                //             {
+                //                 label: 'shiori',
+                //                 to: '/blog',
+                //             },
+                //             {
+                //                 label: 'GitHub',
+                //                 href: 'https://github.com/facebook/docusaurus',
+                //             },
+                //         ],
+                //     },
+                // ],
                 copyright: `Copyright © ${new Date().getFullYear()} Yuikij's blog, Inc. Built with Docusaurus.`,
             },
             prism: {
