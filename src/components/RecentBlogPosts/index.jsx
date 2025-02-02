@@ -11,7 +11,6 @@ const RecentBlogPosts = ({ nrPosts }) => {
 
     return (
         <div>
-            <h1>Recent Blog Posts</h1>
             <div className="card__wrapper" style={{ display: 'grid', gap: '1rem' }}>
                 {recentPosts.map((post, index) => (
                     <RecentBlogPost key={index} post={post} />
