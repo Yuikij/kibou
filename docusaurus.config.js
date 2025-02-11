@@ -219,8 +219,13 @@ const config = {
                         items: [
                             {
                                 type: 'docSidebar',
-                                sidebarId: 'memorandum',
+                                sidebarId: 'SuperGame',
                                 label: 'SuperGame',
+                            },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'deepResearch',
+                                label: '深度解读',
                             },
                             // ... more items
                         ],

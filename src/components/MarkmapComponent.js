@@ -22,7 +22,7 @@ export default function MarkmapComponent({ content }) {
         color: ${colorMode === 'dark' ? '#fff' : '#000'};
       }
       svg {
-        background-color: colorMode === 'dark' ? '#222' : '#fff'} !important;
+        background-color: ${colorMode === 'dark' ? '#222' : '#fff'} !important;
       }
     `;
   }, [colorMode]);
