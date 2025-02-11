@@ -1,5 +1,204 @@
-好的，为了帮助你快速、全面且深刻地理解 MySQL 事务，我为你准备了这份深度学习资料。这份资料将从多个角度、层面详细解析 MySQL 事务，并结合实际例子帮助你充分理解。
+import MarkmapComponent from '@site/src/components/MarkmapComponent';
 
+export const mindmap = `
+---
+思维导图：MySQL 事务深度学习
+
+- 引言：为什么需要事务？
+    - 数据一致性
+    - 银行转账示例
+- 1. 事务的基本概念：ACID 属性
+    - 原子性 (Atomicity)
+        - 不可分割的单元
+        - 全部成功或全部失败
+        - 银行转账例子
+    - 一致性 (Consistency)
+        - 从一个一致性状态到另一个
+        - 满足约束和规则
+        - 总资产不变例子
+    - 隔离性 (Isolation)
+        - 并发事务互不干扰
+        - 隔离级别定义干扰程度
+        - 同账户同时转账例子
+    - 持久性 (Durability)
+        - 提交后修改永久保存
+        - 系统故障不丢失
+        - 服务器崩溃例子
+- 2. MySQL 中的事务支持：存储引擎
+    - InnoDB
+        - 默认存储引擎
+        - 完全支持 ACID
+        - 行级锁，高并发
+        - MVCC
+        - 崩溃恢复
+    - MyISAM
+        - 不支持事务
+        - 表级锁，低并发
+        - 无崩溃恢复
+        - 适用场景：只读/读多写少
+    - 结论：需要事务用 InnoDB
+- 3. 事务的生命周期和状态
+    - 开始事务 (Begin Transaction)
+        - START TRANSACTION
+        - BEGIN
+    - 事务中的操作 (Operations)
+        - INSERT, UPDATE, DELETE, SELECT
+    - 提交事务 (Commit Transaction)
+        - COMMIT
+        - 永久保存修改
+    - 回滚事务 (Rollback Transaction)
+        - ROLLBACK
+        - 撤销所有操作
+        - 恢复到事务开始前状态
+    - 事务状态
+        - 活跃 (Active)
+        - 部分提交 (Partially Committed)
+        - 已提交 (Committed)
+        - 失败 (Failed)
+        - 已回滚 (Rolled Back)
+    - 银行转账代码示例
+- 4. 事务的隔离级别 (Isolation Levels)
+    - 读未提交 (Read Uncommitted)
+        - 最低级别
+        - 脏读 (Dirty Read)
+        - 风险：数据不一致
+        - 几乎不使用
+    - 读已提交 (Read Committed)
+        - 防止脏读
+        - 不可重复读 (Non-repeatable Read)
+        - 同事务多次读不一致
+        - 统计分析可能不准确
+    - 可重复读 (Repeatable Read)
+        - InnoDB 默认级别
+        - 防止脏读、不可重复读
+        - 幻读 (Phantom Read) - InnoDB 缓解
+        - 同范围查询结果行数变化
+    - 串行化 (Serializable)
+        - 最高级别
+        - 防止所有并发问题
+        - 串行执行
+        - 性能最低
+        - 适用：高一致性，低并发
+    - 隔离级别总结和对比表
+        - 脏读/不可重复读/幻读可能性
+        - 并发性能/数据一致性
+    - 设置隔离级别
+        - SET SESSION/GLOBAL TRANSACTION ISOLATION LEVEL
+        - 查看：SELECT @@transaction_isolation;
+    - 选择合适的隔离级别
+        - 权衡：数据一致性 vs 并发性能
+        - 高并发读多写少：读已提交
+        - 高并发写多读多/高一致性：可重复读
+        - 低并发/极高一致性：串行化
+        - 避免读未提交
+- 5. MySQL 中的并发控制：锁机制和 MVCC
+    - 锁机制 (Locking)
+        - 锁的粒度
+            - 表级锁 (Table-level Lock)
+                - MyISAM
+                - 开销小，并发低
+            - 行级锁 (Row-level Lock)
+                - InnoDB
+                - 开销大，并发高
+        - 锁的排他性
+            - 共享锁 (Shared Lock, S Lock)
+                - 读锁
+                - 多个事务可同时持有
+            - 排他锁 (Exclusive Lock, X Lock)
+                - 写锁
+                - 独占
+        - InnoDB 具体锁类型
+            - 记录锁 (Record Lock)
+                - 锁定单行记录
+            - 间隙锁 (Gap Lock)
+                - 锁定索引记录间隙
+                - 防止幻读
+            - 临键锁 (Next-Key Lock)
+                - 记录锁 + 间隙锁
+                - InnoDB 默认
+            - 插入意向锁 (Insert Intention Lock)
+                - 特殊间隙锁
+                - 并发插入
+            - 自增锁 (AUTO-INC Lock)
+                - 表级锁，自增列
+        - 锁的兼容性表
+            - 共享锁 vs 排他锁
+        - 锁的获取和释放
+            - 隐式锁 (自动加锁)
+            - 显式锁 (LOCK TABLES/UNLOCK TABLES - 避免)
+        - 锁的等待和死锁
+            - 锁等待
+            - 死锁 (Deadlock)
+                - 循环等待
+                - 例子
+                - 死锁检测和解决 (回滚代价小事务)
+    - 多版本并发控制 (MVCC - Multi-Version Concurrency Control)
+        - 提高并发性能
+        - 允许多事务同时读，不加锁
+        - 机制
+            - 隐藏列
+                - trx_id (事务 ID)
+                - roll_ptr (undo log 指针)
+            - Undo Log (回滚日志)
+                - 旧版本数据
+                - 实现多版本
+            - Read View (读视图)
+                - 活跃事务 ID 列表
+                - 最大事务 ID
+        - MVCC 读取过程
+            - 读取最新版本条件
+            - 读取快照版本 (历史版本) 条件
+            - 不可见版本条件
+        - MVCC 的优势
+            - 提高并发性能 (读不加锁)
+            - 一致性快照 (可重复读)
+        - MVCC 和隔离级别
+            - 读已提交/可重复读：使用 MVCC
+                - 读已提交：每次 SELECT 新 Read View
+                - 可重复读：事务开始时创建 Read View
+            - 读未提交/串行化：不使用 MVCC
+        - 总结：锁机制和 MVCC 协同工作
+            - 写操作：加锁 (排他性/一致性)
+            - 读操作 (读已提交/可重复读)：MVCC (并发)；串行化：可能加锁
+- 6. Savepoints (保存点)
+    - 允许事务中设置多个保存点
+    - 回滚到指定保存点
+    - 更细粒度事务控制
+    - 创建保存点：SAVEPOINT savepoint_name;
+    - 回滚到保存点：ROLLBACK TO SAVEPOINT savepoint_name;
+    - 释放保存点：RELEASE SAVEPOINT savepoint_name;
+    - 使用场景
+        - 复杂事务错误处理
+        - 模拟嵌套事务
+    - 代码示例
+- 7. 事务管理最佳实践
+    - 显式事务控制 (START TRANSACTION, COMMIT, ROLLBACK)
+    - 保持事务简短
+    - 避免事务中长时间等待
+    - 合理选择隔离级别 (权衡)
+    - 处理事务中的错误 (回滚)
+    - 使用索引优化查询
+    - 避免死锁 (一致加锁顺序)
+    - 监控事务 (性能问题)
+- 8. 高级主题 (扩展学习方向)
+    - 分布式事务 (Distributed Transactions) - XA
+    - 两阶段提交 (Two-Phase Commit - 2PC)
+    - 柔性事务 (柔性事务) - 最终一致性
+    - 事务日志 (Transaction Logs) - Redo/Undo Log
+    - 事务的性能优化
+- 总结
+- 学习建议
+    - 实践操作
+    - 阅读官方文档
+    - 研究源码 (可选)
+    - 持续学习
+`;
+
+## 思维导图
+
+<MarkmapComponent content={mindmap} />
+
+## 正文
 **MySQL 事务深度学习资料**
 
 **引言：为什么我们需要事务？**

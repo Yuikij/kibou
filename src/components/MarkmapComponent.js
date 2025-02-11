@@ -10,7 +10,7 @@ export default function MarkmapComponent({ content }) {
   const refMm = useRef(null);
   const styleRef = useRef(null);
   const { colorMode } = useColorMode();
-
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const updateStyle = useCallback(() => {
     if (!styleRef.current) {
@@ -25,11 +25,10 @@ export default function MarkmapComponent({ content }) {
         background-color: ${colorMode === 'dark' ? '#222' : '#fff'} !important;
       }
     `;
-  }, [colorMode]);
+  }, [colorMode, isFullscreen]);
 
   useEffect(() => {
     const { root } = transformer.transform(content);
-
     updateStyle();
 
     if (refMm.current) {
@@ -45,13 +44,23 @@ export default function MarkmapComponent({ content }) {
       }
     };
   }, [content, updateStyle]);
-  
 
-  // 切换全屏模式
-  const toggleFullscreen = () => {
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const enterFullscreen = () => {
     if (refSvg.current) {
       const svgElement = refSvg.current;
-      // 检查浏览器并调用对应的全屏方法
       if (svgElement.requestFullscreen) {
         svgElement.requestFullscreen();
       } else if (svgElement.webkitRequestFullscreen) {
@@ -60,14 +69,68 @@ export default function MarkmapComponent({ content }) {
     }
   };
 
+  const exportToSVG = () => {
+    const svg = refSvg.current;
+    if (!svg) return;
+
+    // 克隆 SVG 元素以避免修改原始元素
+    const clonedSvg = svg.cloneNode(true);
+    const bbox = svg.getBBox();
+    
+    // 设置 viewBox
+    clonedSvg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+    
+    // 创建并添加样式元素
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+      .markmap-node .markmap-foreign {
+        color: ${colorMode === 'dark' ? '#fff' : '#000'};
+      }
+      .markmap-node text {
+        fill: ${colorMode === 'dark' ? '#fff' : '#000'};
+      }
+    `;
+    clonedSvg.insertBefore(styleElement, clonedSvg.firstChild);
+
+    // 序列化和导出
+    const svgData = new XMLSerializer().serializeToString(clonedSvg);
+    const blob = new Blob([svgData], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mindmap.svg';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div style={{ position: 'relative', width: '100%' }}>
-      {/* 全屏按钮 */}
+      {!isFullscreen && (
+        <button 
+          onClick={enterFullscreen}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            padding: '5px 10px',
+            backgroundColor: colorMode === 'dark' ? '#444' : '#ddd',
+            color: colorMode === 'dark' ? '#fff' : '#000',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            zIndex: 10,
+          }}
+        >
+          全屏
+        </button>
+      )}
+
       <button 
-        onClick={toggleFullscreen}
+        onClick={exportToSVG}
         style={{
           position: 'absolute',
-          top: '10px',
+          top: '50px',
           right: '10px',
           padding: '5px 10px',
           backgroundColor: colorMode === 'dark' ? '#444' : '#ddd',
@@ -78,16 +141,16 @@ export default function MarkmapComponent({ content }) {
           zIndex: 10,
         }}
       >
-        { '全屏'}
+        导出
       </button>
 
-      {/* 思维导图区域 */}
       <svg 
         ref={refSvg} 
         style={{ 
           width: '100%', 
           height: '500px',
           borderRadius: '8px',
+          backgroundColor: isFullscreen ? '#000' : colorMode === 'dark' ? '#222' : '#fff',
         }}
       />
     </div>
