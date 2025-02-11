@@ -1,3 +1,12 @@
+## linux
+* 进入后台
+```shell
+tmux attach -t \<session-name\>
+```
+* 查看会话列表
+```shell
+tmux list-windows
+```
 ## vscode
 * 用ctrl v 或者ctrl t 打开主题设置
 ## docusaurus
