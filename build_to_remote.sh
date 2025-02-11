@@ -38,32 +38,28 @@ cd "$WORK_DIR"
 
 # 更新代码
 log "开始拉取最新代码..."
-if git pull 2>&1 | tee -a "$LOG_FILE" | grep -q "Already up to date"; then
-    log "代码已经是最新，无需更新。"
-else
-    log "代码已更新，继续执行后续操作。"
-    
-    # 安装依赖
-    log "安装依赖..."
-    yarn 2>&1 | tee -a "$LOG_FILE"
+git pull 2>&1 | tee -a "$LOG_FILE" 
 
-    # 构建项目
-    log "开始构建项目..."
-    yarn build 2>&1 | tee -a "$LOG_FILE"
+log "代码已更新，继续执行后续操作。"
 
-    # 确保 build/index.html 存在
-    log "检查并创建 $BUILD_FILE 文件..."
-    if [ ! -f "$BUILD_FILE" ]; then
-        touch "$BUILD_FILE"
-        log "$BUILD_FILE 已创建。"
-    else
-        log "$BUILD_FILE 已存在，无需创建。"
-    fi
+# 安装依赖
+log "安装依赖..."
+yarn 2>&1 | tee -a "$LOG_FILE"
 
-    # 重启服务
-    log "重启服务 $SERVICE_NAME..."
-    systemctl restart "$SERVICE_NAME" 2>&1 | tee -a "$LOG_FILE"
-    log "服务 $SERVICE_NAME 已重启。"
-fi
+# 构建项目
+log "开始构建项目..."
+yarn build 2>&1 | tee -a "$LOG_FILE"
+
+# touch build/index.html 
+log "touch $BUILD_FILE 文件..."
+
+touch "$BUILD_FILE"
+log "$BUILD_FILE 已创建。"
+
+# 重启服务
+log "重启服务 $SERVICE_NAME..."
+systemctl restart "$SERVICE_NAME" 2>&1 | tee -a "$LOG_FILE"
+log "服务 $SERVICE_NAME 已重启。"
+
 
 log "脚本执行完成！"
