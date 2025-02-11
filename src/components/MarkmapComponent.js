@@ -45,12 +45,19 @@ export default function MarkmapComponent({ content }) {
       }
     };
   }, [content, updateStyle]);
+  
 
   // 切换全屏模式
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      refSvg.current?.requestFullscreen();
-    } 
+    if (refSvg.current) {
+      const svgElement = refSvg.current;
+      // 检查浏览器并调用对应的全屏方法
+      if (svgElement.requestFullscreen) {
+        svgElement.requestFullscreen();
+      } else if (svgElement.webkitRequestFullscreen) {
+        svgElement.webkitRequestFullscreen();
+      }
+    }
   };
 
   return (
