@@ -3,6 +3,12 @@
 ```shell
 tmux attach -t \<session-name\>
 ```
+
+* 启动 tmux 会话：
+```shell
+tmux new -s \<session-name\>
+```
+
 * 查看会话列表
 ```shell
 tmux list-windows
