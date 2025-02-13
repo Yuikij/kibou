@@ -121,7 +121,7 @@ const config = {
                 items: [
                     {
                         type: 'dropdown',
-                        label: '基础知识',
+                        label: '基础',
                         position: 'left',
                         items: [
                             {
@@ -139,30 +139,26 @@ const config = {
                                 sidebarId: 'network',
                                 label: '网络',
                             },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'database',
+                                label: '数据库',
+                            },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'algorithm',
+                                label: '算法和数据结构',
+                            },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'distributedSystems',
+                                label: '分布式系统',
+                            },
                         ],
-                    },
-
-                    {
-                        type: 'docSidebar',
-                        sidebarId: 'database',
-                        position: 'left',
-                        label: '数据库',
-                    },
-                    {
-                        type: 'docSidebar',
-                        sidebarId: 'distributedSystems',
-                        position: 'left',
-                        label: '分布式系统',
-                    },
-                    {
-                        type: 'docSidebar',
-                        sidebarId: 'algorithm',
-                        position: 'left',
-                        label: '算法和数据结构',
                     },
                     {
                         type: 'dropdown',
-                        label: '基础软件',
+                        label: '应用',
                         position: 'left',
                         items: [
                             {
@@ -195,20 +191,15 @@ const config = {
                     {
                         type: 'docSidebar',
                         sidebarId: 'publishClass',
-                        position: 'left',
-                        label: '公开课笔记',
-                    },
-                    {
-                        type: 'docSidebar',
-                        sidebarId: 'prepareExam',
                         position: 'right',
-                        label: '备考面试',
+                        label: '公开课',
                     },
+        
                     {
                         type: 'docSidebar',
                         sidebarId: 'naturalLanguage',
                         position: 'right',
-                        label: '语言学习',
+                        label: '语言',
                     },
                     // right
                     {to: '/blog', label: '日记', position: 'right'},
@@ -220,12 +211,17 @@ const config = {
                             {
                                 type: 'docSidebar',
                                 sidebarId: 'SuperGame',
-                                label: 'SuperGame',
+                                label: 'SG论坛',
                             },
                             {
                                 type: 'docSidebar',
                                 sidebarId: 'deepResearch',
                                 label: '深度解读',
+                            },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'prepareExam',
+                                label: '备考面试',
                             },
                             // ... more items
                         ],

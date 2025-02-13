@@ -215,6 +215,7 @@ function TagsSection() {
 
 function CategoriesSection() {
   const categories = [
+    { name: '深度解读', path: '/docs/memorandum/深度解读/DDIA'},
     { name: 'JAVA', path: '/docs/category/java-1' },
     { name: 'CS186', path: '/docs/publishClass/cs186/note/proj0&1' },
     // 添加更多分类
