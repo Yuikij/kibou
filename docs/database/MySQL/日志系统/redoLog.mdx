@@ -5,7 +5,7 @@ title: Redo log
 ## 基本概念
 > The redo log is a disk-based data structure used during crash recovery to correct data written by incomplete transactions
 
-  基于磁盘的数据结构，保证了崩溃恢复，保证**已提交事务**的恢复，并且通过WAL加快了写入的效率。
+  基于磁盘的数据结构，保证了崩溃恢复，保证**已提交事务**的恢复(防止丢掉内存数据)，并且通过WAL加快了写入的效率。
 
 ## 涉及概念
 ### 1. WAL
@@ -18,7 +18,10 @@ title: Redo log
 ### 3. Redo Log Files
 * 磁盘上的物理文件，用于持久化存储 redo log 记录。InnoDB 默认使用一组循环写入的 redo log 文件，通常命名为 ib_logfile0, ib_logfile1 等。 默认情况下，在数据目录（data directory）下创建。
 可以通过 innodb_log_group_home_dir 和 innodb_log_file_size, innodb_log_files_in_group 参数配置 redo log 文件的位置、大小和数量。
-
+### 4. 两个指针
+* checkpoint，系统最后一次（Buffer Pool 脏页）刷入磁盘的点。write pos，系统当前最新的记录点。当write pos追上checkpoint就表示没空间了，需要写回磁盘。
+### 5. 脏页：
+* Buffer Pool中与磁盘数据不一致的页
 ## 如何工作的
 > 基于事务
 
@@ -29,9 +32,28 @@ title: Redo log
 * **更新Checkpoint**：当Redo Log的记录被写入到数据页，更新Checkpoint，Checkpoint包括了LSN的信息，Checkpoint往前的都可以删了
 * **文件循环**：当一个Redo Log文件写满或达到一定条件时，MySQL会切换到下一个Redo Log文件
 :::tip
- * Redo Log Buffer：存储事务中的修改操作的内存缓冲区，用于事务的持久性和恢复，异步写入磁盘，和磁盘的数据页没有直接的关系。  
- * InnoDB Buffer Pool：包含了表和索引的实际数据。从而减少了磁盘 I/O 操作，提高了数据读写的效率（刷新脏页...）。
+ * Redo Log Buffer：存储事务中的修改操作的内存缓冲区，用于事务的持久性和恢复，异步写入磁盘，**和磁盘的数据页没有直接的关系**。  
+ * InnoDB Buffer Pool：包含了表和索引的实际数据。从而减少了磁盘 I/O 操作，提高了数据读写的效率（刷新脏页）。
 :::
+
+## 刷新策略 (由 innodb_flush_log_at_trx_commit 参数控制):
+
+> innodb_flush_log_at_trx_commit 参数控制着 redo log buffer 何时刷新到 redo log 文件（与刷新数据页无关）。它对事务的持久性和性能有重要影响，有三个可选值：
+
+* 0: 事务提交时，redo log buffer 的内容不会立即刷新到 redo log 文件，而是依赖于 InnoDB 的后台线程 (master thread) 每秒刷新一次到 redo log 文件，但不会立即刷到磁盘（仅刷新到文件系统缓存）。 系统崩溃时，可能会丢失 上一秒 提交的事务。 性能最好，但持久性最弱。
+
+  > 英文解释: At transaction commit, redo log buffer content is not immediately flushed to redo log files. Instead, it relies on InnoDB's background thread (master thread) to flush to redo log files every second, but not immediately to disk (only to file system cache). In case of a system crash, transactions committed in the last second may be lost. Best performance, weakest durability.
+
+* 1: **(默认值)** 事务提交时，redo log buffer 的内容会立即刷新到 redo log 文件 (位于文件系统缓存中)，并且立即将 redo log 文件刷新到磁盘 (fsync 操作)。 这是 ACID 属性的完全保证，也是 最安全 的设置，但 性能相对较低，因为每次事务提交都需要进行磁盘 I/O。
+
+  > 英文解释: (Default value) At transaction commit, redo log buffer content is immediately flushed to redo log files, and the redo log files are immediately flushed to disk (fsync operation). This provides full ACID property guarantee and is the safest setting, but with relatively lower performance because each transaction commit requires disk I/O.
+
+* 2: 事务提交时，redo log buffer 的内容会立即刷新到 redo log 文件，但 redo log 文件只会刷新到文件系统缓存，而不是立即刷到磁盘。 刷到磁盘的操作由操作系统控制，通常是周期性的。 相比于 innodb_flush_log_at_trx_commit=1，性能有所提升，但如果操作系统或硬件崩溃 (例如，断电)，可能会丢失 文件系统缓存中 的 redo log 记录，从而导致 最后一次刷新到磁盘之后 提交的事务丢失。 性能和持久性介于 0 和 1 之间。
+
+  > 英文解释: At transaction commit, redo log buffer content is immediately flushed to redo log files, but the redo log files are only flushed to the file system cache, not immediately to disk. Flushing to disk is controlled by the operating system, usually periodically. Compared to innodb_flush_log_at_trx_commit=1, performance is improved, but if the operating system or hardware crashes (e.g., power outage), redo log records in the file system cache may be lost, potentially leading to the loss of transactions committed after the last flush to disk. Performance and durability are between 0 and 1.
+* 其他的时机：write pos追上checkpoint
+
+通常建议使用 innodb_flush_log_at_trx_commit=1，以确保数据安全和事务的持久性。 在对数据安全性要求不高，但对性能要求极高的场景下，可以考虑使用 innodb_flush_log_at_trx_commit=2 或 0，但需要权衡数据丢失的风险
 
 ## 崩溃恢复的流程 
 -- （todo：需要完善）
@@ -43,13 +65,15 @@ title: Redo log
   * 如果碰到只有prepare、而没有commit的redo log，就拿着XID去binlog找对应的事务
 
 ## 特点
-* 顺序的磁盘写入，按照事务提交顺序写入（？有待加深理解）
+* 顺序的磁盘写入（因为是日志追加的方式），提高写入效率
+* redo log 和buffer pool的合作
 * WAL：Write-Ahead Logging
   * 在事务对数据库进行修改之前，先将修改的操作记录到一个持久的日志文件中
 * 崩溃恢复：恢复未持久化的内存数据
 
 
-## 结构
+## 文件结构
+* 记录了数据页的物理修改
 * Ordinary redo log files
   * 普通的redo log文件，正在使用的，使用#ib_redoN命名
 * Spare redo log files
