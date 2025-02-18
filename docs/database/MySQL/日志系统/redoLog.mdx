@@ -7,6 +7,13 @@ title: Redo log
 
   基于磁盘的数据结构，保证了崩溃恢复，保证**已提交事务**的恢复(防止丢掉内存数据)，并且通过WAL加快了写入的效率。
 
+## 特点
+* 顺序的磁盘写入（因为是日志追加的方式），提高写入效率
+* **redo log 和buffer pool的合作：有了redo log之后，我们就可以放心的使用内存做缓存，不怕数据丢失，把实际的修改页的随机操作变成顺序的写操作追加**
+* WAL：Write-Ahead Logging
+  * 在事务对数据库进行修改之前，先将修改的操作记录到一个持久的日志文件中
+* 崩溃恢复：恢复未持久化的内存数据
+
 ## 涉及概念
 ### 1. WAL
 * Write-Ahead Logging ，先写日志，再写数据，在任何修改数据的操作之前，必须讲操作记录到独立的日志文件中，目的是确保数据的持久性和一致性。
@@ -56,20 +63,13 @@ title: Redo log
 通常建议使用 innodb_flush_log_at_trx_commit=1，以确保数据安全和事务的持久性。 在对数据安全性要求不高，但对性能要求极高的场景下，可以考虑使用 innodb_flush_log_at_trx_commit=2 或 0，但需要权衡数据丢失的风险
 
 ## 崩溃恢复的流程 
--- （todo：需要完善）
 * 通过redo log找到最近一次checkpoint的位置，然后根据checkpoint相对应的LSN开始，获取需要重做的日志。
 * 确定需要回滚和需要提交的事务id，XID（Transaction ID）
 * redo log回放，读取记录并应用到已提交的事务
   * 找到 XID： 从 prepare 记录中找到 XID，即事务标识符
   * 如果碰到既有prepare、又有commit的redo log，就直接提交
-  * 如果碰到只有prepare、而没有commit的redo log，就拿着XID去binlog找对应的事务
-
-## 特点
-* 顺序的磁盘写入（因为是日志追加的方式），提高写入效率
-* redo log 和buffer pool的合作
-* WAL：Write-Ahead Logging
-  * 在事务对数据库进行修改之前，先将修改的操作记录到一个持久的日志文件中
-* 崩溃恢复：恢复未持久化的内存数据
+  * 如果碰到只有prepare、而没有commit的redo log，就拿着XID去binlog找对应的事务，查看binlog是否完整
+     * 如果完整，则重做，不完整则撤销
 
 
 ## 文件结构
