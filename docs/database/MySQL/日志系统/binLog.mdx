@@ -1,0 +1,37 @@
+---
+title: Binlog
+---
+
+## 基本概念
+> binlog (Binary Log)，即二进制日志。它记录了数据库的所有数据更改操作，主要用于数据复制 (Replication) 和  point-in-time 恢复 (Point-in-Time Recovery)
+
+## 核心作用
+* 数据复制
+* Point-in-time Recovery
+
+## 与redo log的区别
+* binlog是逻辑修改（做什么）
+* redo log是物理修改（怎么做）
+
+## binlog的格式
+*  STATEMENT (语句模式)
+*  ROW (行模式)
+*  MIXED (混合模式)
+
+## 如何解析binlog   
+> 可以使用mysqlbinlog解析，复杂且有趣，能加深对mysql实现的理解，不过解析工作还是建议交给AI
+
+* 这里摘一段测试的输出，记录了一段新增的操作
+
+```bash
+#250219 23:27:20 server id 1  end_log_pos 424 CRC32 0x76e3e01c  Write_rows: table id 112 flags: STMT_END_F
+### INSERT INTO `gis`.`bis_command_reply`
+### SET
+###   @1=1 /* INT meta=0 nullable=1 is_null=0 */
+###   @2=NULL /* INT meta=0 nullable=1 is_null=1 */
+###   @3=NULL /* INT meta=0 nullable=1 is_null=1 */
+###   @4=NULL /* DATETIME(0) meta=0 nullable=1 is_null=1 */
+
+```
+## 如何使用binlog恢复数据
+## binlog的相关配置
