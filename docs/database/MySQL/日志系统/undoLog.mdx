@@ -5,7 +5,14 @@ title: Undo log
 ## 基本概念
 > An undo log is a collection of undo log records associated with a single read-write transaction. An undo log record contains information about how to undo the latest change by a transaction to a clustered index record
 
-记录了一条事务里对数据的操作，包含了如何撤销每个操作的信息，并且给mvcc提供了可追溯的历史版本的视图
+* 记录了一条事务里对数据的操作，包含了如何撤销每个操作的信息，并且给mvcc提供了可追溯的历史版本的视图
+* 保证了事务的原子性
+## 核心功能
+* 支持事务回滚
+* MVCC的实现基础：因为uodo log里存放了旧数据，这个旧数据会提供给MVCC做一致性快照
+
+## 与MVCC的关系
+
 
 ## 配置
 ```ini
