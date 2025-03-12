@@ -267,3 +267,34 @@ class Worker implements Runnable {
 }
 
 ```
+
+## LongAdder
+
+* 维护一个 base 变量存储累加值。
+* 当并发较低时，所有累加操作直接修改 base，类似于 AtomicLong。
+* 当并发较高时，会 自动扩展一个数组（cells 数组），并把不同线程的值分散到不同的 Cell 里，减少 CAS 竞争。
+* 读取时，将 base 和 cells 数组中所有值求和，得到最终值。 
+
+```java
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.LongAdder;
+
+public class LongAdderConcurrencyTest {
+    private static final int THREAD_COUNT = 1000;
+    private static LongAdder counter = new LongAdder();
+
+    public static void main(String[] args) throws InterruptedException {
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
+
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            executor.submit(() -> counter.increment());
+        }
+
+        executor.shutdown();
+        executor.awaitTermination(1, TimeUnit.MINUTES);
+
+        System.out.println("最终计数值：" + counter.sum());
+    }
+}
+
+```
