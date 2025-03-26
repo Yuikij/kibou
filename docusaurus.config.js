@@ -185,7 +185,7 @@ const config = {
                                 type: 'docSidebar',
                                 sidebarId: 'middleware',
                                 label: '中间件',
-                            },                            
+                            },
                         ],
                     },
                     {
@@ -203,6 +203,11 @@ const config = {
                     },
                     // right
                     {to: '/blog', label: '日记', position: 'right'},
+                    {
+                        to: '/snake-game',
+                        label: '贪吃蛇游戏',
+                        position: 'right',
+                      },
                     {
                         type: 'dropdown',
                         label: '备忘录',
@@ -222,6 +227,11 @@ const config = {
                                 type: 'docSidebar',
                                 sidebarId: 'prepareExam',
                                 label: '备考面试',
+                            },
+                            {
+                                type: 'docSidebar',
+                                sidebarId: 'prepareExam',
+                                label: '小米游戏库',
                             },
                             // ... more items
                         ],
