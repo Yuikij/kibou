@@ -64,14 +64,21 @@ const INITIAL_SPEED = 150;
 const SnakeGame = () => {
   const canvasRef = useRef(null);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(() => {
-    const saved = localStorage.getItem('snakeHighScore');
-    return saved ? parseInt(saved) : 0;
-  });
-  const [scoreHistory, setScoreHistory] = useState(() => {
-    const saved = localStorage.getItem('snakeScoreHistory');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [highScore, setHighScore] = useState(0);
+  const [scoreHistory, setScoreHistory] = useState([]);
+
+  // 在客户端加载时初始化分数
+  useEffect(() => {
+    const savedHighScore = localStorage.getItem('snakeHighScore');
+    if (savedHighScore) {
+      setHighScore(parseInt(savedHighScore));
+    }
+    
+    const savedHistory = localStorage.getItem('snakeScoreHistory');
+    if (savedHistory) {
+      setScoreHistory(JSON.parse(savedHistory));
+    }
+  }, []);
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [snake, setSnake] = useState([
@@ -230,7 +237,10 @@ const SnakeGame = () => {
         if (isNewHighScore) {
           const newHighScore = score;
           setHighScore(newHighScore);
-          localStorage.setItem('snakeHighScore', newHighScore.toString());
+          // 将localStorage操作移至useEffect中
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('snakeHighScore', newHighScore.toString());
+          }
         }
         const newHistory = [{
           score,
@@ -238,7 +248,10 @@ const SnakeGame = () => {
           isHighScore: isNewHighScore
         }, ...scoreHistory].slice(0, 10);
         setScoreHistory(newHistory);
-        localStorage.setItem('snakeScoreHistory', JSON.stringify(newHistory));
+        // 将localStorage操作移至useEffect中
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('snakeScoreHistory', JSON.stringify(newHistory));
+        }
       };
 
   return (
