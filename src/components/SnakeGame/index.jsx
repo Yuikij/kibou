@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
-import { Button, Modal, message } from 'antd';
-import { TrophyOutlined } from '@ant-design/icons';
+import { Button, Modal, message, List, Card, Typography } from 'antd';
+import { TrophyOutlined, HistoryOutlined } from '@ant-design/icons';
+
+const { Title, Text } = Typography;
 
 // 在原有样式的基础上修改以下部分
 const GameContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 16px;
@@ -40,6 +43,20 @@ const ControlPanel = styled.div`
   margin-bottom: 20px;
 `;
 
+const ScoreHistoryPanel = styled(Card)`
+  width: 250px;
+  height: fit-content;
+  .ant-card-head-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ant-list-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(235, 47, 150, 0.15);
+  }
+`;
+
 const GRID_SIZE = 20;
 const CELL_SIZE = 20;
 const INITIAL_SPEED = 150;
@@ -47,7 +64,14 @@ const INITIAL_SPEED = 150;
 const SnakeGame = () => {
   const canvasRef = useRef(null);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('snakeHighScore');
+    return saved ? parseInt(saved) : 0;
+  });
+  const [scoreHistory, setScoreHistory] = useState(() => {
+    const saved = localStorage.getItem('snakeScoreHistory');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [snake, setSnake] = useState([
@@ -201,28 +225,40 @@ const SnakeGame = () => {
     const handleGameOver = () => {
         setGameOver(false);
         setClose(true);
-        // 更新最高分
-        if (score > highScore) {
-          setHighScore(score);
+        // 更新最高分和历史记录
+        const isNewHighScore = score > highScore;
+        if (isNewHighScore) {
+          const newHighScore = score;
+          setHighScore(newHighScore);
+          localStorage.setItem('snakeHighScore', newHighScore.toString());
         }
+        const newHistory = [{
+          score,
+          date: new Date().toLocaleString(),
+          isHighScore: isNewHighScore
+        }, ...scoreHistory].slice(0, 10);
+        setScoreHistory(newHistory);
+        localStorage.setItem('snakeScoreHistory', JSON.stringify(newHistory));
       };
 
   return (
     <GameContainer>
-      <ScoreBoard>
-        分数: {score} <TrophyOutlined style={{ color: '#faad14' }} /> 最高分: {highScore}
-      </ScoreBoard>
-      <GameBoard
-        ref={canvasRef}
-        width={GRID_SIZE * CELL_SIZE}
-        height={GRID_SIZE * CELL_SIZE}
-      />
-      <ControlPanel>
-        <Button type="primary" onClick={() => setIsPaused(!isPaused)}>
-          {isPaused ? '继续' : '暂停'}
-        </Button>
-        <Button onClick={resetGame}>重新开始</Button>
-      </ControlPanel>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <ScoreBoard>
+          分数: {score} <TrophyOutlined style={{ color: '#faad14' }} /> 最高分: {highScore}
+        </ScoreBoard>
+        <GameBoard
+          ref={canvasRef}
+          width={GRID_SIZE * CELL_SIZE}
+          height={GRID_SIZE * CELL_SIZE}
+        />
+        <ControlPanel>
+          <Button type="primary" onClick={() => setIsPaused(!isPaused)}>
+            {isPaused ? '继续' : '暂停'}
+          </Button>
+          <Button onClick={resetGame}>重新开始</Button>
+        </ControlPanel>
+      </div>
       <Modal
         title="游戏结束"
         open={gameOver&&!close}
@@ -230,12 +266,37 @@ const SnakeGame = () => {
         onCancel={handleGameOver}
         okText="重新开始"
         cancelText="关闭"
+        width={400}
       >
-        <p>游戏结束！你的得分是：{score}</p>
-        {score > highScore && (
-          <p>恭喜你创造了新的最高分！</p>
-        )}
+        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+          <Title level={2} style={{ color: '#eb2f96', marginBottom: '20px' }}>{score}分</Title>
+          {score > highScore && (
+            <Text type="success" style={{ fontSize: '18px', display: 'block', marginBottom: '15px' }}>
+              🎉 恭喜你创造了新的最高分！
+            </Text>
+          )}
+          <Text type="secondary">历史最高分：{highScore}分</Text>
+        </div>
       </Modal>
+      <ScoreHistoryPanel
+        title={<><HistoryOutlined /> 历史记录</>}
+        size="small"
+      >
+        <List
+          dataSource={scoreHistory}
+          renderItem={(item) => (
+            <List.Item>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                <Text style={{ color: item.score>=highScore ? '#eb2f96' : 'inherit' }}>
+                  {item.score}分 {item.score>=highScore && '🏆'}
+                </Text>
+                <Text type="secondary" style={{ fontSize: '12px' }}>{item.date}</Text>
+              </div>
+            </List.Item>
+          )}
+          locale={{ emptyText: '暂无记录' }}
+        />
+      </ScoreHistoryPanel>
     </GameContainer>
   );
 };

@@ -205,7 +205,7 @@ const config = {
                     {to: '/blog', label: '日记', position: 'right'},
                     {
                         to: '/snake-game',
-                        label: '贪吃蛇游戏',
+                        label: '小米的专属游戏',
                         position: 'right',
                       },
                     {
