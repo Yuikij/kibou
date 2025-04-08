@@ -102,6 +102,7 @@ const config = {
                 {name: 'description', content: 'Yuikij\'s  blog'},
                 {name: 'robots', content: 'index, follow'},
                 {name: 'viewport', content: 'width=device-width, initial-scale=1.0'},
+                {name: 'google-site-verification', content: '-xEN6xN-ZxgRBYd5yWu6wEmhSpllJZAZSLXGTAJkzzU'},
                 {property: 'og:description', content: 'Yuikij\'s  blog'},
               ],
             // Replace with your project's social card
