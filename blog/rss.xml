@@ -9,29 +9,128 @@
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <item>
-            <title><![CDATA[OpenManus源码学习]]></title>
-            <link>https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/OpenManus源码学习</link>
-            <guid>https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/OpenManus源码学习</guid>
+            <title><![CDATA[从LLM到OpenManus]]></title>
+            <link>https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/从LLM到OpenManus</link>
+            <guid>https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/从LLM到OpenManus</guid>
             <pubDate>Mon, 31 Mar 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[组件说明]]></description>
-            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="组件说明">组件说明<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/OpenManus%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0#%E7%BB%84%E4%BB%B6%E8%AF%B4%E6%98%8E" class="hash-link" aria-label="Direct link to 组件说明" title="Direct link to 组件说明">​</a></h2>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="agent">Agent<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/OpenManus%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0#agent" class="hash-link" aria-label="Direct link to Agent" title="Direct link to Agent">​</a></h3>
+            <description><![CDATA[初心]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="初心">初心<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#%E5%88%9D%E5%BF%83" class="hash-link" aria-label="Direct link to 初心" title="Direct link to 初心">​</a></h2>
+<p>随着DeepSeek的爆火，当看到大量LLM API出现之后，自己也萌生了接触prompt engineering，开发LLM应用的想法，虽然国内调用gemini很麻烦，但是还是有几个大厂的ds api看上去还是廉价可口，
+于是想找几个LLM应用学习一下，并且搞明白几个问题：</p>
+<ol>
+<li>LLM如何保证可靠性</li>
+<li>提示词的使用技巧</li>
+<li>如何减少上下文占用的token</li>
+<li>LLM如何调用其他工具</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="对openmanus的学习">对OpenManus的学习<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#%E5%AF%B9openmanus%E7%9A%84%E5%AD%A6%E4%B9%A0" class="hash-link" aria-label="Direct link to 对OpenManus的学习" title="Direct link to 对OpenManus的学习">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="agent">Agent<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#agent" class="hash-link" aria-label="Direct link to Agent" title="Direct link to Agent">​</a></h3>
 <blockquote>
 <p>负责决策和执行任务，是系统的智能核心</p>
 </blockquote>
 <ul>
-<li>base.py：定义了BaseAgent基类，包括状态管理、内存管理和执行循环</li>
-<li>browser.py：实现了浏览器相关的代理功能，用于网页交互</li>
-<li>manus.py：实现了Manus主代理，集成了多种工具能力的核心代理</li>
-<li>mcp.py：实现了MCP(Manus Control Protocol)代理，用于控制协议相关功能</li>
-<li>react.py：实现了ReAct模式的代理，基于推理-行动循环模式</li>
-<li>swe.py：实现了软件工程(SWE)相关的代理，专注于代码生成和分析</li>
-<li>toolcall.py：实现了工具调用代理，负责管理和执行各种工具</li>
+<li>base.py：定义了BaseAgent基类，包括状态管理、内存管理和执行循环<!-- -->
+<ul>
+<li>run()：执行循环，调用step()执行步骤，调用is_stuck()排查是否陷入重复循环。</li>
+<li>update_memory()：存储上下文，图片和消息</li>
+<li>state_context()：状态管理</li>
+</ul>
+</li>
+<li>react.py：实现了ReAct模式的智能体，基于推理-行动循环模式<!-- -->
+<ul>
+<li>定义了step()的实现：先思考再执行，然后把具体的think()和act()交给子类</li>
+</ul>
+</li>
+<li>toolcall.py：实现了工具调用智能体，负责管理和执行各种工具<!-- -->
+<ul>
+<li>实现了think()和act()</li>
+</ul>
+</li>
+<li>browser.py：实现了浏览器相关的代理功能，用于网页交互<!-- -->
+<ul>
+<li>重写了think()，在调用父类think之前，填充上下文和提示词</li>
+</ul>
+</li>
+<li>manus.py：实现了Manus主智能体</li>
+<li>mcp.py：实现了MCP(Manus Control Protocol)智能体，MCP是一个和LLM交互的协议，有待深入了解</li>
+<li>swe.py：实现了软件工程(SWE)相关的智能体，在toolcall的基础上配备了与操作系统交互，与代码交互的工具</li>
 </ul>
 <!-- -->
 <!-- -->
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="flow">Flow<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/OpenManus%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0#flow" class="hash-link" aria-label="Direct link to Flow" title="Direct link to Flow">​</a></h3>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mcp">Mcp<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/OpenManus%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0#mcp" class="hash-link" aria-label="Direct link to Mcp" title="Direct link to Mcp">​</a></h3>]]></content:encoded>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="flow">Flow<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#flow" class="hash-link" aria-label="Direct link to Flow" title="Direct link to Flow">​</a></h3>
+<ul>
+<li>base.py：提供了对智能体的管理</li>
+<li>flow_factory.py：工厂类，用于创建flow，目前只支持planning类型</li>
+<li>planning.py：基于计划的flow，大致上是从数组中依次找到对应类型的智能体去执行</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="mcp">Mcp<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#mcp" class="hash-link" aria-label="Direct link to Mcp" title="Direct link to Mcp">​</a></h3>
+<p>todo 暂时觉得是高级的tool</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="prompt">Prompt<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#prompt" class="hash-link" aria-label="Direct link to Prompt" title="Direct link to Prompt">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="角色定位">角色定位<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#%E8%A7%92%E8%89%B2%E5%AE%9A%E4%BD%8D" class="hash-link" aria-label="Direct link to 角色定位" title="Direct link to 角色定位">​</a></h4>
+<blockquote>
+<p>SETTING: You are an autonomous programmer, and you're working directly in the command line with a special interface.<br>
+<!-- -->您是一名自主程序员，并且您正在使用特殊界面直接在命令行中工作</p>
+</blockquote>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="任务分解">任务分解<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#%E4%BB%BB%E5%8A%A1%E5%88%86%E8%A7%A3" class="hash-link" aria-label="Direct link to 任务分解" title="Direct link to 任务分解">​</a></h4>
+<blockquote>
+<p>Your job is:</p>
+<ol>
+<li>Analyze requests to understand the task scope</li>
+<li>Create a clear, actionable plan that makes meaningful progress with the <code>planning</code> tool</li>
+<li>Execute steps using available tools as needed</li>
+<li>Track progress and adapt plans when necessary</li>
+<li>Use <code>finish</code> to conclude immediately when the task is complete</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>你的工作是：</p>
+<ol>
+<li>分析请求，了解任务范围</li>
+<li>使用“planning”工具制定清晰、可操作的计划，确保取得有意义的进展</li>
+<li>根据需要使用可用工具执行步骤</li>
+<li>跟踪进度并在必要时调整计划</li>
+<li>使用“完成”按钮在任务完成后立即结束</li>
+</ol>
+</blockquote>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="通过反问引导">通过反问引导<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#%E9%80%9A%E8%BF%87%E5%8F%8D%E9%97%AE%E5%BC%95%E5%AF%BC" class="hash-link" aria-label="Direct link to 通过反问引导" title="Direct link to 通过反问引导">​</a></h4>
+<blockquote>
+<p>Based on the current state, what's your next action?
+Choose the most efficient path forward:</p>
+<ol>
+<li>Is the plan sufficient, or does it need refinement?</li>
+<li>Can you execute the next step immediately?</li>
+<li>Is the task complete? If so, use <code>finish</code> right away.</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>根据当前状态，你的下一步行动是什么？
+选择最有效的前进路径：</p>
+<ol>
+<li>计划是否充分，还是需要改进？</li>
+<li>你能立即执行下一步吗？</li>
+<li>任务完成了吗？如果完成了，请立即使用“finish”。</li>
+</ol>
+</blockquote>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="限制">限制<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#%E9%99%90%E5%88%B6" class="hash-link" aria-label="Direct link to 限制" title="Direct link to 限制">​</a></h4>
+<blockquote>
+<p>Note that the environment does NOT support interactive session commands (e.g. python, vim)<br>
+<!-- -->请注意，该环境不支持交互式会话命令（例如 python、vim）</p>
+</blockquote>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="问题回答">问题回答<a href="https://your-docusaurus-test-site.com/kibou/blog/2025/03/31/%E4%BB%8ELLM%E5%88%B0OpenManus#%E9%97%AE%E9%A2%98%E5%9B%9E%E7%AD%94" class="hash-link" aria-label="Direct link to 问题回答" title="Direct link to 问题回答">​</a></h2>
+<ol>
+<li>LLM如何保证可靠性</li>
+<li>如何减少上下文占用的token<!-- -->
+<ul>
+<li>向量化？</li>
+<li>通过应用层，比如减少不必要的工具输入，压缩上下文</li>
+</ul>
+</li>
+<li>LLM如何调用其他工具<!-- -->
+<ul>
+<li>一般情况下，LLM API 会提供相关的支持，比如说在chat请求里添加tool这么一个参数，提供结构化的输入输出，但是工具的功能和参数的含义还是用自然语言</li>
+</ul>
+</li>
+</ol>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[两个人的话，去1912散步也是可以的]]></title>
