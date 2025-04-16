@@ -19,3 +19,23 @@ Read View 定义了事务在某个时间点可以“看到”哪些版本的数�
 * 读取某行的隐藏字段，找到最后一次修改该行数据的事务 ID：DB_TRX_ID
 * 根据DB_TRX_ID与Read View ，判断当前读到的行是否可见。如果可见则返回
 * 如果不可见，则根据DB_ROLL_PTR回溯到更早的版本，重复上面判断步骤
+
+### 如何判断当前读到的行是否可见
+```java
+    if (DB_TRX_ID < min_trx_id) {
+        // 规则 1：该行由一个已提交的事务修改（早于所有活跃事务），可见
+        return VISIBLE;
+    } else if (DB_TRX_ID >= max_trx_id) {
+        // 规则 2：该行由未来的事务修改（晚于 Read View 创建），不可见
+        return INVISIBLE;
+    } else if (DB_TRX_ID == creator_trx_id) {
+        // 规则 3：该行由当前事务修改，可见
+        return VISIBLE;
+    } else if (DB_TRX_ID in m_ids) {
+        // 规则 4：该行由其他未提交的事务修改，不可见
+        return INVISIBLE;
+    } else {
+        // 规则 5：该行由一个已提交但晚于 min_trx_id 的事务修改，可见
+        return VISIBLE;
+    }
+```

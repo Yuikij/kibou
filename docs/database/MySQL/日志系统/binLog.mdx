@@ -13,13 +13,23 @@ title: Binlog
 * binlog是逻辑修改（做什么）
 * redo log是物理修改（怎么做）
 
+## 两段提交
+* 准备阶段
+    * redo log进入prepare 阶段
+* 提交阶段
+    * 先尝试写入binlog，成功之后提交redo log
+
+* 关键点
+    * 如果没有两段提交，那么当日志不一致的时候，没有能力通过binlog恢复redo log，或者通过redo log恢复binlog
+    * 当有了准备阶段之后，redo log会先持久化并且标记为prepare，当binlog写入但是redo log没有提交的时候，会直接提交redo log，如何是在提交阶段之前崩溃，也可以回滚prepare状态。
+
 ## binlog的格式
 *  STATEMENT (语句模式)
 *  ROW (行模式)
 *  MIXED (混合模式)
 
 ## 如何解析binlog   
-> 可以使用mysqlbinlog解析，复杂且有趣，能加深对mysql实现的理解，不过解析工作还是建议交给AI
+> 可以使用mysqlbinlog解析，复杂且有趣，能加深对mysql实现的理解，不过解析工作还是交给AI吧
 
 * 这里摘一段测试的输出，记录了一段新增的操作
 
