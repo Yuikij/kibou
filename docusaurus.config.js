@@ -238,6 +238,11 @@ const config = {
                                 sidebarId: 'prepareExam',
                                 label: '小米游戏库',
                             },
+                            {
+                                type:'docSidebar',
+                                sidebarId: 'prompt',
+                                label: '提示词',                               
+                            }
                             // ... more items
                         ],
                     },
