@@ -1,4 +1,4 @@
-"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[9158],{89096:(e,t,r)=>{r.r(t),r.d(t,{default:()=>R});var s=r(96540),a=r(84897),o=r(44404),n=r(83375),i=r(18419),l=r(19534),c=r(81200),d=r(19188),x=r(51610),f=r(30461),p=r(74848);const{Title:h,Text:y}=n.A,g=o.Ay.div`
+"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[9158],{89096:(e,t,r)=>{r.r(t),r.d(t,{default:()=>R});var s=r(96540),a=r(84897),o=r(44404),n=r(83375),i=r(18419),l=r(19534),c=r(81200),d=r(59071),x=r(51610),f=r(30461),p=r(74848);const{Title:h,Text:y}=n.A,g=o.Ay.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
