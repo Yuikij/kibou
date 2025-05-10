@@ -445,7 +445,7 @@ name=browser_use, arguments={"action": "navigate", "url": "https://finance.yahoo
 
 ##### 1. 执行步骤0（act）：BROWSER_AGENT
 
-###### 将执行结果添加到用户提示词，然后继续think
+###### 将执行结果添加LLM记忆中，然后继续think
 ```markdown
 CURRENT STEP ENVIRONMENT STATUS:
 When you see [Current state starts here], focus on the following:
@@ -470,5 +470,11 @@ When you see [Current state starts here], focus on the following:
 为实现我的目标，下一步应该做什么？
 省略。。。
 ```
+
+##### react过程总结
+1. name=browser_use, arguments={"action": "navigate", "url": "https://finance.yahoo.com/quote/BABA"}
+2. name=browser_use, arguments={"action": "get_text"}
+3. name=browser_use, arguments={"action":"input_text","index":10,"text":"BABA"}
+
 
 ##### 2. DEFAULT_AGENT
