@@ -239,6 +239,11 @@ const config = {
                                 label: '小米游戏库',
                             },
                             {
+                                type: 'docSidebar',
+                                sidebarId: 'gpt',
+                                label: '小贴士',
+                            },
+                            {
                                 type:'docSidebar',
                                 sidebarId: 'prompt',
                                 label: '提示词',                               

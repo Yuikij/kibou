@@ -475,6 +475,8 @@ When you see [Current state starts here], focus on the following:
 1. name=browser_use, arguments={"action": "navigate", "url": "https://finance.yahoo.com/quote/BABA"}
 2. name=browser_use, arguments={"action": "get_text"}
 3. name=browser_use, arguments={"action":"input_text","index":10,"text":"BABA"}
+4. name=browser_use, arguments={"action":"key_enter","index":10}
+5. name=browser_use, arguments={"action": "get_text"}
 
 
 ##### 2. DEFAULT_AGENT
