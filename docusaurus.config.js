@@ -209,8 +209,9 @@ const config = {
                     // right
                     {to: '/blog', label: '日记', position: 'right'},
                     {
-                        to: '/snake-game',
-                        label: '小米的专属游戏',
+                        type: 'docSidebar',
+                        label: 'AI编程',
+                        sidebarId: 'ai',
                         position: 'right',
                       },
                     {
@@ -235,19 +236,10 @@ const config = {
                             },
                             {
                                 type: 'docSidebar',
-                                sidebarId: 'prepareExam',
-                                label: '小米游戏库',
-                            },
-                            {
-                                type: 'docSidebar',
                                 sidebarId: 'gpt',
                                 label: '小贴士',
                             },
-                            {
-                                type:'docSidebar',
-                                sidebarId: 'prompt',
-                                label: '提示词',                               
-                            }
+
                             // ... more items
                         ],
                     },

@@ -1,0 +1,820 @@
+import {  Row, Col,Image } from "antd";
+
+## 初衷
+虽然谷歌大善人提供了免费的Gemini APi，但是有很大的速率限制，甚至在我日常开发中都遇到过很多次超过速率限制的报错。阅读文档之后，发现速率的限制只针对project，
+于是打算做一个Gemini APi的代理，去更好的管理和使用key。
+
+<Image style={{paddingBottom:"20px"}}  src="https://file.yuisama.top:9009/file//picture/geminiDoc.png"
+/>
+
+## 搭建worker
+
+### 创建D1数据库
+根据文档去官网的仪表盘或者用命令行创建D1 数据库
+### 创建worker
+#### 1. 绑定之前创建好的D1数据库
+```jsonc title="wrangler.jsonc"
+// binding 填本项目自定义的id，database_name和database_id去之前创建D1数据库的地方找
+	"d1_databases": [
+		{
+			"binding": "d1",
+			"database_name": "d1",
+			"database_id": "xxx"
+		}
+	],
+```
+#### 2. 初始化数据库
+```sql
+-- API Key管理表
+CREATE TABLE IF NOT EXISTS api_keys (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    api_key TEXT UNIQUE NOT NULL,           -- API密钥
+    name TEXT,                              -- 密钥名称/备注
+    priority INTEGER DEFAULT 100,           -- 优先级权重 (数值越高优先级越高)
+    status INTEGER DEFAULT 1,              -- 状态: 1=有效, 2=暂时失效, 0=完全失效
+    consecutive_failures INTEGER DEFAULT 0, -- 连续失败次数
+    total_calls INTEGER DEFAULT 0,         -- 总调用次数
+    success_calls INTEGER DEFAULT 0,       -- 成功调用次数
+    last_used_at DATETIME,                 -- 最后使用时间
+    last_success_at DATETIME,              -- 最后成功时间
+    last_failure_at DATETIME,              -- 最后失败时间
+    disabled_until DATETIME,               -- 禁用截止时间
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 创建索引优化查询性能
+CREATE INDEX IF NOT EXISTS idx_api_keys_status ON api_keys(status);
+CREATE INDEX IF NOT EXISTS idx_api_keys_disabled_until ON api_keys(disabled_until);
+CREATE INDEX IF NOT EXISTS idx_api_keys_priority ON api_keys(priority);
+
+-- API调用日志表 (可选，用于更详细的统计和监控)
+CREATE TABLE IF NOT EXISTS api_call_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    api_key_id INTEGER NOT NULL,
+    success BOOLEAN NOT NULL,
+    response_status INTEGER,
+    error_message TEXT,
+    response_time_ms INTEGER,
+    called_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (api_key_id) REFERENCES api_keys(id)
+);
+
+-- 为日志表创建索引
+CREATE INDEX IF NOT EXISTS idx_logs_api_key_id ON api_call_logs(api_key_id);
+CREATE INDEX IF NOT EXISTS idx_logs_called_at ON api_call_logs(called_at);
+CREATE INDEX IF NOT EXISTS idx_logs_success ON api_call_logs(success);
+```
+然后使用命令
+```shell
+# 注意将d1替换成自己填的binding
+npx wrangler d1 execute d1 --remote --file=./schema.sql 
+```
+#### 3. 写主程序
+根据情况自己改，我这也是AI生成的，openai范式的接口
+
+```txt title="目录结构"
+└─src
+    index.js
+    keyManager.js
+```
+```js title="index.js"
+// Cloudflare Workers - Gemini API 代理服务
+// 用于隐藏前端 API Key，提供安全的 API 调用
+// 添加了域名白名单功能和智能API Key管理
+
+import { KeyManager } from './keyManager.js';
+
+export default {
+	async fetch(request, env, ctx) {
+		// 初始化KeyManager
+		const keyManager = new KeyManager(env.d1);
+		
+		// 如果设置了GEMINI_API_KEY环境变量，自动导入到数据库
+		if (env.GEMINI_API_KEY) {
+			try {
+				await keyManager.initializeKeysFromEnv(env.GEMINI_API_KEY);
+			} catch (error) {
+				console.error('Error initializing keys from environment:', error);
+			}
+		}
+
+		// 域名白名单检查
+		// if (!isAllowedOrigin(request, env)) {
+		// 	return createErrorResponse('Access denied: Origin not allowed', 403);
+		// }
+
+		// API Token 校验
+		if (!isValidApiToken(request, env)) {
+			return createErrorResponse('Access denied: Invalid or missing API token', 400);
+		}
+	
+		// CORS 预检请求处理
+		if (request.method === 'OPTIONS') {
+			return handleCors(request, env);
+		}
+
+		// 只允许 POST 请求
+		if (request.method !== 'POST') {
+			return createErrorResponse('Method not allowed', 405);
+		}
+
+		// 检查请求路径
+		const url = new URL(request.url);
+		
+		// 添加管理接口 - 查看Key状态
+		if (url.pathname === '/api/keys/status') {
+			try {
+				const keysStatus = await keyManager.getAllKeysStatus();
+				return new Response(JSON.stringify({
+					success: true,
+					data: keysStatus
+				}), {
+					status: 200,
+					headers: {
+						'Content-Type': 'application/json',
+						...getCorsHeaders(request, env)
+					}
+				});
+			} catch (error) {
+				return createErrorResponse('Failed to get keys status', 500);
+			}
+		}
+		
+		// 主要的聊天API路径
+		if (url.pathname !== '/v1/chat/completions') {
+			return createErrorResponse('Not found', 404);
+		}
+
+		try {
+			// 选择API Key
+			const selectedKey = await keyManager.selectKey();
+			if (!selectedKey) {
+				return createErrorResponse('No available API keys', 503);
+			}
+
+			console.log(`Using API key: ${selectedKey.name || selectedKey.id} (Priority: ${selectedKey.priority})`);
+
+			// 获取 OpenAI API 端点和模型
+			const apiEndpoint = env.LLM_API_ENDPOINT || 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+			const model = env.LLM_MODEL || 'gemini-2.0-flash';
+
+			// 解析请求体
+			const requestBody = await request.json();
+			
+			// 验证请求体格式
+			if (!requestBody.messages || !Array.isArray(requestBody.messages)) {
+				return createErrorResponse('Invalid request format: "messages" is required and must be an array.', 400);
+			}
+
+			// 可选：添加请求频率限制（根据 IP）
+			const clientIP = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For');
+			if (clientIP && !(await checkRateLimit(clientIP, env))) {
+				return createErrorResponse('Rate limit exceeded', 429);
+			}
+
+			// 构建发送到 OpenAI API 的请求体
+			const body = {
+				model: requestBody.model || model,
+				messages: requestBody.messages,
+				stream: requestBody.stream || false,
+			};
+
+			// 添加可选参数（如果请求中存在）
+			if (requestBody.temperature !== undefined) body.temperature = requestBody.temperature;
+			if (requestBody.max_tokens !== undefined) body.max_tokens = requestBody.max_tokens;
+			if (requestBody.top_p !== undefined) body.top_p = requestBody.top_p;
+			if (requestBody.frequency_penalty !== undefined) body.frequency_penalty = requestBody.frequency_penalty;
+			if (requestBody.presence_penalty !== undefined) body.presence_penalty = requestBody.presence_penalty;
+			if (requestBody.stop !== undefined) body.stop = requestBody.stop;
+
+
+			// 构建发送到 OpenAI API 的请求
+			const openaiRequest = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${selectedKey.api_key}`,
+				
+				},
+				body: JSON.stringify(body)
+			};
+
+			// 记录开始时间用于计算响应时间
+			const startTime = Date.now();
+
+			// 调用 OpenAI API
+			const openaiResponse = await fetch(apiEndpoint, openaiRequest);
+			
+			// 计算响应时间
+			const responseTime = Date.now() - startTime;
+			
+			// 获取响应数据
+			const responseData = await openaiResponse.json();
+
+			// 检查 API 响应状态
+			if (!openaiResponse.ok) {
+				console.error('OpenAI API Error:', responseData);
+				
+				// 记录失败
+				await keyManager.recordFailure(
+					selectedKey.id, 
+					openaiResponse.status, 
+					responseData.error?.message || 'API request failed'
+				);
+				
+				return createErrorResponse(
+					responseData.error?.message || 'API request failed', 
+					openaiResponse.status
+				);
+			}
+
+			// 记录成功
+			await keyManager.recordSuccess(selectedKey.id, responseTime);
+
+			// 返回成功响应（使用动态 CORS 头）
+			return new Response(JSON.stringify(responseData), {
+				status: 200,
+				headers: {
+					'Content-Type': 'application/json',
+					...getCorsHeaders(request, env),
+					'Cache-Control': 'no-cache'
+				}
+			});
+
+		} catch (error) {
+			console.error('Worker Error:', error);
+			return createErrorResponse('Internal server error', 500);
+		}
+	}
+};
+
+// API Token 校验函数
+function isValidApiToken(request, env) {
+	// 获取环境变量中的API Token
+	const expectedToken = env.MY_API_TOKEN;
+	
+	if (!expectedToken) {
+		console.warn('MY_API_TOKEN not configured, denying all requests');
+		return false;
+	}
+	
+	// 获取请求头中的 Authorization
+	const authHeader = request.headers.get('Authorization');
+	
+	if (!authHeader) {
+		console.warn('Missing Authorization header');
+		return false;
+	}
+	
+	// 检查是否以 "Bearer " 开头
+	if (!authHeader.startsWith('Bearer ')) {
+		console.warn('Invalid Authorization header format');
+		return false;
+	}
+	
+	// 提取token
+	const token = authHeader.substring(7); // 去掉 "Bearer " 前缀
+	
+	// 比较token
+	if (token !== expectedToken) {
+		console.warn('Invalid API token');
+		return false;
+	}
+	
+	return true;
+}
+
+// 域名白名单检查函数
+function isAllowedOrigin(request, env) {
+	// 从环境变量获取允许的域名列表
+	const allowedOrigins = env.ALLOWED_ORIGINS;
+
+	console.log(allowedOrigins);
+	
+	if (!allowedOrigins) {
+	  // 如果没有设置白名单，默认拒绝所有请求
+	  console.warn('ALLOWED_ORIGINS not configured, denying all requests');
+	  return false;
+	}
+  
+	// 解析允许的域名（支持多个域名，用逗号分隔）
+	const allowedList = allowedOrigins.split(',').map(origin => origin.trim().toLowerCase());
+	
+	// 获取请求来源
+	const origin = request.headers.get('Origin');
+	const referer = request.headers.get('Referer');
+	console.log(origin);
+	console.log(referer);
+
+	// 检查 Origin 头（优先）
+	if (origin) {
+	  const originLower = origin.toLowerCase();
+	  if (allowedList.includes(originLower)) {
+		return true;
+	  }
+	  
+	  // 检查是否包含通配符域名
+	  for (const allowed of allowedList) {
+		if (allowed.startsWith('*.')) {
+		  const domain = allowed.substring(2);
+		  if (originLower.endsWith('.' + domain) || originLower === domain) {
+			return true;
+		  }
+		}
+	  }
+	}
+	
+	// 如果没有 Origin，检查 Referer
+	if (referer) {
+
+	  try {
+		const refererUrl = new URL(referer);
+		const refererOrigin = refererUrl.origin.toLowerCase();
+		
+		if (allowedList.includes(refererOrigin)) {
+		  return true;
+		}
+		
+		// 检查通配符域名
+		for (const allowed of allowedList) {
+		  if (allowed.startsWith('*.')) {
+			const domain = allowed.substring(2);
+			if (refererOrigin.endsWith('.' + domain) || refererOrigin === `https://${domain}` || refererOrigin === `http://${domain}`) {
+			  return true;
+			}
+		  }
+		}
+	  } catch (e) {
+		console.error('Invalid referer URL:', referer);
+	  }
+	}
+	
+	return false;
+  }
+  
+  // 获取 CORS 头函数
+  function getCorsHeaders(request, env) {
+	const origin = request.headers.get('Origin');
+	
+	// 如果来源在白名单中，返回具体的 Origin
+	if (origin && isAllowedOrigin(request, env)) {
+	  return {
+		'Access-Control-Allow-Origin': origin,
+		'Access-Control-Allow-Methods': 'POST, OPTIONS',
+		'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+		'Access-Control-Allow-Credentials': 'true'
+	  };
+	}
+	
+	// 否则返回限制性的头
+	return {
+	  'Access-Control-Allow-Origin': 'null',
+	  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+	  'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+	};
+  }
+  
+  // CORS 处理函数（更新版）
+  function handleCors(request, env) {
+	return new Response(null, {
+	  status: 200,
+	  headers: {
+		...getCorsHeaders(request, env),
+		'Access-Control-Max-Age': '86400'
+	  }
+	});
+  }
+  
+  // 错误响应创建函数（更新版）
+  function createErrorResponse(message, status = 400) {
+	return new Response(JSON.stringify({ 
+	  error: { 
+		message,
+		status 
+	  } 
+	}), {
+	  status,
+	  headers: {
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': 'null',
+		'Access-Control-Allow-Methods': 'POST, OPTIONS',
+		'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+	  }
+	});
+  }
+  
+  // 简单的频率限制检查（可选功能）
+  async function checkRateLimit(clientIP, env) {
+	try {
+	  // 使用 Cloudflare KV 存储进行频率限制
+	  // 这里是一个简单的实现，每分钟最多 10 次请求
+	  const key = `rate_limit:${clientIP}`;
+	  const current = await env.RATE_LIMIT?.get(key);
+	  const now = Date.now();
+	  const windowStart = Math.floor(now / 60000) * 60000; // 1分钟窗口
+	  
+	  if (current) {
+		const data = JSON.parse(current);
+		if (data.windowStart === windowStart && data.count >= 10) {
+		  return false; // 超过限制
+		}
+		
+		if (data.windowStart === windowStart) {
+		  await env.RATE_LIMIT?.put(key, JSON.stringify({
+			windowStart,
+			count: data.count + 1
+		  }), { expirationTtl: 120 });
+		} else {
+		  await env.RATE_LIMIT?.put(key, JSON.stringify({
+			windowStart,
+			count: 1
+		  }), { expirationTtl: 120 });
+		}
+	  } else {
+		await env.RATE_LIMIT?.put(key, JSON.stringify({
+		  windowStart,
+		  count: 1
+		}), { expirationTtl: 120 });
+	  }
+	  
+	  return true;
+	} catch (error) {
+	  console.error('Rate limit check failed:', error);
+	  return true; // 如果检查失败，允许请求通过
+	}
+  }
+```
+```js title="keyManager.js"
+/**
+ * Gemini API Key管理器
+ * 负责API Key的选择、状态管理和数据库操作
+ */
+
+// Key状态常量
+export const KEY_STATUS = {
+  ACTIVE: 1,        // 有效
+  TEMP_DISABLED: 2, // 暂时失效
+  DISABLED: 0       // 完全失效
+};
+
+// 配置常量
+const CONFIG = {
+  MAX_CONSECUTIVE_FAILURES: 5,     // 最大连续失败次数
+  TEMP_DISABLE_MINUTES: 30,        // 暂时禁用时间（分钟）
+  FAILURE_PENALTY_WEIGHT: 10,      // 失败惩罚权重
+  MAX_TIME_WEIGHT: 24,              // 最大时间权重（小时）
+  NEW_KEY_BONUS: 50                 // 新Key额外权重
+};
+
+export class KeyManager {
+  constructor(db) {
+    this.db = db;
+  }
+
+  /**
+   * 选择最适合的API Key
+   * @returns {Promise<Object|null>} 选中的Key对象或null
+   */
+  async selectKey() {
+    try {
+      const availableKeys = await this.getAvailableKeys();
+      
+      if (availableKeys.length === 0) {
+        console.warn('No available API keys found');
+        return null;
+      }
+
+      if (availableKeys.length === 1) {
+        return availableKeys[0];
+      }
+
+      // 使用加权随机选择算法
+      return this.weightedRandomSelect(availableKeys);
+    } catch (error) {
+      console.error('Error selecting API key:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 获取所有可用的Key
+   * @returns {Promise<Array>} 可用的Key列表
+   */
+  async getAvailableKeys() {
+    const now = new Date().toISOString();
+    
+    const query = `
+      SELECT * FROM api_keys 
+      WHERE status = ? 
+      AND (disabled_until IS NULL OR disabled_until < ?)
+      ORDER BY priority DESC, last_used_at ASC
+    `;
+    
+    const result = await this.db.prepare(query)
+      .bind(KEY_STATUS.ACTIVE, now)
+      .all();
+    
+    return result.results || [];
+  }
+
+  /**
+   * 加权随机选择算法
+   * @param {Array} keys 可用的Key列表
+   * @returns {Object} 选中的Key
+   */
+  weightedRandomSelect(keys) {
+    const weights = keys.map(key => this.calculateWeight(key));
+    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+    
+    if (totalWeight === 0) {
+      // 如果所有权重都是0，随机选择
+      return keys[Math.floor(Math.random() * keys.length)];
+    }
+
+    let random = Math.random() * totalWeight;
+    
+    for (let i = 0; i < keys.length; i++) {
+      random -= weights[i];
+      if (random <= 0) {
+        return keys[i];
+      }
+    }
+    
+    // 备用返回最后一个
+    return keys[keys.length - 1];
+  }
+
+  /**
+   * 计算Key的权重
+   * @param {Object} key Key对象
+   * @returns {number} 权重值
+   */
+  calculateWeight(key) {
+    let weight = key.priority || 100;
+
+    // 失败惩罚
+    const failurePenalty = key.consecutive_failures * CONFIG.FAILURE_PENALTY_WEIGHT;
+    weight -= failurePenalty;
+
+    // 时间加权 - 最近使用时间越早，权重稍微提高
+    if (key.last_used_at) {
+      const hoursSinceLastUse = this.getHoursDifference(key.last_used_at, new Date());
+      const timeBonus = Math.min(hoursSinceLastUse, CONFIG.MAX_TIME_WEIGHT);
+      weight += timeBonus;
+    } else {
+      // 新Key获得额外权重
+      weight += CONFIG.NEW_KEY_BONUS;
+    }
+
+    // 权重不能小于0
+    return Math.max(weight, 0);
+  }
+
+  /**
+   * 记录成功调用
+   * @param {number} keyId Key ID
+   * @param {number} responseTime 响应时间（毫秒）
+   */
+  async recordSuccess(keyId, responseTime = null) {
+    const now = new Date().toISOString();
+    
+    try {
+      // 更新Key状态
+      await this.db.prepare(`
+        UPDATE api_keys 
+        SET 
+          consecutive_failures = 0,
+          total_calls = total_calls + 1,
+          success_calls = success_calls + 1,
+          last_used_at = ?,
+          last_success_at = ?,
+          status = ?,
+          disabled_until = NULL,
+          updated_at = ?
+        WHERE id = ?
+      `).bind(now, now, KEY_STATUS.ACTIVE, now, keyId).run();
+
+      // 记录日志
+      await this.db.prepare(`
+        INSERT INTO api_call_logs 
+        (api_key_id, success, response_time_ms, called_at)
+        VALUES (?, ?, ?, ?)
+      `).bind(keyId, true, responseTime, now).run();
+
+      console.log(`API key ${keyId} success recorded`);
+    } catch (error) {
+      console.error('Error recording success:', error);
+    }
+  }
+
+  /**
+   * 记录失败调用
+   * @param {number} keyId Key ID
+   * @param {number} statusCode HTTP状态码
+   * @param {string} errorMessage 错误信息
+   */
+  async recordFailure(keyId, statusCode, errorMessage = null) {
+    const now = new Date().toISOString();
+    
+    try {
+      // 获取当前Key状态
+      const keyResult = await this.db.prepare(
+        'SELECT consecutive_failures FROM api_keys WHERE id = ?'
+      ).bind(keyId).first();
+      
+      if (!keyResult) {
+        console.error(`API key ${keyId} not found`);
+        return;
+      }
+
+      const newFailureCount = keyResult.consecutive_failures + 1;
+      let newStatus = KEY_STATUS.ACTIVE;
+      let disabledUntil = null;
+
+      // 根据失败类型和次数决定状态
+      if (statusCode === 400) {
+        // 400错误立即设为完全失效
+        newStatus = KEY_STATUS.DISABLED;
+      } else if (newFailureCount >= CONFIG.MAX_CONSECUTIVE_FAILURES) {
+        // 连续5次失败设为完全失效
+        newStatus = KEY_STATUS.DISABLED;
+      } else if (newFailureCount >= 2) {
+        // 连续2-4次失败设为暂时失效，禁用30分钟
+        newStatus = KEY_STATUS.TEMP_DISABLED;
+        disabledUntil = new Date(Date.now() + CONFIG.TEMP_DISABLE_MINUTES * 60 * 1000).toISOString();
+      }
+
+      // 更新Key状态
+      await this.db.prepare(`
+        UPDATE api_keys 
+        SET 
+          consecutive_failures = ?,
+          total_calls = total_calls + 1,
+          last_used_at = ?,
+          last_failure_at = ?,
+          status = ?,
+          disabled_until = ?,
+          updated_at = ?
+        WHERE id = ?
+      `).bind(newFailureCount, now, now, newStatus, disabledUntil, now, keyId).run();
+
+      // 记录日志
+      await this.db.prepare(`
+        INSERT INTO api_call_logs 
+        (api_key_id, success, response_status, error_message, called_at)
+        VALUES (?, ?, ?, ?, ?)
+      `).bind(keyId, false, statusCode, errorMessage, now).run();
+
+      console.log(`API key ${keyId} failure recorded: ${newFailureCount} consecutive failures, status: ${newStatus}`);
+    } catch (error) {
+      console.error('Error recording failure:', error);
+    }
+  }
+
+  /**
+   * 获取Key统计信息
+   * @param {number} keyId Key ID
+   * @returns {Promise<Object>} 统计信息
+   */
+  async getKeyStats(keyId) {
+    try {
+      const result = await this.db.prepare(
+        'SELECT * FROM api_keys WHERE id = ?'
+      ).bind(keyId).first();
+      
+      return result;
+    } catch (error) {
+      console.error('Error getting key stats:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 重置Key状态
+   * @param {number} keyId Key ID
+   */
+  async resetKeyStatus(keyId) {
+    const now = new Date().toISOString();
+    
+    try {
+      await this.db.prepare(`
+        UPDATE api_keys 
+        SET 
+          consecutive_failures = 0,
+          status = ?,
+          disabled_until = NULL,
+          updated_at = ?
+        WHERE id = ?
+      `).bind(KEY_STATUS.ACTIVE, now, keyId).run();
+
+      console.log(`API key ${keyId} status reset`);
+    } catch (error) {
+      console.error('Error resetting key status:', error);
+    }
+  }
+
+  /**
+   * 添加新的API Key
+   * @param {string} apiKey API密钥
+   * @param {string} name 备注名称
+   * @param {number} priority 优先级
+   */
+  async addKey(apiKey, name = null, priority = 100) {
+    const now = new Date().toISOString();
+    
+    try {
+      await this.db.prepare(`
+        INSERT INTO api_keys 
+        (api_key, name, priority, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?)
+      `).bind(apiKey, name, priority, now, now).run();
+
+      console.log(`New API key added: ${name || apiKey.substring(0, 10)}...`);
+    } catch (error) {
+      console.error('Error adding API key:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 批量从环境变量初始化Keys
+   * @param {string} keysString 逗号分隔的Key字符串
+   */
+  async initializeKeysFromEnv(keysString) {
+    if (!keysString) return;
+    
+    const keys = keysString.split(',').map(key => key.trim()).filter(key => key);
+    
+    for (let i = 0; i < keys.length; i++) {
+      try {
+        // 检查Key是否已存在
+        const existing = await this.db.prepare(
+          'SELECT id FROM api_keys WHERE api_key = ?'
+        ).bind(keys[i]).first();
+        
+        if (!existing) {
+          await this.addKey(keys[i], `Auto-imported Key ${i + 1}`, 100 - i * 10);
+        }
+      } catch (error) {
+        console.error(`Error initializing key ${i + 1}:`, error);
+      }
+    }
+  }
+
+  /**
+   * 计算两个时间之间的小时差
+   * @param {string|Date} dateTime1 
+   * @param {string|Date} dateTime2 
+   * @returns {number} 小时差
+   */
+  getHoursDifference(dateTime1, dateTime2) {
+    const date1 = new Date(dateTime1);
+    const date2 = new Date(dateTime2);
+    const diffMs = Math.abs(date2 - date1);
+    return diffMs / (1000 * 60 * 60);
+  }
+
+  /**
+   * 获取所有Key的状态概览
+   * @returns {Promise<Array>} Key状态列表
+   */
+  async getAllKeysStatus() {
+    try {
+      const result = await this.db.prepare(`
+        SELECT 
+          id, name, status, consecutive_failures, 
+          total_calls, success_calls, last_used_at,
+          ROUND(CAST(success_calls AS FLOAT) / NULLIF(total_calls, 0) * 100, 2) as success_rate
+        FROM api_keys 
+        ORDER BY priority DESC, id ASC
+      `).all();
+      
+      return result.results || [];
+    } catch (error) {
+      console.error('Error getting all keys status:', error);
+      return [];
+    }
+  }
+} 
+```
+## 如何使用worker
+#### 配置环境变量
+```js
+// 允许的域名，这个的过滤我在主代码里注掉了
+ALLOWED_ORIGINS= 
+// 有默认值，就是gemini的端点
+LLM_API_ENDPOINT=
+// 模型id，默认gemini-2.0-flash
+LLM_MODEL=
+// 我们收集的key，需要是不同项目
+GEMINI_API_KEY=k1,k2,k3
+// 我们自定义的token,放在header里面,openai的规则
+MY_API_TOKEN=
+```
+#### 1. 内部使用
+page或者worker内部调用，需要绑定然后用环境变量请求，没试过
+#### 2. 外部接口调用
+直接用绑定的域名访问即可，和调用其他openai类的api一样，前端直接调用的话注意MY_API_TOKEN不要泄露
+
+
