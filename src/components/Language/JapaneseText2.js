@@ -24,6 +24,7 @@ function JapaneseText2({ texts, translations, annotations, fullText, notes }) {
     const [showFurigana, setShowFurigana] = useState(true);
     const [showTranslation, setShowTranslation] = useState(true);
     const [showNotes, setShowNotes] = useState(true);
+    const [showLineNumbers, setShowLineNumbers] = useState(false);
     const [activeNote, setActiveNote] = useState(null);
     const [notePosition, setNotePosition] = useState({ top: 0, left: 0 });
 
@@ -258,16 +259,27 @@ function JapaneseText2({ texts, translations, annotations, fullText, notes }) {
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                 >
-                    <div className={styles.japaneseSection}>
-                        {renderTextWithAnnotations(text, annotation, index)}
-                    </div>
-                    {translation && showTranslation && (
-                        <div className={styles.translationSection}>
-                            <div className={styles.translationText}>
-                                {translation}
-                            </div>
+                    <div className={styles.lineContainer}>
+                        <div className={styles.lineNumberArea}>
+                            {showLineNumbers && (
+                                <div className={styles.lineNumber}>
+                                    {String(index + 1).padStart(2, '0')}
+                                </div>
+                            )}
                         </div>
-                    )}
+                        <div className={styles.lineContent}>
+                            <div className={styles.japaneseSection}>
+                                {renderTextWithAnnotations(text, annotation, index)}
+                            </div>
+                            {translation && showTranslation && (
+                                <div className={styles.translationSection}>
+                                    <div className={styles.translationText}>
+                                        {translation}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             );
         });
@@ -311,6 +323,18 @@ function JapaneseText2({ texts, translations, annotations, fullText, notes }) {
                             />
                             <span className={styles.toggleSlider}></span>
                             <span className={styles.toggleText}>显示笔记</span>
+                        </label>
+                    </div>
+                    <div className={styles.toggleContainer}>
+                        <label className={styles.toggleLabel}>
+                            <input
+                                type="checkbox"
+                                checked={showLineNumbers}
+                                onChange={(e) => setShowLineNumbers(e.target.checked)}
+                                className={styles.toggleInput}
+                            />
+                            <span className={styles.toggleSlider}></span>
+                            <span className={styles.toggleText}>显示行号</span>
                         </label>
                     </div>
                 </div>

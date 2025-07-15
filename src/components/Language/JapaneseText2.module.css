@@ -125,6 +125,70 @@
   overflow: hidden;
 }
 
+.lineContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  min-height: 2.5rem; /* 确保最小高度，避免布局跳动 */
+}
+
+.lineNumberArea {
+  flex-shrink: 0;
+  width: 2.5rem; /* 始终保持固定宽度 */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.25rem; /* 与文本对齐 */
+}
+
+.lineNumber {
+  width: 2.5rem;
+  height: 1.5rem; /* 减小高度，更贴近文本行高 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.08);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.lineNumber::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.textBlockHovered .lineNumber {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.15);
+  transform: none; /* 移除缩放效果，避免布局跳动 */
+}
+
+.textBlockHovered .lineNumber::before {
+  opacity: 1;
+}
+
+.lineContent {
+  flex: 1;
+  min-width: 0;
+  padding-top: 0; /* 确保内容顶部对齐 */
+}
+
 .textBlock::before {
   content: '';
   position: absolute;
@@ -432,6 +496,23 @@
     0 0 0 1px rgba(51, 65, 85, 0.4);
 }
 
+[data-theme='dark'] .lineNumber {
+  color: #94a3b8;
+  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.08);
+}
+
+[data-theme='dark'] .lineNumber::before {
+  background: rgba(139, 92, 246, 0.03);
+}
+
+[data-theme='dark'] .textBlockHovered .lineNumber {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.15);
+  transform: none; /* 确保深色模式下也不缩放 */
+}
+
 [data-theme='dark'] .textBlock::before {
   background: linear-gradient(90deg, 
     rgba(139, 92, 246, 0.15) 0%, 
@@ -596,6 +677,26 @@
   .textBlock {
     padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
+  }
+  
+  .lineContainer {
+    gap: 0.75rem;
+    min-height: 2rem; /* 移动端减小最小高度 */
+  }
+  
+  .lineNumberArea {
+    width: 2rem; /* 移动端减小宽度 */
+    padding-top: 0.125rem; /* 微调移动端对齐 */
+  }
+  
+  .lineNumber {
+    width: 2rem;
+    height: 1.25rem; /* 移动端进一步减小高度 */
+    font-size: 0.7rem;
+  }
+  
+  .lineContent {
+    flex: 1;
   }
   
   .textContent {
