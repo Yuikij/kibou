@@ -127,36 +127,44 @@
 
 .lineContainer {
   display: flex;
-  align-items: flex-start;
+  align-items: baseline;
   gap: 1rem;
-  min-height: 2.5rem; /* 确保最小高度，避免布局跳动 */
+  min-height: 2.5rem;
 }
 
+/* 行号区域优化 */
 .lineNumberArea {
   flex-shrink: 0;
-  width: 2.5rem; /* 始终保持固定宽度 */
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 0.25rem; /* 与文本对齐 */
-}
-
-.lineNumber {
-  width: 2.5rem;
-  height: 1.5rem; /* 减小高度，更贴近文本行高 */
+  width: 3rem;
+  min-width: 3rem;
+  max-width: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(90deg, #f3f4f6 80%, rgba(99,102,241,0.04) 100%);
+  border-right: 1.5px solid #e5e7eb;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  box-shadow: 1px 0 0 0 #e5e7eb;
+  padding-top: 0;
+}
+
+.lineNumber {
+  width: 2.2rem;
+  display: block;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 500;
-  color: #64748b;
-  background: rgba(99, 102, 241, 0.06);
-  border: 1px solid rgba(99, 102, 241, 0.08);
-  border-radius: 6px;
+  color: #a0aec0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
   transition: all 0.2s ease;
   position: relative;
   user-select: none;
+  margin: 0;
+  height: auto;
 }
 
 .lineNumber::before {
@@ -174,9 +182,9 @@
 
 .textBlockHovered .lineNumber {
   color: #6366f1;
-  background: rgba(99, 102, 241, 0.1);
-  border-color: rgba(99, 102, 241, 0.15);
-  transform: none; /* 移除缩放效果，避免布局跳动 */
+  background: rgba(99, 102, 241, 0.08);
+  border-radius: 4px;
+  font-weight: 600;
 }
 
 .textBlockHovered .lineNumber::before {
@@ -497,9 +505,7 @@
 }
 
 [data-theme='dark'] .lineNumber {
-  color: #94a3b8;
-  background: rgba(139, 92, 246, 0.06);
-  border-color: rgba(139, 92, 246, 0.08);
+  color: #64748b;
 }
 
 [data-theme='dark'] .lineNumber::before {
@@ -508,9 +514,7 @@
 
 [data-theme='dark'] .textBlockHovered .lineNumber {
   color: #a78bfa;
-  background: rgba(139, 92, 246, 0.1);
-  border-color: rgba(139, 92, 246, 0.15);
-  transform: none; /* 确保深色模式下也不缩放 */
+  background: rgba(139, 92, 246, 0.13);
 }
 
 [data-theme='dark'] .textBlock::before {
@@ -685,14 +689,17 @@
   }
   
   .lineNumberArea {
-    width: 2rem; /* 移动端减小宽度 */
-    padding-top: 0.125rem; /* 微调移动端对齐 */
+    width: 2.2rem;
+    min-width: 2.2rem;
+    max-width: 2.2rem;
+    padding-top: 0;
   }
   
   .lineNumber {
-    width: 2rem;
-    height: 1.25rem; /* 移动端进一步减小高度 */
-    font-size: 0.7rem;
+    width: 1.7rem;
+    font-size: 0.65rem;
+    margin: 0;
+    height: auto;
   }
   
   .lineContent {

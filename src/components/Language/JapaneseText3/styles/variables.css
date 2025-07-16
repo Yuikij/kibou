@@ -1,0 +1,258 @@
+/* CSS Custom Properties for JapaneseText2 Component */
+
+:root {
+  /* Color Palette */
+  --jt2-primary-50: #eff6ff;
+  --jt2-primary-100: #dbeafe;
+  --jt2-primary-200: #bfdbfe;
+  --jt2-primary-300: #93c5fd;
+  --jt2-primary-400: #60a5fa;
+  --jt2-primary-500: #3b82f6;
+  --jt2-primary-600: #2563eb;
+  --jt2-primary-700: #1d4ed8;
+  --jt2-primary-800: #1e40af;
+  --jt2-primary-900: #1e3a8a;
+
+  --jt2-secondary-50: #f5f3ff;
+  --jt2-secondary-100: #ede9fe;
+  --jt2-secondary-200: #ddd6fe;
+  --jt2-secondary-300: #c4b5fd;
+  --jt2-secondary-400: #a78bfa;
+  --jt2-secondary-500: #8b5cf6;
+  --jt2-secondary-600: #7c3aed;
+  --jt2-secondary-700: #6d28d9;
+  --jt2-secondary-800: #5b21b6;
+  --jt2-secondary-900: #4c1d95;
+
+  --jt2-accent-50: #fffbeb;
+  --jt2-accent-100: #fef3c7;
+  --jt2-accent-200: #fde68a;
+  --jt2-accent-300: #fcd34d;
+  --jt2-accent-400: #fbbf24;
+  --jt2-accent-500: #f59e0b;
+  --jt2-accent-600: #d97706;
+  --jt2-accent-700: #b45309;
+  --jt2-accent-800: #92400e;
+  --jt2-accent-900: #78350f;
+
+  /* Semantic Colors */
+  --jt2-success: #10b981;
+  --jt2-warning: #f59e0b;
+  --jt2-error: #ef4444;
+  --jt2-info: #3b82f6;
+
+  /* Gray Scale */
+  --jt2-gray-50: #f9fafb;
+  --jt2-gray-100: #f3f4f6;
+  --jt2-gray-200: #e5e7eb;
+  --jt2-gray-300: #d1d5db;
+  --jt2-gray-400: #9ca3af;
+  --jt2-gray-500: #6b7280;
+  --jt2-gray-600: #4b5563;
+  --jt2-gray-700: #374151;
+  --jt2-gray-800: #1f2937;
+  --jt2-gray-900: #111827;
+
+  /* Typography */
+  --jt2-font-family-sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --jt2-font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  --jt2-font-family-japanese: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'Takao', 'IPAexGothic', 'IPAPGothic', 'VL PGothic', 'Noto Sans CJK JP', sans-serif;
+
+  /* Font Sizes */
+  --jt2-text-xs: 0.75rem;
+  --jt2-text-sm: 0.875rem;
+  --jt2-text-base: 1rem;
+  --jt2-text-lg: 1.125rem;
+  --jt2-text-xl: 1.25rem;
+  --jt2-text-2xl: 1.5rem;
+  --jt2-text-3xl: 1.875rem;
+
+  /* Line Heights */
+  --jt2-leading-tight: 1.25;
+  --jt2-leading-snug: 1.375;
+  --jt2-leading-normal: 1.5;
+  --jt2-leading-relaxed: 1.625;
+  --jt2-leading-loose: 2;
+
+  /* Font Weights */
+  --jt2-font-thin: 100;
+  --jt2-font-light: 300;
+  --jt2-font-normal: 400;
+  --jt2-font-medium: 500;
+  --jt2-font-semibold: 600;
+  --jt2-font-bold: 700;
+  --jt2-font-extrabold: 800;
+  --jt2-font-black: 900;
+
+  /* Spacing */
+  --jt2-space-px: 1px;
+  --jt2-space-0: 0;
+  --jt2-space-1: 0.25rem;
+  --jt2-space-2: 0.5rem;
+  --jt2-space-3: 0.75rem;
+  --jt2-space-4: 1rem;
+  --jt2-space-5: 1.25rem;
+  --jt2-space-6: 1.5rem;
+  --jt2-space-8: 2rem;
+  --jt2-space-10: 2.5rem;
+  --jt2-space-12: 3rem;
+  --jt2-space-16: 4rem;
+  --jt2-space-20: 5rem;
+  --jt2-space-24: 6rem;
+
+  /* Border Radius */
+  --jt2-rounded-none: 0;
+  --jt2-rounded-sm: 0.125rem;
+  --jt2-rounded: 0.25rem;
+  --jt2-rounded-md: 0.375rem;
+  --jt2-rounded-lg: 0.5rem;
+  --jt2-rounded-xl: 0.75rem;
+  --jt2-rounded-2xl: 1rem;
+  --jt2-rounded-3xl: 1.5rem;
+  --jt2-rounded-full: 9999px;
+
+  /* Shadows */
+  --jt2-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --jt2-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --jt2-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --jt2-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --jt2-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --jt2-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --jt2-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+  /* Animation Durations */
+  --jt2-duration-75: 75ms;
+  --jt2-duration-100: 100ms;
+  --jt2-duration-150: 150ms;
+  --jt2-duration-200: 200ms;
+  --jt2-duration-300: 300ms;
+  --jt2-duration-500: 500ms;
+  --jt2-duration-700: 700ms;
+  --jt2-duration-1000: 1000ms;
+
+  /* Animation Timing Functions */
+  --jt2-ease-linear: linear;
+  --jt2-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --jt2-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --jt2-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-Index Scale */
+  --jt2-z-0: 0;
+  --jt2-z-10: 10;
+  --jt2-z-20: 20;
+  --jt2-z-30: 30;
+  --jt2-z-40: 40;
+  --jt2-z-50: 50;
+  --jt2-z-auto: auto;
+
+  /* Component Specific Variables */
+  --jt2-container-max-width: 800px;
+  --jt2-control-panel-z: var(--jt2-z-10);
+  --jt2-note-overlay-z: 999;
+  --jt2-note-panel-z: 1000;
+
+  /* Breakpoints */
+  --jt2-screen-sm: 640px;
+  --jt2-screen-md: 768px;
+  --jt2-screen-lg: 1024px;
+  --jt2-screen-xl: 1280px;
+  --jt2-screen-2xl: 1536px;
+
+  /* Note Type Colors */
+  --jt2-note-vocabulary: var(--jt2-primary-500);
+  --jt2-note-grammar: var(--jt2-success);
+  --jt2-note-cultural: var(--jt2-secondary-500);
+  --jt2-note-pronunciation: #ec4899;
+
+  /* Difficulty Colors */
+  --jt2-difficulty-beginner: var(--jt2-success);
+  --jt2-difficulty-intermediate: var(--jt2-warning);
+  --jt2-difficulty-advanced: var(--jt2-error);
+
+  /* Interactive States */
+  --jt2-hover-opacity: 0.8;
+  --jt2-active-scale: 0.95;
+  --jt2-focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  /* Override colors for dark theme */
+  --jt2-gray-50: #1f2937;
+  --jt2-gray-100: #374151;
+  --jt2-gray-200: #4b5563;
+  --jt2-gray-300: #6b7280;
+  --jt2-gray-400: #9ca3af;
+  --jt2-gray-500: #d1d5db;
+  --jt2-gray-600: #e5e7eb;
+  --jt2-gray-700: #f3f4f6;
+  --jt2-gray-800: #f9fafb;
+  --jt2-gray-900: #ffffff;
+
+  /* Adjust shadows for dark theme */
+  --jt2-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --jt2-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --jt2-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --jt2-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --jt2-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  --jt2-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+  /* Adjust focus ring for dark theme */
+  --jt2-focus-ring: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --jt2-primary-500: #0000ff;
+    --jt2-secondary-500: #800080;
+    --jt2-success: #008000;
+    --jt2-warning: #ff8000;
+    --jt2-error: #ff0000;
+    --jt2-gray-500: #000000;
+    --jt2-gray-600: #000000;
+    --jt2-gray-700: #000000;
+    --jt2-gray-800: #000000;
+    --jt2-gray-900: #000000;
+  }
+
+  [data-theme='dark'] {
+    --jt2-primary-500: #6666ff;
+    --jt2-secondary-500: #cc66cc;
+    --jt2-success: #66ff66;
+    --jt2-warning: #ffcc66;
+    --jt2-error: #ff6666;
+    --jt2-gray-500: #ffffff;
+    --jt2-gray-600: #ffffff;
+    --jt2-gray-700: #ffffff;
+    --jt2-gray-800: #ffffff;
+    --jt2-gray-900: #ffffff;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --jt2-duration-75: 0ms;
+    --jt2-duration-100: 0ms;
+    --jt2-duration-150: 0ms;
+    --jt2-duration-200: 0ms;
+    --jt2-duration-300: 0ms;
+    --jt2-duration-500: 0ms;
+    --jt2-duration-700: 0ms;
+    --jt2-duration-1000: 0ms;
+  }
+}
+
+/* Print Styles */
+@media print {
+  :root {
+    --jt2-shadow-sm: none;
+    --jt2-shadow: none;
+    --jt2-shadow-md: none;
+    --jt2-shadow-lg: none;
+    --jt2-shadow-xl: none;
+    --jt2-shadow-2xl: none;
+    --jt2-shadow-inner: none;
+  }
+}

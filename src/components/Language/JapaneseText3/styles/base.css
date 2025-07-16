@@ -1,0 +1,295 @@
+/* Base styles for JapaneseText2 Component */
+
+/* Import CSS variables */
+@import './variables.css';
+
+/* Base component styles */
+.japaneseText2 {
+  /* Container */
+  max-width: var(--jt2-container-max-width);
+  margin: 0 auto;
+  padding: var(--jt2-space-8) var(--jt2-space-4);
+  font-family: var(--jt2-font-family-sans);
+  line-height: var(--jt2-leading-relaxed);
+  color: var(--jt2-gray-900);
+  
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+  
+  /* Text rendering optimization */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography scale */
+.japaneseText2 h1,
+.japaneseText2 h2,
+.japaneseText2 h3,
+.japaneseText2 h4,
+.japaneseText2 h5,
+.japaneseText2 h6 {
+  font-weight: var(--jt2-font-semibold);
+  line-height: var(--jt2-leading-tight);
+  margin: 0;
+}
+
+.japaneseText2 h1 { font-size: var(--jt2-text-3xl); }
+.japaneseText2 h2 { font-size: var(--jt2-text-2xl); }
+.japaneseText2 h3 { font-size: var(--jt2-text-xl); }
+.japaneseText2 h4 { font-size: var(--jt2-text-lg); }
+.japaneseText2 h5 { font-size: var(--jt2-text-base); }
+.japaneseText2 h6 { font-size: var(--jt2-text-sm); }
+
+/* Japanese text specific styles */
+.japaneseText2 .japanese-text {
+  font-family: var(--jt2-font-family-japanese), var(--jt2-font-family-sans);
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+/* Ruby text (furigana) base styles */
+.japaneseText2 ruby {
+  ruby-align: center;
+  ruby-position: over;
+}
+
+.japaneseText2 rt {
+  font-size: 0.6em;
+  line-height: 1;
+  text-align: center;
+  color: var(--jt2-gray-600);
+  font-weight: var(--jt2-font-normal);
+}
+
+/* Interactive elements */
+.japaneseText2 button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  transition: all var(--jt2-duration-200) var(--jt2-ease-in-out);
+}
+
+.japaneseText2 button:focus {
+  outline: 2px solid var(--jt2-primary-500);
+  outline-offset: 2px;
+}
+
+.japaneseText2 input,
+.japaneseText2 select,
+.japaneseText2 textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: var(--jt2-space-2) var(--jt2-space-3);
+  border: 1px solid var(--jt2-gray-300);
+  border-radius: var(--jt2-rounded-md);
+  background: var(--jt2-gray-50);
+  color: var(--jt2-gray-900);
+  transition: all var(--jt2-duration-200) var(--jt2-ease-in-out);
+}
+
+.japaneseText2 input:focus,
+.japaneseText2 select:focus,
+.japaneseText2 textarea:focus {
+  outline: none;
+  border-color: var(--jt2-primary-500);
+  box-shadow: var(--jt2-focus-ring);
+}
+
+/* Utility classes */
+.japaneseText2 .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.japaneseText2 .not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Loading states */
+.japaneseText2 .loading {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: wait;
+}
+
+.japaneseText2 .loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--jt2-gray-300);
+  border-top-color: var(--jt2-primary-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error states */
+.japaneseText2 .error {
+  color: var(--jt2-error);
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--jt2-rounded-md);
+  padding: var(--jt2-space-3);
+  margin: var(--jt2-space-2) 0;
+}
+
+/* Success states */
+.japaneseText2 .success {
+  color: var(--jt2-success);
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--jt2-rounded-md);
+  padding: var(--jt2-space-3);
+  margin: var(--jt2-space-2) 0;
+}
+
+/* Warning states */
+.japaneseText2 .warning {
+  color: var(--jt2-warning);
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--jt2-rounded-md);
+  padding: var(--jt2-space-3);
+  margin: var(--jt2-space-2) 0;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  .japaneseText2 {
+    padding: var(--jt2-space-4) var(--jt2-space-2);
+    font-size: var(--jt2-text-sm);
+  }
+  
+  .japaneseText2 h1 { font-size: var(--jt2-text-2xl); }
+  .japaneseText2 h2 { font-size: var(--jt2-text-xl); }
+  .japaneseText2 h3 { font-size: var(--jt2-text-lg); }
+  .japaneseText2 h4 { font-size: var(--jt2-text-base); }
+  .japaneseText2 h5 { font-size: var(--jt2-text-sm); }
+  .japaneseText2 h6 { font-size: var(--jt2-text-xs); }
+}
+
+/* Dark theme adjustments */
+[data-theme='dark'] .japaneseText2 {
+  color: var(--jt2-gray-100);
+}
+
+[data-theme='dark'] .japaneseText2 rt {
+  color: var(--jt2-gray-400);
+}
+
+[data-theme='dark'] .japaneseText2 input,
+[data-theme='dark'] .japaneseText2 select,
+[data-theme='dark'] .japaneseText2 textarea {
+  background: var(--jt2-gray-800);
+  border-color: var(--jt2-gray-600);
+  color: var(--jt2-gray-100);
+}
+
+[data-theme='dark'] .japaneseText2 .loading::after {
+  border-color: var(--jt2-gray-600);
+  border-top-color: var(--jt2-primary-400);
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .japaneseText2 {
+    color: var(--jt2-gray-900);
+  }
+  
+  .japaneseText2 button:focus {
+    outline-width: 3px;
+    outline-style: solid;
+  }
+  
+  .japaneseText2 input:focus,
+  .japaneseText2 select:focus,
+  .japaneseText2 textarea:focus {
+    border-width: 2px;
+    box-shadow: none;
+  }
+  
+  [data-theme='dark'] .japaneseText2 {
+    color: var(--jt2-gray-100);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .japaneseText2 {
+    scroll-behavior: auto;
+  }
+  
+  .japaneseText2 *,
+  .japaneseText2 *::before,
+  .japaneseText2 *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .japaneseText2 .loading::after {
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .japaneseText2 {
+    max-width: none;
+    padding: 0;
+    color: #000;
+    background: #fff;
+  }
+  
+  .japaneseText2 button {
+    display: none;
+  }
+  
+  .japaneseText2 .loading,
+  .japaneseText2 .error,
+  .japaneseText2 .success,
+  .japaneseText2 .warning {
+    background: none;
+    border: none;
+    color: #000;
+  }
+  
+  .japaneseText2 rt {
+    color: #666;
+  }
+}

@@ -1,0 +1,408 @@
+/* AnnotatedText.module.css */
+
+.textContent {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #1a202c;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.125rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.plainText {
+  color: #2d3748;
+  font-weight: 400;
+  white-space: pre-line;
+}
+
+.annotatedWord {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  margin: 0 0.0625rem;
+}
+
+.annotatedWord:hover,
+.annotatedWord.active {
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateY(-1px);
+}
+
+.annotatedWord:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.ruby {
+  font-size: 1.125rem;
+  line-height: 1.2;
+  display: inline-block;
+  position: relative;
+}
+
+.kanjiText {
+  font-weight: 500;
+  color: #1a202c;
+  position: relative;
+  z-index: 1;
+}
+
+.rubyText {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.rubyTextActive {
+  color: #6366f1;
+  opacity: 1;
+  font-weight: 500;
+  transform: scale(1.05);
+}
+
+/* Note highlighting styles */
+.noteHighlight {
+  background: linear-gradient(120deg, rgba(255, 233, 43, 0.3) 0%, rgba(255, 233, 43, 0.1) 100%);
+  border-bottom: 2px solid rgba(255, 193, 7, 0.6);
+  padding: 0.125rem 0.25rem;
+  margin: 0 0.0625rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.noteHighlight:hover {
+  background: linear-gradient(120deg, rgba(255, 233, 43, 0.5) 0%, rgba(255, 233, 43, 0.2) 100%);
+  border-bottom-color: rgba(255, 193, 7, 0.8);
+  transform: translateY(-1px);
+}
+
+.noteHighlight:focus {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+  background: linear-gradient(120deg, rgba(255, 233, 43, 0.6) 0%, rgba(255, 233, 43, 0.3) 100%);
+}
+
+.noteHighlight::after {
+  content: '📝';
+  position: absolute;
+  right: -0.5rem;
+  top: -0.25rem;
+  font-size: 0.6rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.noteHighlight:hover::after {
+  opacity: 1;
+}
+
+/* Note type variations */
+.noteType-vocabulary {
+  background: linear-gradient(120deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+  border-bottom-color: rgba(59, 130, 246, 0.6);
+}
+
+.noteType-vocabulary:hover {
+  background: linear-gradient(120deg, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0.2) 100%);
+  border-bottom-color: rgba(59, 130, 246, 0.8);
+}
+
+.noteType-grammar {
+  background: linear-gradient(120deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+  border-bottom-color: rgba(16, 185, 129, 0.6);
+}
+
+.noteType-grammar:hover {
+  background: linear-gradient(120deg, rgba(16, 185, 129, 0.4) 0%, rgba(16, 185, 129, 0.2) 100%);
+  border-bottom-color: rgba(16, 185, 129, 0.8);
+}
+
+.noteType-cultural {
+  background: linear-gradient(120deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border-bottom-color: rgba(139, 92, 246, 0.6);
+}
+
+.noteType-cultural:hover {
+  background: linear-gradient(120deg, rgba(139, 92, 246, 0.4) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-bottom-color: rgba(139, 92, 246, 0.8);
+}
+
+.noteType-pronunciation {
+  background: linear-gradient(120deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+  border-bottom-color: rgba(236, 72, 153, 0.6);
+}
+
+.noteType-pronunciation:hover {
+  background: linear-gradient(120deg, rgba(236, 72, 153, 0.4) 0%, rgba(236, 72, 153, 0.2) 100%);
+  border-bottom-color: rgba(236, 72, 153, 0.8);
+}
+
+/* Font size variations */
+.fontSize-small {
+  font-size: 1rem;
+}
+
+.fontSize-small .ruby {
+  font-size: 1rem;
+}
+
+.fontSize-small .rubyText {
+  font-size: 0.6875rem;
+}
+
+.fontSize-medium {
+  font-size: 1.125rem;
+}
+
+.fontSize-medium .ruby {
+  font-size: 1.125rem;
+}
+
+.fontSize-medium .rubyText {
+  font-size: 0.75rem;
+}
+
+.fontSize-large {
+  font-size: 1.25rem;
+}
+
+.fontSize-large .ruby {
+  font-size: 1.25rem;
+}
+
+.fontSize-large .rubyText {
+  font-size: 0.875rem;
+}
+
+/* Line spacing variations */
+.lineSpacing-compact {
+  line-height: 1.4;
+}
+
+.lineSpacing-normal {
+  line-height: 1.6;
+}
+
+.lineSpacing-relaxed {
+  line-height: 1.8;
+}
+
+/* Dark mode styles */
+[data-theme='dark'] .textContent {
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .plainText {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .annotatedWord:hover,
+[data-theme='dark'] .annotatedWord.active {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+[data-theme='dark'] .annotatedWord:focus {
+  outline-color: #a78bfa;
+  background: rgba(139, 92, 246, 0.15);
+}
+
+[data-theme='dark'] .kanjiText {
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .rubyText {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .rubyTextActive {
+  color: #a78bfa;
+}
+
+/* Note highlights - dark mode */
+[data-theme='dark'] .noteHighlight {
+  background: linear-gradient(120deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+  border-bottom-color: rgba(255, 193, 7, 0.5);
+}
+
+[data-theme='dark'] .noteHighlight:hover {
+  background: linear-gradient(120deg, rgba(255, 193, 7, 0.3) 0%, rgba(255, 193, 7, 0.15) 100%);
+  border-bottom-color: rgba(255, 193, 7, 0.7);
+}
+
+[data-theme='dark'] .noteHighlight:focus {
+  outline-color: #fbbf24;
+  background: linear-gradient(120deg, rgba(255, 193, 7, 0.4) 0%, rgba(255, 193, 7, 0.2) 100%);
+}
+
+[data-theme='dark'] .noteType-vocabulary {
+  background: linear-gradient(120deg, rgba(96, 165, 250, 0.2) 0%, rgba(96, 165, 250, 0.1) 100%);
+  border-bottom-color: rgba(96, 165, 250, 0.5);
+}
+
+[data-theme='dark'] .noteType-vocabulary:hover {
+  background: linear-gradient(120deg, rgba(96, 165, 250, 0.3) 0%, rgba(96, 165, 250, 0.15) 100%);
+  border-bottom-color: rgba(96, 165, 250, 0.7);
+}
+
+[data-theme='dark'] .noteType-grammar {
+  background: linear-gradient(120deg, rgba(52, 211, 153, 0.2) 0%, rgba(52, 211, 153, 0.1) 100%);
+  border-bottom-color: rgba(52, 211, 153, 0.5);
+}
+
+[data-theme='dark'] .noteType-grammar:hover {
+  background: linear-gradient(120deg, rgba(52, 211, 153, 0.3) 0%, rgba(52, 211, 153, 0.15) 100%);
+  border-bottom-color: rgba(52, 211, 153, 0.7);
+}
+
+[data-theme='dark'] .noteType-cultural {
+  background: linear-gradient(120deg, rgba(167, 139, 250, 0.2) 0%, rgba(167, 139, 250, 0.1) 100%);
+  border-bottom-color: rgba(167, 139, 250, 0.5);
+}
+
+[data-theme='dark'] .noteType-cultural:hover {
+  background: linear-gradient(120deg, rgba(167, 139, 250, 0.3) 0%, rgba(167, 139, 250, 0.15) 100%);
+  border-bottom-color: rgba(167, 139, 250, 0.7);
+}
+
+[data-theme='dark'] .noteType-pronunciation {
+  background: linear-gradient(120deg, rgba(244, 114, 182, 0.2) 0%, rgba(244, 114, 182, 0.1) 100%);
+  border-bottom-color: rgba(244, 114, 182, 0.5);
+}
+
+[data-theme='dark'] .noteType-pronunciation:hover {
+  background: linear-gradient(120deg, rgba(244, 114, 182, 0.3) 0%, rgba(244, 114, 182, 0.15) 100%);
+  border-bottom-color: rgba(244, 114, 182, 0.7);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .textContent {
+    font-size: 1rem;
+    gap: 0.0625rem;
+  }
+  
+  .fontSize-small {
+    font-size: 0.875rem;
+  }
+  
+  .fontSize-medium {
+    font-size: 1rem;
+  }
+  
+  .fontSize-large {
+    font-size: 1.125rem;
+  }
+  
+  .annotatedWord {
+    padding: 0.0625rem 0.125rem;
+    margin: 0 0.03125rem;
+  }
+  
+  .noteHighlight {
+    padding: 0.0625rem 0.125rem;
+    margin: 0 0.03125rem;
+  }
+  
+  .noteHighlight::after {
+    display: none;
+  }
+  
+  .ruby {
+    font-size: inherit;
+  }
+  
+  .rubyText {
+    font-size: 0.6875rem;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .annotatedWord:hover,
+  .annotatedWord.active {
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid #000;
+  }
+  
+  .noteHighlight {
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+  }
+  
+  .rubyText {
+    opacity: 1;
+    font-weight: 600;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .annotatedWord,
+  .noteHighlight,
+  .rubyText,
+  .noteHighlight::after {
+    transition: none;
+  }
+  
+  .annotatedWord:hover,
+  .annotatedWord.active,
+  .noteHighlight:hover {
+    transform: none;
+  }
+  
+  .rubyTextActive {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .textContent {
+    color: #000;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  .plainText {
+    color: #000;
+  }
+  
+  .kanjiText {
+    color: #000;
+  }
+  
+  .rubyText {
+    opacity: 1 !important;
+    color: #666;
+    font-size: 8pt;
+  }
+  
+  .noteHighlight {
+    background: #f0f0f0 !important;
+    border-bottom: 1px solid #666 !important;
+  }
+  
+  .noteHighlight::after {
+    display: none;
+  }
+  
+  .annotatedWord:hover,
+  .annotatedWord.active,
+  .noteHighlight:hover {
+    background: transparent !important;
+    transform: none !important;
+  }
+}

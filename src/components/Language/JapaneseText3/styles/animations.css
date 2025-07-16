@@ -1,0 +1,491 @@
+/* Animations and transitions for JapaneseText2 Component */
+
+/* Import base variables */
+@import './variables.css';
+
+/* Keyframe Animations */
+
+/* Fade in animation */
+@keyframes jt2-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade in up animation */
+@keyframes jt2-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade in down animation */
+@keyframes jt2-fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide in from left */
+@keyframes jt2-slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide in from right */
+@keyframes jt2-slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale in animation */
+@keyframes jt2-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Bounce in animation */
+@keyframes jt2-bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pulse animation */
+@keyframes jt2-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Shake animation for errors */
+@keyframes jt2-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Glow animation */
+@keyframes jt2-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+  }
+}
+
+/* Shimmer loading animation */
+@keyframes jt2-shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Typing animation */
+@keyframes jt2-typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Blink cursor animation */
+@keyframes jt2-blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Animation Classes */
+
+/* Basic animations */
+.jt2-animate-fadeIn {
+  animation: jt2-fadeIn var(--jt2-duration-300) var(--jt2-ease-out);
+}
+
+.jt2-animate-fadeInUp {
+  animation: jt2-fadeInUp var(--jt2-duration-500) var(--jt2-ease-out);
+}
+
+.jt2-animate-fadeInDown {
+  animation: jt2-fadeInDown var(--jt2-duration-500) var(--jt2-ease-out);
+}
+
+.jt2-animate-slideInLeft {
+  animation: jt2-slideInLeft var(--jt2-duration-300) var(--jt2-ease-out);
+}
+
+.jt2-animate-slideInRight {
+  animation: jt2-slideInRight var(--jt2-duration-300) var(--jt2-ease-out);
+}
+
+.jt2-animate-scaleIn {
+  animation: jt2-scaleIn var(--jt2-duration-200) var(--jt2-ease-out);
+}
+
+.jt2-animate-bounceIn {
+  animation: jt2-bounceIn var(--jt2-duration-500) var(--jt2-ease-out);
+}
+
+.jt2-animate-pulse {
+  animation: jt2-pulse var(--jt2-duration-1000) var(--jt2-ease-in-out) infinite;
+}
+
+.jt2-animate-shake {
+  animation: jt2-shake var(--jt2-duration-500) var(--jt2-ease-in-out);
+}
+
+.jt2-animate-glow {
+  animation: jt2-glow var(--jt2-duration-1000) var(--jt2-ease-in-out) infinite alternate;
+}
+
+/* Shimmer loading effect */
+.jt2-animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--jt2-gray-200) 0%,
+    var(--jt2-gray-100) 50%,
+    var(--jt2-gray-200) 100%
+  );
+  background-size: 200px 100%;
+  animation: jt2-shimmer var(--jt2-duration-1000) var(--jt2-ease-in-out) infinite;
+}
+
+[data-theme='dark'] .jt2-animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--jt2-gray-700) 0%,
+    var(--jt2-gray-600) 50%,
+    var(--jt2-gray-700) 100%
+  );
+}
+
+/* Staggered animations */
+.jt2-animate-stagger-1 {
+  animation-delay: var(--jt2-duration-100);
+}
+
+.jt2-animate-stagger-2 {
+  animation-delay: var(--jt2-duration-200);
+}
+
+.jt2-animate-stagger-3 {
+  animation-delay: var(--jt2-duration-300);
+}
+
+.jt2-animate-stagger-4 {
+  animation-delay: var(--jt2-duration-500);
+}
+
+/* Transition Classes */
+
+/* Basic transitions */
+.jt2-transition {
+  transition: all var(--jt2-duration-200) var(--jt2-ease-in-out);
+}
+
+.jt2-transition-fast {
+  transition: all var(--jt2-duration-150) var(--jt2-ease-in-out);
+}
+
+.jt2-transition-slow {
+  transition: all var(--jt2-duration-300) var(--jt2-ease-in-out);
+}
+
+/* Specific property transitions */
+.jt2-transition-colors {
+  transition: color var(--jt2-duration-200) var(--jt2-ease-in-out),
+              background-color var(--jt2-duration-200) var(--jt2-ease-in-out),
+              border-color var(--jt2-duration-200) var(--jt2-ease-in-out);
+}
+
+.jt2-transition-opacity {
+  transition: opacity var(--jt2-duration-200) var(--jt2-ease-in-out);
+}
+
+.jt2-transition-transform {
+  transition: transform var(--jt2-duration-200) var(--jt2-ease-in-out);
+}
+
+.jt2-transition-shadow {
+  transition: box-shadow var(--jt2-duration-200) var(--jt2-ease-in-out);
+}
+
+/* Hover effects */
+.jt2-hover-lift {
+  transition: transform var(--jt2-duration-200) var(--jt2-ease-out);
+}
+
+.jt2-hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.jt2-hover-scale {
+  transition: transform var(--jt2-duration-200) var(--jt2-ease-out);
+}
+
+.jt2-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.jt2-hover-glow {
+  transition: box-shadow var(--jt2-duration-200) var(--jt2-ease-out);
+}
+
+.jt2-hover-glow:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+/* Focus effects */
+.jt2-focus-ring {
+  transition: box-shadow var(--jt2-duration-150) var(--jt2-ease-out);
+}
+
+.jt2-focus-ring:focus {
+  outline: none;
+  box-shadow: var(--jt2-focus-ring);
+}
+
+/* Loading states */
+.jt2-loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--jt2-gray-200) 25%,
+    var(--jt2-gray-100) 50%,
+    var(--jt2-gray-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: jt2-shimmer var(--jt2-duration-1000) var(--jt2-ease-in-out) infinite;
+  border-radius: var(--jt2-rounded);
+}
+
+[data-theme='dark'] .jt2-loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--jt2-gray-700) 25%,
+    var(--jt2-gray-600) 50%,
+    var(--jt2-gray-700) 75%
+  );
+}
+
+/* Interactive states */
+.jt2-interactive {
+  transition: all var(--jt2-duration-200) var(--jt2-ease-in-out);
+  cursor: pointer;
+}
+
+.jt2-interactive:hover {
+  opacity: var(--jt2-hover-opacity);
+}
+
+.jt2-interactive:active {
+  transform: scale(var(--jt2-active-scale));
+}
+
+/* Note panel animations */
+.jt2-note-enter {
+  animation: jt2-scaleIn var(--jt2-duration-300) var(--jt2-ease-out);
+}
+
+.jt2-note-exit {
+  animation: jt2-scaleIn var(--jt2-duration-200) var(--jt2-ease-in) reverse;
+}
+
+/* Text block animations */
+.jt2-text-block-enter {
+  animation: jt2-fadeInUp var(--jt2-duration-500) var(--jt2-ease-out);
+}
+
+/* Control panel animations */
+.jt2-control-panel-enter {
+  animation: jt2-fadeInDown var(--jt2-duration-300) var(--jt2-ease-out);
+}
+
+/* Furigana animations */
+.jt2-furigana-highlight {
+  transition: all var(--jt2-duration-150) var(--jt2-ease-out);
+}
+
+.jt2-furigana-highlight:hover {
+  color: var(--jt2-primary-500);
+  transform: scale(1.1);
+}
+
+/* Note highlight animations */
+.jt2-note-highlight {
+  position: relative;
+  transition: all var(--jt2-duration-200) var(--jt2-ease-out);
+}
+
+.jt2-note-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity var(--jt2-duration-200) var(--jt2-ease-out);
+  border-radius: var(--jt2-rounded-sm);
+}
+
+.jt2-note-highlight:hover::before {
+  opacity: 0.1;
+}
+
+/* Toggle animations */
+.jt2-toggle-slider {
+  transition: all var(--jt2-duration-300) var(--jt2-ease-in-out);
+}
+
+.jt2-toggle-slider::before {
+  transition: all var(--jt2-duration-300) var(--jt2-ease-in-out);
+}
+
+/* Error animations */
+.jt2-error-shake {
+  animation: jt2-shake var(--jt2-duration-500) var(--jt2-ease-in-out);
+}
+
+/* Success animations */
+.jt2-success-bounce {
+  animation: jt2-bounceIn var(--jt2-duration-500) var(--jt2-ease-out);
+}
+
+/* Accessibility considerations */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable all animations and transitions */
+  .jt2-animate-fadeIn,
+  .jt2-animate-fadeInUp,
+  .jt2-animate-fadeInDown,
+  .jt2-animate-slideInLeft,
+  .jt2-animate-slideInRight,
+  .jt2-animate-scaleIn,
+  .jt2-animate-bounceIn,
+  .jt2-animate-pulse,
+  .jt2-animate-shake,
+  .jt2-animate-glow,
+  .jt2-animate-shimmer,
+  .jt2-loading-skeleton,
+  .jt2-note-enter,
+  .jt2-note-exit,
+  .jt2-text-block-enter,
+  .jt2-control-panel-enter,
+  .jt2-error-shake,
+  .jt2-success-bounce {
+    animation: none !important;
+  }
+  
+  .jt2-transition,
+  .jt2-transition-fast,
+  .jt2-transition-slow,
+  .jt2-transition-colors,
+  .jt2-transition-opacity,
+  .jt2-transition-transform,
+  .jt2-transition-shadow,
+  .jt2-hover-lift,
+  .jt2-hover-scale,
+  .jt2-hover-glow,
+  .jt2-focus-ring,
+  .jt2-interactive,
+  .jt2-furigana-highlight,
+  .jt2-note-highlight,
+  .jt2-toggle-slider,
+  .jt2-toggle-slider::before {
+    transition: none !important;
+  }
+  
+  /* Keep essential transforms but remove animations */
+  .jt2-hover-lift:hover {
+    transform: none;
+  }
+  
+  .jt2-hover-scale:hover {
+    transform: none;
+  }
+  
+  .jt2-interactive:active {
+    transform: none;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .jt2-hover-glow:hover {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+  
+  .jt2-focus-ring:focus {
+    box-shadow: 0 0 0 3px currentColor;
+  }
+}
+
+/* Print styles - remove all animations */
+@media print {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

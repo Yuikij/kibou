@@ -1,0 +1,399 @@
+/* Responsive styles for JapaneseText2 Component */
+
+/* Import base variables */
+@import './variables.css';
+
+/* Mobile-first responsive design */
+
+/* Base styles (mobile) */
+.japaneseText2 {
+  /* Touch-friendly interactions */
+  -webkit-tap-highlight-color: rgba(99, 102, 241, 0.1);
+  touch-action: manipulation;
+}
+
+/* Touch targets */
+.japaneseText2 button,
+.japaneseText2 [role="button"],
+.japaneseText2 input,
+.japaneseText2 select {
+  min-height: 44px;
+  min-width: 44px;
+  padding: var(--jt2-space-2) var(--jt2-space-3);
+}
+
+/* Small screens (up to 640px) */
+@media (max-width: 640px) {
+  .japaneseText2 {
+    padding: var(--jt2-space-4) var(--jt2-space-3);
+    font-size: var(--jt2-text-sm);
+  }
+  
+  /* Container adjustments */
+  .japaneseText2 .container {
+    max-width: 100%;
+    padding: 0 var(--jt2-space-2);
+  }
+  
+  /* Control panel mobile layout */
+  .japaneseText2 .control-panel {
+    position: static;
+    margin-bottom: var(--jt2-space-4);
+    padding: var(--jt2-space-3);
+    border-radius: var(--jt2-rounded-lg);
+  }
+  
+  .japaneseText2 .control-panel .toggle-group {
+    flex-direction: column;
+    gap: var(--jt2-space-3);
+    align-items: stretch;
+  }
+  
+  .japaneseText2 .control-panel .toggle-container {
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  /* Text blocks mobile layout */
+  .japaneseText2 .text-block {
+    padding: var(--jt2-space-3) var(--jt2-space-4);
+    margin-bottom: var(--jt2-space-3);
+    border-radius: var(--jt2-rounded-lg);
+  }
+  
+  .japaneseText2 .line-container {
+    gap: var(--jt2-space-2);
+    min-height: auto;
+  }
+  
+  /* Line numbers mobile */
+  .japaneseText2 .line-number-area {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    max-width: 2.5rem;
+  }
+  
+  .japaneseText2 .line-number {
+    font-size: var(--jt2-text-xs);
+    width: 1.75rem;
+  }
+  
+  /* Japanese text mobile */
+  .japaneseText2 .text-content {
+    font-size: var(--jt2-text-base);
+    line-height: var(--jt2-leading-relaxed);
+    gap: 0.0625rem;
+  }
+  
+  .japaneseText2 .annotated-word {
+    padding: 0.0625rem 0.125rem;
+    margin: 0 0.03125rem;
+  }
+  
+  .japaneseText2 .ruby {
+    font-size: inherit;
+  }
+  
+  .japaneseText2 .ruby-text {
+    font-size: 0.6875rem;
+  }
+  
+  /* Translation mobile */
+  .japaneseText2 .translation-text {
+    font-size: var(--jt2-text-sm);
+    padding: var(--jt2-space-2) var(--jt2-space-3);
+    margin-top: var(--jt2-space-2);
+  }
+  
+  /* Note highlights mobile */
+  .japaneseText2 .note-highlight {
+    padding: 0.0625rem 0.125rem;
+    margin: 0 0.03125rem;
+  }
+  
+  .japaneseText2 .note-highlight::after {
+    display: none; /* Hide emoji on mobile */
+  }
+  
+  /* Note panel mobile (full screen modal) */
+  .japaneseText2 .note-panel {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 95vw !important;
+    max-width: 400px !important;
+    max-height: 85vh !important;
+    border-radius: var(--jt2-rounded-xl);
+  }
+  
+  .japaneseText2 .note-panel .header {
+    padding: var(--jt2-space-3) var(--jt2-space-4);
+  }
+  
+  .japaneseText2 .note-panel .body {
+    padding: var(--jt2-space-3) var(--jt2-space-4);
+    max-height: 50vh;
+  }
+  
+  .japaneseText2 .note-panel .footer {
+    padding: var(--jt2-space-2) var(--jt2-space-4);
+    flex-direction: column;
+    gap: var(--jt2-space-2);
+    align-items: flex-start;
+  }
+  
+  .japaneseText2 .note-panel .shortcuts {
+    display: none;
+  }
+  
+  /* Mobile overlay */
+  .japaneseText2 .note-overlay.mobile {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Medium screens (641px to 768px) */
+@media (min-width: 641px) and (max-width: 768px) {
+  .japaneseText2 {
+    padding: var(--jt2-space-6) var(--jt2-space-4);
+  }
+  
+  .japaneseText2 .control-panel {
+    padding: var(--jt2-space-4) var(--jt2-space-5);
+  }
+  
+  .japaneseText2 .control-panel .toggle-group {
+    gap: var(--jt2-space-4);
+  }
+  
+  .japaneseText2 .text-block {
+    padding: var(--jt2-space-4) var(--jt2-space-5);
+  }
+  
+  .japaneseText2 .text-content {
+    font-size: var(--jt2-text-lg);
+  }
+}
+
+/* Large screens (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .japaneseText2 {
+    padding: var(--jt2-space-8) var(--jt2-space-6);
+  }
+  
+  .japaneseText2 .container {
+    max-width: 90%;
+  }
+}
+
+/* Extra large screens (1025px and up) */
+@media (min-width: 1025px) {
+  .japaneseText2 {
+    padding: var(--jt2-space-10) var(--jt2-space-8);
+  }
+  
+  .japaneseText2 .container {
+    max-width: var(--jt2-container-max-width);
+  }
+  
+  .japaneseText2 .text-content {
+    font-size: var(--jt2-text-xl);
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+  .japaneseText2 .control-panel {
+    position: static;
+    margin-bottom: var(--jt2-space-3);
+  }
+  
+  .japaneseText2 .note-panel {
+    max-height: 80vh !important;
+  }
+  
+  .japaneseText2 .note-panel .body {
+    max-height: 40vh;
+  }
+}
+
+/* Touch device specific styles */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .japaneseText2 .annotated-word:hover,
+  .japaneseText2 .note-highlight:hover,
+  .japaneseText2 .text-block:hover {
+    background: transparent;
+    transform: none;
+  }
+  
+  /* Increase touch targets */
+  .japaneseText2 .annotated-word,
+  .japaneseText2 .note-highlight {
+    padding: var(--jt2-space-2);
+    margin: var(--jt2-space-1);
+  }
+  
+  /* Touch feedback */
+  .japaneseText2 .annotated-word:active,
+  .japaneseText2 .note-highlight:active {
+    background: rgba(99, 102, 241, 0.1);
+    transform: scale(0.98);
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .japaneseText2 {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .japaneseText2 .ruby-text {
+    font-weight: var(--jt2-font-medium);
+  }
+}
+
+/* Foldable devices */
+@media (min-width: 280px) and (max-width: 653px) {
+  .japaneseText2 .control-panel .toggle-group {
+    grid-template-columns: 1fr;
+    gap: var(--jt2-space-2);
+  }
+  
+  .japaneseText2 .text-content {
+    font-size: var(--jt2-text-sm);
+  }
+}
+
+/* Very small screens (below 320px) */
+@media (max-width: 320px) {
+  .japaneseText2 {
+    padding: var(--jt2-space-2);
+    font-size: var(--jt2-text-xs);
+  }
+  
+  .japaneseText2 .control-panel {
+    padding: var(--jt2-space-2);
+  }
+  
+  .japaneseText2 .text-block {
+    padding: var(--jt2-space-2) var(--jt2-space-3);
+  }
+  
+  .japaneseText2 .line-number-area {
+    width: 2rem;
+    min-width: 2rem;
+    max-width: 2rem;
+  }
+  
+  .japaneseText2 .line-number {
+    font-size: 0.625rem;
+    width: 1.5rem;
+  }
+  
+  .japaneseText2 .note-panel {
+    width: 98vw !important;
+    max-height: 90vh !important;
+  }
+}
+
+/* Container queries (when supported) */
+@supports (container-type: inline-size) {
+  .japaneseText2 {
+    container-type: inline-size;
+  }
+  
+  @container (max-width: 600px) {
+    .japaneseText2 .control-panel .toggle-group {
+      flex-direction: column;
+    }
+  }
+  
+  @container (max-width: 400px) {
+    .japaneseText2 .text-content {
+      font-size: var(--jt2-text-sm);
+    }
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (max-width: 768px) {
+  /* Larger focus indicators on mobile */
+  .japaneseText2 *:focus {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+  
+  /* Better contrast for small screens */
+  .japaneseText2 .ruby-text {
+    opacity: 0.9;
+    font-weight: var(--jt2-font-medium);
+  }
+  
+  /* Improved spacing for readability */
+  .japaneseText2 .japanese-section {
+    margin-bottom: var(--jt2-space-4);
+    padding-bottom: var(--jt2-space-4);
+  }
+}
+
+/* Print styles for mobile */
+@media print {
+  .japaneseText2 {
+    padding: 0;
+    font-size: 12pt;
+  }
+  
+  .japaneseText2 .control-panel {
+    display: none;
+  }
+  
+  .japaneseText2 .note-panel,
+  .japaneseText2 .note-overlay {
+    display: none;
+  }
+  
+  .japaneseText2 .text-block {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+  
+  .japaneseText2 .ruby-text {
+    opacity: 1;
+    color: #666;
+  }
+}
+
+/* Reduced motion for mobile */
+@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
+  .japaneseText2 * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .japaneseText2 .note-panel {
+    animation: none;
+  }
+}
+
+/* Dark mode mobile adjustments */
+@media (max-width: 768px) {
+  [data-theme='dark'] .japaneseText2 .control-panel {
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(8px);
+  }
+  
+  [data-theme='dark'] .japaneseText2 .text-block {
+    background: rgba(30, 41, 59, 0.98);
+  }
+  
+  [data-theme='dark'] .japaneseText2 .note-panel {
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(12px);
+  }
+}

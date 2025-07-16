@@ -1,0 +1,228 @@
+/* LineNumber.module.css */
+
+.lineNumberArea {
+  flex-shrink: 0;
+  width: 3rem;
+  min-width: 3rem;
+  max-width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #f3f4f6 80%, rgba(99,102,241,0.04) 100%);
+  border-right: 1.5px solid #e5e7eb;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  box-shadow: 1px 0 0 0 #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.lineNumber {
+  width: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #a0aec0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+  margin: 0;
+  height: auto;
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+.lineNumber::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.hovered .lineNumber {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+  font-weight: 600;
+}
+
+.hovered .lineNumber::before {
+  opacity: 1;
+}
+
+.clickable .lineNumber {
+  cursor: pointer;
+}
+
+.clickable .lineNumber:hover {
+  color: #4f46e5;
+  background: rgba(99, 102, 241, 0.12);
+  transform: scale(1.05);
+}
+
+.clickable .lineNumber:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  color: #4f46e5;
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.clickable .lineNumber:active {
+  transform: scale(0.95);
+}
+
+/* Dark mode styles */
+[data-theme='dark'] .lineNumberArea {
+  background: linear-gradient(90deg, #374151 80%, rgba(139,92,246,0.08) 100%);
+  border-right-color: #4b5563;
+  box-shadow: 1px 0 0 0 #4b5563;
+}
+
+[data-theme='dark'] .lineNumber {
+  color: #64748b;
+}
+
+[data-theme='dark'] .lineNumber::before {
+  background: rgba(139, 92, 246, 0.05);
+}
+
+[data-theme='dark'] .hovered .lineNumber {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.15);
+}
+
+[data-theme='dark'] .clickable .lineNumber:hover {
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.2);
+}
+
+[data-theme='dark'] .clickable .lineNumber:focus {
+  outline-color: #a78bfa;
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.25);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .lineNumberArea {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    max-width: 2.5rem;
+  }
+  
+  .lineNumber {
+    width: 1.875rem;
+    font-size: 0.6875rem;
+    padding: 0.1875rem;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .lineNumberArea {
+    border-right-width: 2px;
+    border-right-color: #000;
+  }
+  
+  .lineNumber {
+    color: #000;
+    font-weight: 600;
+  }
+  
+  .hovered .lineNumber,
+  .clickable .lineNumber:hover,
+  .clickable .lineNumber:focus {
+    background: #f0f0f0;
+    border: 1px solid #000;
+  }
+  
+  [data-theme='dark'] .lineNumber {
+    color: #fff;
+  }
+  
+  [data-theme='dark'] .hovered .lineNumber,
+  [data-theme='dark'] .clickable .lineNumber:hover,
+  [data-theme='dark'] .clickable .lineNumber:focus {
+    background: #333;
+    border: 1px solid #fff;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .lineNumberArea,
+  .lineNumber,
+  .lineNumber::before {
+    transition: none;
+  }
+  
+  .clickable .lineNumber:hover,
+  .clickable .lineNumber:active {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .lineNumberArea {
+    background: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    box-shadow: none;
+  }
+  
+  .lineNumber {
+    color: #6c757d;
+    font-size: 8pt;
+  }
+  
+  .lineNumber::before {
+    display: none;
+  }
+}
+
+/* Focus styles for better accessibility */
+.lineNumber:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .lineNumber:focus-visible {
+  outline-color: #a78bfa;
+}
+
+/* Animation for line number appearance */
+@keyframes lineNumberFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.lineNumber {
+  animation: lineNumberFadeIn 0.3s ease-out;
+}
+
+/* Hover effect for the entire line number area */
+.lineNumberArea:hover {
+  background: linear-gradient(90deg, #e5e7eb 80%, rgba(99,102,241,0.08) 100%);
+}
+
+[data-theme='dark'] .lineNumberArea:hover {
+  background: linear-gradient(90deg, #4b5563 80%, rgba(139,92,246,0.12) 100%);
+}
