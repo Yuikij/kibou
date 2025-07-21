@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import {
   ControlPanel,
   TextBlock,
@@ -117,26 +117,35 @@ const JapaneseText2 = React.memo(({
   });
 
   // Note handling
-  const noteHandling = useNoteHandling(textData?.processed || []);
+  const noteHandling = useNoteHandling(textData?.processed || [], preferences);
 
-  // Keyboard shortcuts
+  // Stable callback for keyboard shortcuts
+  const handleShortcutChange = useCallback((section, field, value) => {
+    updatePreference(section, field, value);
+    if (onPreferenceChange) {
+      onPreferenceChange({ [section]: { [field]: value } });
+    }
+  }, [updatePreference, onPreferenceChange]);
+
+  // Keyboard shortcuts (simplified since no note navigation needed)
   const keyboardShortcuts = useKeyboardShortcuts(
     preferences,
-    (section, field, value) => {
-      updatePreference(section, field, value);
-      if (onPreferenceChange) {
-        onPreferenceChange({ [section]: { [field]: value } });
-      }
-    },
+    handleShortcutChange,
     noteHandling
   );
 
-  // Accessibility management
-  const accessibilityManager = useAccessibilityManager(containerRef, {
+  // Memoize accessibility options to prevent re-creation
+  const accessibilityOptions = useMemo(() => ({
     announceChanges: true,
     keyboardNavigation: preferences.interaction?.keyboardShortcuts !== false,
     screenReaderOptimized: preferences.accessibility?.screenReaderOptimized || false
-  });
+  }), [
+    preferences.interaction?.keyboardShortcuts,
+    preferences.accessibility?.screenReaderOptimized
+  ]);
+
+  // Accessibility management
+  const accessibilityManager = useAccessibilityManager(containerRef, accessibilityOptions);
 
   // Handle preference changes
   const handlePreferenceChange = (section, field, value) => {
@@ -153,36 +162,9 @@ const JapaneseText2 = React.memo(({
     }
   };
 
-  // Handle note interactions
-  const handleNoteClick = (noteKey, noteContent, event, sentenceIndex) => {
-    noteHandling.handleNoteClick(noteKey, noteContent, event, sentenceIndex);
 
-    // Announce to screen readers
-    if (accessibilityManager) {
-      const displayText = noteKey.includes('_') ? noteKey.split('_')[0] : noteKey;
-      const content = typeof noteContent === 'string' ? noteContent : noteContent.content;
-      accessibilityManager.announceNoteOpened(displayText, content);
-    }
-  };
 
-  const handleNoteClose = () => {
-    noteHandling.closeNote();
 
-    // Announce to screen readers
-    if (accessibilityManager) {
-      accessibilityManager.announceNoteClosed();
-    }
-  };
-
-  // Log performance stats in development
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      const stats = getPerformanceStats();
-      if (stats.renderCount % 10 === 0) {
-        console.log('JapaneseText2 Performance Stats:', stats);
-      }
-    }
-  });
 
   // Show loading state
   if (isLoading) {
@@ -228,27 +210,19 @@ const JapaneseText2 = React.memo(({
 
       {/* Main Content */}
       <main className={styles.content} id="jt2-main-content">
-        {textData.processed.map((textBlockData, index) => (
+        {(textData?.processed || []).map((textBlockData, index) => (
           <TextBlock
             key={index}
             textData={textBlockData}
             index={index}
             preferences={preferences}
-            onNoteClick={handleNoteClick}
             registerNoteRef={noteHandling.registerNoteRef}
             className={styles.textBlock}
           />
         ))}
       </main>
 
-      {/* Note Panel */}
-      <NotePanel
-        note={noteHandling.activeNote}
-        position={noteHandling.notePosition}
-        isMobile={noteHandling.isMobile}
-        onClose={handleNoteClose}
-        onNavigate={noteHandling.navigateNote}
-      />
+      {/* Note panel is now inline with the text, no separate component needed */}
 
       {/* Development Tools */}
       {process.env.NODE_ENV === 'development' && (
@@ -257,11 +231,11 @@ const JapaneseText2 = React.memo(({
             <summary>开发工具</summary>
             <div className={styles.devToolsContent}>
               <h4>统计信息</h4>
-              <p>文本块数量: {textData.processed.length}</p>
-              <p>总字符数: {textData.statistics?.totalCharacters || 0}</p>
-              <p>包含注音: {textData.statistics?.textsWithAnnotations || 0}</p>
-              <p>包含笔记: {textData.statistics?.textsWithNotes || 0}</p>
-              <p>包含翻译: {textData.statistics?.textsWithTranslations || 0}</p>
+              <p>文本块数量: {textData?.processed?.length || 0}</p>
+              <p>总字符数: {textData?.statistics?.totalCharacters || 0}</p>
+              <p>包含注音: {textData?.statistics?.textsWithAnnotations || 0}</p>
+              <p>包含笔记: {textData?.statistics?.textsWithNotes || 0}</p>
+              <p>包含翻译: {textData?.statistics?.textsWithTranslations || 0}</p>
 
               <h4>偏好设置</h4>
               <button onClick={() => console.log('Preferences:', preferences)}>

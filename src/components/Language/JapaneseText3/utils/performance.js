@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
+import { useMemo, useCallback, useRef, useEffect, useState, useLayoutEffect } from 'react';
 import { debounce, throttle } from './textProcessing';
 import { PERFORMANCE_THRESHOLDS } from './constants';
 
@@ -159,12 +159,14 @@ export const useVirtualScrolling = (items, itemHeight = 100, containerHeight = 6
  * @param {string} componentName - Name of the component to monitor
  * @returns {Object} Performance monitoring functions
  */
-export const usePerformanceMonitor = (componentName) => {
+export const usePerformanceMonitor = (componentName = 'Unknown') => {
   const renderCount = useRef(0);
   const renderTimes = useRef([]);
   const lastRenderTime = useRef(performance.now());
+  const logThrottle = useRef(0);
   
-  useEffect(() => {
+  // Use useLayoutEffect to measure actual render time
+  useLayoutEffect(() => {
     renderCount.current += 1;
     const currentTime = performance.now();
     const renderTime = currentTime - lastRenderTime.current;
@@ -177,22 +179,26 @@ export const usePerformanceMonitor = (componentName) => {
     
     lastRenderTime.current = currentTime;
     
-    // Log performance issues in development
+    // Throttled logging in development
     if (process.env.NODE_ENV === 'development') {
       if (renderTime > 16) { // More than one frame at 60fps
-        console.warn(`${componentName}: Slow render detected (${renderTime.toFixed(2)}ms)`);
+        // Only warn for very slow renders to reduce noise
+        if (renderTime > 100) { // Increased threshold from 50ms to 100ms
+          console.warn(`${componentName}: Very slow render detected (${renderTime.toFixed(2)}ms)`);
+        }
       }
       
-      if (renderCount.current % 10 === 0) {
+      // Further throttle the average render time logging
+      if (renderCount.current % 500 === 0) { // Changed from 100 to 500
         const avgRenderTime = renderTimes.current.reduce((a, b) => a + b, 0) / renderTimes.current.length;
         console.log(`${componentName}: Avg render time: ${avgRenderTime.toFixed(2)}ms (${renderCount.current} renders)`);
       }
     }
-  });
-  
+  }); // No dependencies - this should run after every render
+
   const getPerformanceStats = useCallback(() => {
-    const avgRenderTime = renderTimes.current.length > 0 
-      ? renderTimes.current.reduce((a, b) => a + b, 0) / renderTimes.current.length 
+    const avgRenderTime = renderTimes.current.length > 0
+      ? renderTimes.current.reduce((a, b) => a + b, 0) / renderTimes.current.length
       : 0;
     
     return {
@@ -201,9 +207,18 @@ export const usePerformanceMonitor = (componentName) => {
       lastRenderTime: renderTimes.current[renderTimes.current.length - 1] || 0,
       recentRenderTimes: [...renderTimes.current]
     };
+  }, []); // Stable function, no dependencies needed
+
+  const resetStats = useCallback(() => {
+    renderCount.current = 0;
+    renderTimes.current = [];
+    lastRenderTime.current = performance.now();
   }, []);
-  
-  return { getPerformanceStats };
+
+  return {
+    getPerformanceStats,
+    resetStats
+  };
 };
 
 /**

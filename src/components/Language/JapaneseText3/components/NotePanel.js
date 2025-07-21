@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef, useCallback } from 'react';
 import { focusManagement } from '../utils/accessibility';
 import styles from './NotePanel.module.css';
 
@@ -15,6 +15,13 @@ const NotePanel = memo(({
 }) => {
   const panelRef = useRef(null);
   const restoreFocus = useRef(null);
+  const positionRef = useRef(position);
+  const resizeObserverRef = useRef(null);
+
+  // Update position ref when position changes
+  useEffect(() => {
+    positionRef.current = position;
+  }, [position]);
 
   // Save focus when panel opens
   useEffect(() => {
@@ -37,6 +44,33 @@ const NotePanel = memo(({
     };
   }, [note]);
 
+  // Monitor panel size changes and trigger position validation
+  useEffect(() => {
+    if (!note || !panelRef.current) return;
+
+    // Disable ResizeObserver to prevent position validation loops
+    // The simplified positioning should work without constant validation
+    
+    return () => {
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect();
+      }
+    };
+  }, [note, isMobile]);
+
+  // Disabled position validation to prevent loops
+  const validatePanelPosition = useCallback(() => {
+    // Completely disabled to prevent validation loops
+    return;
+  }, [isMobile]);
+
+  // Validate position after initial render - DISABLED
+  useEffect(() => {
+    // Disabled to prevent validation loops
+    // The simplified positioning should work without validation
+    return;
+  }, [note, position, isMobile, validatePanelPosition]);
+
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -47,19 +81,13 @@ const NotePanel = memo(({
           event.preventDefault();
           onClose();
           break;
-        case 'ArrowRight':
-        case 'ArrowDown':
-          if (onNavigate) {
-            event.preventDefault();
-            onNavigate('next');
-          }
-          break;
         case 'ArrowLeft':
-        case 'ArrowUp':
-          if (onNavigate) {
-            event.preventDefault();
-            onNavigate('prev');
-          }
+          event.preventDefault();
+          onNavigate('prev');
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          onNavigate('next');
           break;
         default:
           break;
@@ -76,13 +104,10 @@ const NotePanel = memo(({
 
   const { text, content, type = 'vocabulary', difficulty = 'intermediate', tags = [] } = note;
 
-  const panelStyle = isMobile 
-    ? {} 
-    : {
-        top: position.top,
-        left: position.left,
-        transform: position.centered ? 'translate(-50%, -50%)' : undefined
-      };
+  const panelStyle = {
+    top: position.top,
+    left: position.left
+  };
 
   const getDifficultyColor = (level) => {
     switch (level) {
@@ -126,6 +151,7 @@ const NotePanel = memo(({
         aria-modal="true"
         aria-labelledby="note-title"
         aria-describedby="note-content"
+        data-note-strategy={position.strategy}
       >
         {/* Header */}
         <div className={styles.header}>
@@ -204,6 +230,11 @@ const NotePanel = memo(({
             <span className={styles.metadataItem}>
               难度: {difficulty}
             </span>
+            {process.env.NODE_ENV === 'development' && position.strategy && (
+              <span className={styles.metadataItem} title="定位策略">
+                策略: {position.strategy}
+              </span>
+            )}
           </div>
           
           {!isMobile && (

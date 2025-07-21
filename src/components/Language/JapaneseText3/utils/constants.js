@@ -59,7 +59,9 @@ export const DEFAULT_PREFERENCES = {
   interaction: {
     hoverDelay: 200,
     animationSpeed: ANIMATION_SPEEDS.NORMAL,
-    keyboardShortcuts: true
+    keyboardShortcuts: true,
+    autoScrollOnNavigation: true, // Auto-scroll when navigating with keyboard
+    smoothScrolling: true // Use smooth scrolling behavior
   },
   accessibility: {
     highContrast: false,
@@ -126,4 +128,37 @@ export const CSS_CUSTOM_PROPERTIES = {
   '--radius-md': '8px',
   '--radius-lg': '12px',
   '--radius-xl': '16px'
+};
+
+// Note positioning configuration
+export const NOTE_POSITIONING = {
+  // Note panel dimensions (should match CSS)
+  DESKTOP_WIDTH: 360,
+  DESKTOP_HEIGHT: 320,
+  MOBILE_WIDTH_PERCENT: 90,
+  MOBILE_HEIGHT_PERCENT: 80,
+  
+  // Positioning margins and offsets
+  SAFE_MARGIN: 24,
+  TARGET_OFFSET: 16,
+  MOBILE_MIN_MARGIN: 20,
+  
+  // Positioning strategies priority order
+  STRATEGIES: [
+    'right',
+    'left', 
+    'center-below',
+    'center-above',
+    'center-horizontal',
+    'center-vertical',
+    'emergency-center'
+  ],
+  
+  // Debounce delays
+  POSITION_DEBOUNCE: 50,
+  RESIZE_DEBOUNCE: 150,
+  VALIDATION_DELAYS: [16, 100, 250],
+  
+  // Space thresholds for positioning decisions
+  SPACE_THRESHOLD: 0.8 // 80% of panel size needed for preferred positioning
 };

@@ -12,7 +12,6 @@ const AnnotatedText = memo(({
   notes = {},
   sentenceIndex,
   preferences,
-  onNoteClick,
   registerNoteRef,
   className = ''
 }) => {
@@ -31,10 +30,7 @@ const AnnotatedText = memo(({
     setActiveWordIndex(null);
   }, []);
 
-  const handleNoteClick = useCallback((noteKey, noteContent, event) => {
-    if (!showNotes || !onNoteClick) return;
-    onNoteClick(noteKey, noteContent, event, sentenceIndex);
-  }, [showNotes, onNoteClick, sentenceIndex]);
+
 
   const renderSegment = (segment, segmentIndex) => {
     const { text: segmentText, type, data, position } = segment;
@@ -82,16 +78,55 @@ const AnnotatedText = memo(({
     const noteContent = typeof noteData === 'string' ? noteData : noteData.content;
     const noteType = typeof noteData === 'object' ? noteData.type : 'vocabulary';
     const ariaLabel = generateAriaLabels.noteHighlight(noteText, noteContent);
+    
+    // Check if this note is currently active
+    const isActive = activeWordIndex === `note-${sentenceIndex}-${noteIndex}`;
+
+    // Dynamic position adjustment for panel
+    const getPanelStyle = () => {
+      if (!isActive) return {};
+      
+      const viewportWidth = window.innerWidth;
+      const panelWidth = 300; // 预估面板宽度
+      
+      // 简单的边界检测
+      const rect = document.querySelector(`[data-note-key="${noteKey}"]`)?.getBoundingClientRect();
+      if (rect) {
+        const spaceRight = viewportWidth - rect.right;
+        const spaceLeft = rect.left;
+        
+        if (spaceRight < panelWidth && spaceLeft > panelWidth) {
+          // 右侧空间不足，左侧有空间，向左偏移
+          return { left: 'auto', right: '0' };
+        }
+      }
+      
+      return {};
+    };
 
     return (
       <span
         key={`note-${noteIndex}`}
         className={`${styles.noteHighlight} ${styles[`noteType-${noteType}`] || ''}`}
-        onClick={(e) => handleNoteClick(noteKey, noteData, e)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // Toggle note visibility
+          if (isActive) {
+            setActiveWordIndex(null);
+          } else {
+            setActiveWordIndex(`note-${sentenceIndex}-${noteIndex}`);
+          }
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            handleNoteClick(noteKey, noteData, e);
+            // Toggle note visibility
+            if (isActive) {
+              setActiveWordIndex(null);
+            } else {
+              setActiveWordIndex(`note-${sentenceIndex}-${noteIndex}`);
+            }
           }
         }}
         ref={(el) => registerNoteRef && registerNoteRef(sentenceIndex, noteKey, el)}
@@ -99,8 +134,42 @@ const AnnotatedText = memo(({
         tabIndex={0}
         aria-label={ariaLabel}
         data-note-type={noteType}
+        data-note-key={noteKey}
+        style={{ position: 'relative' }}
       >
         {noteText}
+        
+        {/* Inline note panel with relative positioning */}
+        {isActive && (
+          <div className={styles.inlineNotePanel} style={getPanelStyle()}>
+            <div className={styles.notePanelArrow} />
+            <div className={styles.notePanelContent}>
+              <div className={styles.notePanelHeader}>
+                <span className={styles.noteTypeIcon}>
+                  {noteType === 'vocabulary' ? '📚' : 
+                   noteType === 'grammar' ? '📝' : 
+                   noteType === 'cultural' ? '🏮' : 
+                   noteType === 'pronunciation' ? '🔊' : '💡'}
+                </span>
+                <strong>{noteText}</strong>
+                <button 
+                  className={styles.closeNoteButton}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setActiveWordIndex(null);
+                  }}
+                  aria-label="关闭笔记"
+                >
+                  ×
+                </button>
+              </div>
+              <div className={styles.notePanelBody}>
+                {noteContent}
+              </div>
+            </div>
+          </div>
+        )}
       </span>
     );
   };

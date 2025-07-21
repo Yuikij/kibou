@@ -11,7 +11,6 @@ const TextBlock = memo(({
   textData,
   index,
   preferences,
-  onNoteClick,
   registerNoteRef,
   className = ''
 }) => {
@@ -69,7 +68,6 @@ const TextBlock = memo(({
               notes={notes}
               sentenceIndex={index}
               preferences={preferences}
-              onNoteClick={onNoteClick}
               registerNoteRef={registerNoteRef}
             />
           </div>

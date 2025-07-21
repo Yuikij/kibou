@@ -1,6 +1,6 @@
 // Enhanced accessibility utilities for JapaneseText2 component
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { generateAriaLabels, keyboardNavigation, screenReader, visualAccessibility, focusManagement } from './accessibility';
 
 /**
@@ -360,16 +360,27 @@ export class AccessibilityManager {
 export const useAccessibilityManager = (containerRef, options = {}) => {
   const [manager, setManager] = useState(null);
 
+  // Memoize options to prevent unnecessary re-creation
+  const memoizedOptions = useMemo(() => ({
+    announceChanges: options.announceChanges ?? true,
+    keyboardNavigation: options.keyboardNavigation ?? true,
+    screenReaderOptimized: options.screenReaderOptimized ?? false
+  }), [
+    options.announceChanges,
+    options.keyboardNavigation,
+    options.screenReaderOptimized
+  ]);
+
   useEffect(() => {
     if (containerRef.current) {
-      const accessibilityManager = new AccessibilityManager(containerRef.current, options);
+      const accessibilityManager = new AccessibilityManager(containerRef.current, memoizedOptions);
       setManager(accessibilityManager);
       
       return () => {
         accessibilityManager.destroy();
       };
     }
-  }, [containerRef, options]);
+  }, [containerRef, memoizedOptions]);
 
   return manager;
 };
