@@ -243,6 +243,7 @@ const config = {
                             // ... more items
                         ],
                     },
+                    {to: '/about', label: '关于', position: 'right'},
                     {
                         type: 'search',
                         position: 'right',
