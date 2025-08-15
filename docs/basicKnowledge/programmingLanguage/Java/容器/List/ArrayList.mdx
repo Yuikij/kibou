@@ -23,3 +23,47 @@ int newCapacity = oldCapacity + (oldCapacity >> 1);
 // 1.8
 elementData = Arrays.copyOf(elementData, newCapacity);
   ```
+
+### Api和实现细节
+* add(E e)
+> 不扩容的话O(1)
+```java
+  private void add(E e, Object[] elementData, int s) {
+    // 先检查是否扩容
+      if (s == elementData.length)
+          elementData = grow();
+    // 添加元素
+      elementData[s] = e;
+      size = s + 1;
+  }
+
+```
+
+* add(int index, E element)
+> O(n)
+```java
+  public void add(int index, E element) {
+      rangeCheckForAdd(index);
+      modCount++;
+      final int s;
+      Object[] elementData;
+      if ((s = size) == (elementData = this.elementData).length)
+          elementData = grow();
+      System.arraycopy(elementData, index,
+                        elementData, index + 1,
+                        s - index);
+      elementData[index] = element;
+      size = s + 1;
+  }
+```
+
+* set(int index, E element)
+> O(1)
+```java
+  public E set(int index, E element) {
+      Objects.checkIndex(index, size);
+      E oldValue = elementData(index);
+      elementData[index] = element;
+      return oldValue;
+  }
+```
