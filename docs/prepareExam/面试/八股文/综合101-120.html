@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-prepareExam/面试/八股文/综合101-120" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.7.0">
+<title data-rh="true">综合101-120 | Yuikij&#x27;s  blog</title><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://your-docusaurus-test-site.com/kibou/img/avatar.jpg"><meta data-rh="true" name="twitter:image" content="https://your-docusaurus-test-site.com/kibou/img/avatar.jpg"><meta data-rh="true" property="og:url" content="https://your-docusaurus-test-site.com/kibou/docs/prepareExam/面试/八股文/综合101-120"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="keywords" content="Yuikij&#x27;s  blog, blog, Yuikij"><meta data-rh="true" name="robots" content="index, follow"><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="google-site-verification" content="-xEN6xN-ZxgRBYd5yWu6wEmhSpllJZAZSLXGTAJkzzU"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="综合101-120 | Yuikij&#x27;s  blog"><meta data-rh="true" name="description" content="101. 什么是分库分表？分库分表有哪些类型（或策略）？"><meta data-rh="true" property="og:description" content="101. 什么是分库分表？分库分表有哪些类型（或策略）？"><link data-rh="true" rel="icon" href="/kibou/img/avatar.jpg"><link data-rh="true" rel="canonical" href="https://your-docusaurus-test-site.com/kibou/docs/prepareExam/面试/八股文/综合101-120"><link data-rh="true" rel="alternate" href="https://your-docusaurus-test-site.com/kibou/docs/prepareExam/面试/八股文/综合101-120" hreflang="en"><link data-rh="true" rel="alternate" href="https://your-docusaurus-test-site.com/kibou/docs/prepareExam/面试/八股文/综合101-120" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/kibou/blog/rss.xml" title="Yuikij&#39;s  blog RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/kibou/blog/atom.xml" title="Yuikij&#39;s  blog Atom Feed"><link rel="stylesheet" href="/kibou/assets/css/styles.07414980.css">
+<script src="/kibou/assets/js/runtime~main.60326a01.js" defer="defer"></script>
+<script src="/kibou/assets/js/main.7694ef28.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"dark")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/kibou/"><div class="navbar__logo"><img src="/kibou/img/avatar.jpg" alt="to be kibou" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/kibou/img/avatar.jpg" alt="to be kibou" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Yuikij&#x27;s  blog</b></a><div class="navbar__item dropdown dropdown--hoverable"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">基础</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="/kibou/docs/category/java-1">编程语言</a></li><li><a class="dropdown__link" href="/kibou/docs/basicKnowledge/framework/Mybatis/插件">软件框架</a></li><li><a class="dropdown__link" href="/kibou/docs/basicKnowledge/network/协议/MQTT">网络</a></li><li><a class="dropdown__link" href="/kibou/docs/database/MySQL/SQL语句/CTE">数据库</a></li><li><a class="dropdown__link" href="/kibou/docs/algorithm">算法和数据结构</a></li><li><a class="dropdown__link" href="/kibou/docs/distributedSystems/MapReduce">分布式系统</a></li></ul></div><div class="navbar__item dropdown dropdown--hoverable"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">应用</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="/kibou/docs/basicSoftware/Git/shell">Git</a></li><li><a class="dropdown__link" href="/kibou/docs/category/常用命令-1">Linux</a></li><li><a class="dropdown__link" href="/kibou/docs/basicSoftware/Operation/CiCD">运维相关</a></li><li><a class="dropdown__link" href="/kibou/docs/basicSoftware/Design/建模语言">软件设计</a></li><li><a class="dropdown__link" href="/kibou/docs/basicSoftware/中间件/RabbitMq">中间件</a></li></ul></div></div><div class="navbar__items navbar__items--right"><a class="navbar__item navbar__link" href="/kibou/docs/category/note记录-1">公开课</a><a class="navbar__item navbar__link" href="/kibou/docs/naturalLanguage/日语/文法/动词">语言</a><a class="navbar__item navbar__link" href="/kibou/blog">日记</a><a class="navbar__item navbar__link" href="/kibou/docs/ai/LLM/利用CF的worker实现gemini的key池代理">AI编程</a><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">备忘录</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="/kibou/docs/memorandum/SuperGame/关于狗头护肤的简单探讨/page1">SG论坛</a></li><li><a class="dropdown__link" href="/kibou/docs/memorandum/深度解读/DDIA">深度解读</a></li><li><a aria-current="page" class="dropdown__link dropdown__link--active" href="/kibou/docs/prepareExam/软考/错题集/真题">备考面试</a></li><li><a class="dropdown__link" href="/kibou/docs/memorandum/chatgpt/如何解除网站的复制粘贴限制">小贴士</a></li></ul></div><a class="navbar__item navbar__link" href="/kibou/about">关于</a><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><input placeholder="Search" aria-label="Search" class="navbar__search-input" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div><a href="https://books.yuisama.top" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">图书馆<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a href="https://github.com/Yuikij" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently dark mode)" aria-label="Switch between dark and light mode (currently dark mode)" aria-live="polite" aria-pressed="true"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/kibou/docs/prepareExam/软考/错题集/真题">软考</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/kibou/docs/prepareExam/面试/八股文/JVM">面试</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/JVM">八股文</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/JVM">JVM</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合1-20">综合1-20</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合101-120">综合101-120</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合121-140">综合121-140</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合141-160">综合141-160</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合21-40">综合21-40</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合41-60">综合41-60</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合61-80">综合61-80</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/kibou/docs/prepareExam/面试/八股文/综合81-100">综合81-100</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/kibou/docs/prepareExam/面试/美团/一面">美团</a></div></li></ul></li></ul></nav><button type="button" title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width="20" height="20" aria-hidden="true" class="collapseSidebarButtonIcon_kv0_"><g fill="#7a7a7a"><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"></path><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"></path></g></svg></button></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/kibou/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">面试</span><meta itemprop="position" content="1"></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">八股文</span><meta itemprop="position" content="2"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">综合101-120</span><meta itemprop="position" content="3"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>综合101-120</h1></header><h3 class="anchor anchorWithStickyNavbar_LWe7" id="101-什么是分库分表分库分表有哪些类型或策略">101. 什么是分库分表？分库分表有哪些类型（或策略）？<a href="#101-什么是分库分表分库分表有哪些类型或策略" class="hash-link" aria-label="Direct link to 101. 什么是分库分表？分库分表有哪些类型（或策略）？" title="Direct link to 101. 什么是分库分表？分库分表有哪些类型（或策略）？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">简单</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">MySQL</span> <span class="badge badge--secondary">数据库</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p>分库分表是将原来集中存储在一个数据库中的数据分散存储到多个数据库/表中，以应对海量数据带来的性能问题。</p>
+<p><strong>分库分表类型：</strong></p>
+<ul>
+<li><strong>垂直分库</strong>：按业务模块将不同表分散到不同数据库</li>
+<li><strong>垂直分表</strong>：将一个表的不同字段分散到不同表中</li>
+<li><strong>水平分库</strong>  ：将同一个表的数据按某种规则分散到不同数据库</li>
+<li><strong>水平分表</strong>：将同一个表的数据按某种规则分散到不同表中</li>
+</ul>
+<p><strong>分片策略：</strong></p>
+<ul>
+<li><strong>范围分片</strong>：按ID范围、时间范围等</li>
+<li><strong>哈希分片</strong>：对分片键进行哈希运算</li>
+<li><strong>目录分片</strong>：维护分片映射关系表</li>
+<li><strong>一致性哈希</strong>：解决节点动态增减问题</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="102-mybatis-中--和--的区别是什么">102. MyBatis 中 #{} 和 ${} 的区别是什么？<a href="#102-mybatis-中--和--的区别是什么" class="hash-link" aria-label="Direct link to 102. MyBatis 中 #{} 和 ${} 的区别是什么？" title="Direct link to 102. MyBatis 中 #{} 和 ${} 的区别是什么？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">简单</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">MyBatis</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>#{}（推荐）:</strong></p>
+<ul>
+<li>预编译处理，防止SQL注入</li>
+<li>参数会被当作字符串，自动加上引号</li>
+<li>底层使用PreparedStatement的占位符</li>
+</ul>
+<p><strong>${}（谨慎使用）:</strong></p>
+<ul>
+<li>字符串替换，直接拼接到SQL中</li>
+<li>存在SQL注入风险</li>
+<li>适用于动态表名、列名等场景</li>
+</ul>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token comment" style="color:rgb(98, 114, 164)">-- #{} 示例</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">SELECT</span><span class="token plain"> </span><span class="token operator">*</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">FROM</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">user</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">WHERE</span><span class="token plain"> id </span><span class="token operator">=</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">#{id}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">-- 实际执行：SELECT * FROM user WHERE id = ?</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">-- ${} 示例  </span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">SELECT</span><span class="token plain"> </span><span class="token operator">*</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">FROM</span><span class="token plain"> ${tableName} </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">WHERE</span><span class="token plain"> id </span><span class="token operator">=</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">#{id}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">-- 实际执行：SELECT * FROM user WHERE id = ?</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="103-java-中的-final-关键字是否能保证变量的可见性">103. Java 中的 final 关键字是否能保证变量的可见性？<a href="#103-java-中的-final-关键字是否能保证变量的可见性" class="hash-link" aria-label="Direct link to 103. Java 中的 final 关键字是否能保证变量的可见性？" title="Direct link to 103. Java 中的 final 关键字是否能保证变量的可见性？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--secondary">Java并发</span> <span class="badge badge--secondary">Java</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>final不能保证变量的可见性</strong>，但有特殊语义：</p>
+<p><strong>final的内存语义：</strong></p>
+<ul>
+<li>对final字段的写入会在构造函数返回前完成</li>
+<li>禁止final 字段写入与构造函数返回重排序</li>
+<li>读取final字段不会与读取该字段的对象引用重排序</li>
+</ul>
+<p><strong>可见性保证需要：</strong></p>
+<ul>
+<li>volatile：保证变量在多线程间的可见性</li>
+<li>synchronized：同步块保证可见性</li>
+<li>happens-before规则</li>
+</ul>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">class</span><span class="token plain"> </span><span class="token class-name">Example</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">private</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">final</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token plain"> x</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">private</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">volatile</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token plain"> y</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// 需要volatile保证可见性</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">public</span><span class="token plain"> </span><span class="token class-name">Example</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token plain"> x</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">this</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token plain">x </span><span class="token operator">=</span><span class="token plain"> x</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// final保证构造完成后的正确读取</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="104-redis-的-hash-是什么">104. Redis 的 hash 是什么？<a href="#104-redis-的-hash-是什么" class="hash-link" aria-label="Direct link to 104. Redis 的 hash 是什么？" title="Direct link to 104. Redis 的 hash 是什么？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">Redis</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p>Redis Hash是一个键值对集合，类似于Java中的HashMap。</p>
+<p><strong>底层实现：</strong></p>
+<ul>
+<li><strong>ziplist（压缩列表）</strong>：元素较少时使用，内存紧凑</li>
+<li><strong>hashtable（哈希表）</strong>：元素较多时使用，查询高效</li>
+</ul>
+<p><strong>切换条件：</strong></p>
+<ul>
+<li>hash-max-ziplist-entries：最大元素数量（默认512）</li>
+<li>hash-max-ziplist-value：最大值长度（默认64字节）</li>
+</ul>
+<p><strong>常用命令：</strong></p>
+<div class="language-redis codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-redis codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">HSET user:1 name &quot;张三&quot; age 25</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">HGET user:1 name</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">HMGET user:1 name age</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">HGETALL user:1</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">HDEL user:1 age</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>用户信息存储</li>
+<li>商品属性存储</li>
+<li>配置信息管理</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="105-从网络角度来看用户从输入网址到网页显示期间发生了什么">105. 从网络角度来看，用户从输入网址到网页显示，期间发生了什么？<a href="#105-从网络角度来看用户从输入网址到网页显示期间发生了什么" class="hash-link" aria-label="Direct link to 105. 从网络角度来看，用户从输入网址到网页显示，期间发生了什么？" title="Direct link to 105. 从网络角度来看，用户从输入网址到网页显示，期间发生了什么？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--danger">困难</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">网络</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>完整流程：</strong></p>
+<ol>
+<li><strong>URL解析</strong>：浏览器解析URL，提取协议、域名、路径</li>
+<li><strong>DNS解析</strong>：
+<ul>
+<li>浏览器缓存 → 系统缓存 → 路由器缓存 → ISP DNS → 根域名服务器</li>
+<li>递归/迭代查询获取IP地址</li>
+</ul>
+</li>
+<li><strong>建立TCP连接</strong>：三次握手建立连接</li>
+<li><strong>HTTPS握手</strong>（如果是HTTPS）：TLS/SSL握手</li>
+<li><strong>发送HTTP请求</strong>：构造并发送HTTP请求报文</li>
+<li><strong>服务器处理</strong>：Web服务器接收、处理请求</li>
+<li><strong>返回HTTP响应</strong>：服务器返回响应报文</li>
+<li><strong>浏览器解析</strong>：
+<ul>
+<li>解析HTML构建DOM树</li>
+<li>解析CSS构建CSSOM树</li>
+<li>执行JavaScript</li>
+<li>构建渲染树</li>
+</ul>
+</li>
+<li><strong>页面渲染</strong>：布局、绘制、合成</li>
+<li><strong>断开连接</strong>：四次挥手关闭连接</li>
+</ol>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="106-dubbo-和-spring-cloud-gateway-有什么区别">106. Dubbo 和 Spring Cloud Gateway 有什么区别？<a href="#106-dubbo-和-spring-cloud-gateway-有什么区别" class="hash-link" aria-label="Direct link to 106. Dubbo 和 Spring Cloud Gateway 有什么区别？" title="Direct link to 106. Dubbo 和 Spring Cloud Gateway 有什么区别？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--danger">困难</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">分布式</span> <span class="badge badge--secondary">Spring Cloud</span> <span class="badge badge--secondary">Dubbo</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>本质区别：</strong></p>
+<ul>
+<li><strong>Dubbo</strong>：RPC框架，服务间直接调用</li>
+<li><strong>Spring Cloud Gateway</strong>：API网关，统一入口</li>
+</ul>
+<p><strong>Dubbo特点：</strong></p>
+<ul>
+<li>基于接口的RPC调用</li>
+<li>支持多种序列化协议</li>
+<li>内置负载均衡、服务发现</li>
+<li>适合内部服务调用</li>
+</ul>
+<p><strong>Spring Cloud Gateway特点：</strong></p>
+<ul>
+<li>基于Spring WebFlux响应式编程</li>
+<li>路由转发、过滤器链</li>
+<li>限流、熔断、监控</li>
+<li>适合外部请求入口</li>
+</ul>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>Dubbo：微服务内部通信</li>
+<li>Gateway：外部请求统一处理、路由分发</li>
+</ul>
+<p><strong>可以结合使用：</strong>
+Gateway作为统一入口，内部使用Dubbo进行服务调用。</p>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="107-什么是-java-中的原子性可见性和有序性">107. 什么是 Java 中的原子性、可见性和有序性？<a href="#107-什么是-java-中的原子性可见性和有序性" class="hash-link" aria-label="Direct link to 107. 什么是 Java 中的原子性、可见性和有序性？" title="Direct link to 107. 什么是 Java 中的原子性、可见性和有序性？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--danger">困难</span> <span class="badge badge--secondary">Java并发</span> <span class="badge badge--secondary">Java</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>并发编程三大特性：</strong></p>
+<p><strong>1. 原子性（Atomicity）</strong></p>
+<ul>
+<li>操作不可分割，要么全部执行要么全部不执行</li>
+<li>Java保证：基本数据类型读写（long/double除外）</li>
+<li>解决方案：synchronized、Lock、  原子类（AtomicInteger）</li>
+</ul>
+<p><strong>2. 可见性（Visibility）</strong></p>
+<ul>
+<li>一个线程修改变量后，其他线程能立即看到</li>
+<li>问题：CPU缓存导致数据不一致</li>
+<li>解决方案：volatile、synchronized、final</li>
+</ul>
+<p><strong>3. 有序性（Ordering）</strong></p>
+<ul>
+<li>程序执行顺序按代码顺序执行</li>
+<li>问题：编译器和CPU优化可能重排序</li>
+<li>解决方案：volatile、synchronized、happens-before规则</li>
+</ul>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">class</span><span class="token plain"> </span><span class="token class-name">Example</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">private</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">volatile</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">boolean</span><span class="token plain"> flag </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">false</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// 保证可见性和有序性</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">private</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">final</span><span class="token plain"> </span><span class="token class-name">AtomicInteger</span><span class="token plain"> count </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">AtomicInteger</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token number">0</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// 保证原子性</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">public</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">synchronized</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">void</span><span class="token plain"> </span><span class="token function" style="color:rgb(80, 250, 123)">update</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// 三种特性都保证</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        count</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">incrementAndGet</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        flag </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="108-线程和进程有什么区别">108. 线程和进程有什么区别？<a href="#108-线程和进程有什么区别" class="hash-link" aria-label="Direct link to 108. 线程和进程有什么区别？" title="Direct link to 108. 线程和进程有什么区别？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">操作系统</span> <span class="badge badge--secondary">计算机基础</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>定义：</strong></p>
+<ul>
+<li><strong>进程</strong>：操作系统资源分配的基本单位</li>
+<li><strong>线程</strong>：CPU调度的基本单位</li>
+</ul>
+<p><strong>主要区别：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>对比项</th><th>进程</th><th>线程</th></tr></thead><tbody><tr><td>内存空间</td><td>独立地址空间</td><td>共享进程地址空间</td></tr><tr><td>资源开销</td><td>创建、切换开销大</td><td>创建、切换开销小</td></tr><tr><td>通信方式</td><td>IPC（管道、消息队列、信号量）</td><td>共享内存、同步原语</td></tr><tr><td>安全性</td><td>崩溃不影响其他进程</td><td>一个线程崩溃可能影响整个进程</td></tr><tr><td>系统调用</td><td>fork()</td><td>pthread_create()</td></tr></tbody></table>
+<p><strong>Java中的体现：</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token comment" style="color:rgb(98, 114, 164)">// 进程级别</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">ProcessBuilder</span><span class="token plain"> pb </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">ProcessBuilder</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token string" style="color:rgb(255, 121, 198)">&quot;java&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token string" style="color:rgb(255, 121, 198)">&quot;-jar&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token string" style="color:rgb(255, 121, 198)">&quot;app.jar&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">Process</span><span class="token plain"> process </span><span class="token operator">=</span><span class="token plain"> pb</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">start</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">// 线程级别</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">Thread</span><span class="token plain"> thread </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">Thread</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token operator">-&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token comment" style="color:rgb(98, 114, 164)">// 线程任务</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">thread</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">start</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="109-说说你知道的几种-io-模型">109. 说说你知道的几种 I/O 模型<a href="#109-说说你知道的几种-io-模型" class="hash-link" aria-label="Direct link to 109. 说说你知道的几种 I/O 模型" title="Direct link to 109. 说说你知道的几种 I/O 模型">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">Netty</span> <span class="badge badge--secondary">后端</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>五种I/O模型：</strong></p>
+<p><strong>1. 阻塞I/O（Blocking I/O）</strong></p>
+<ul>
+<li>线程阻塞等待数据准备和复制</li>
+<li>简单直观，但并发性差</li>
+</ul>
+<p><strong>2. 非阻塞I/O（Non-blocking I/O）</strong></p>
+<ul>
+<li>立即返回，需要轮询检查状态</li>
+<li>CPU利用率低，效率不高</li>
+</ul>
+<p><strong>3. I/O多路复用（I/O Multiplexing）</strong></p>
+<ul>
+<li>select/poll/epoll监听多个文件描述符</li>
+<li>单线程处理多个连接，高并发</li>
+</ul>
+<p><strong>4. 信号驱动I/O（Signal-driven I/O）</strong></p>
+<ul>
+<li>数据准备好时发送信号通知</li>
+<li>实际应用较少</li>
+</ul>
+<p><strong>5. 异步I/O（Asynchronous I/O）</strong></p>
+<ul>
+<li>数据复制完成后通知应用程序</li>
+<li>真正的异步，性能最优</li>
+</ul>
+<p><strong>Java实现：</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token comment" style="color:rgb(98, 114, 164)">// BIO</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">ServerSocket</span><span class="token plain"> serverSocket </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">ServerSocket</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token number">8080</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">Socket</span><span class="token plain"> socket </span><span class="token operator">=</span><span class="token plain"> serverSocket</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">accept</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// 阻塞</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">// NIO</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">Selector</span><span class="token plain"> selector </span><span class="token operator">=</span><span class="token plain"> </span><span class="token class-name">Selector</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">open</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">ServerSocketChannel</span><span class="token plain"> channel </span><span class="token operator">=</span><span class="token plain"> </span><span class="token class-name">ServerSocketChannel</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">open</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">channel</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">configureBlocking</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token boolean">false</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// 非阻塞</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">// AIO（NIO.2）</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">AsynchronousServerSocketChannel</span><span class="token plain"> server </span><span class="token operator">=</span><span class="token plain"> </span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token class-name">AsynchronousServerSocketChannel</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">open</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="110-mybatis-与-hibernate-有哪些不同">110. MyBatis 与 Hibernate 有哪些不同？<a href="#110-mybatis-与-hibernate-有哪些不同" class="hash-link" aria-label="Direct link to 110. MyBatis 与 Hibernate 有哪些不同？" title="Direct link to 110. MyBatis 与 Hibernate 有哪些不同？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">MyBatis</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>主要区别：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>对比项</th><th>MyBatis</th><th>Hibernate</th></tr></thead><tbody><tr><td>类型</td><td>半自动化ORM</td><td>全自动化ORM</td></tr><tr><td>SQL控制</td><td>手写SQL，灵活控制</td><td>自动生成SQL</td></tr><tr><td>学习曲线</td><td>相对简单</td><td>相对复杂</td></tr><tr><td>性能优化</td><td>手动优化SQL</td><td>依赖工具和配置</td></tr><tr><td>数据库移植</td><td>需要修改SQL</td><td>良好的数据库无关性</td></tr><tr><td>缓存机制</td><td>一级、二级缓存</td><td>强大的缓存体系</td></tr></tbody></table>
+<p><strong>MyBatis优势：</strong></p>
+<ul>
+<li>SQL可控性强，便于优化</li>
+<li>轻量级，学习成本低</li>
+<li>适合复杂查询和报表</li>
+</ul>
+<p><strong>Hibernate优势：</strong></p>
+<ul>
+<li>开发效率高</li>
+<li>对象化程度高</li>
+<li>数据库无关性好</li>
+</ul>
+<p><strong>选择建议：</strong></p>
+<ul>
+<li>复杂业务逻辑、性能要求高：MyBatis</li>
+<li>快速开发、简单CRUD：Hibernate</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="111-什么是-java-内存模型jmm">111. 什么是 Java 内存模型（JMM）？<a href="#111-什么是-java-内存模型jmm" class="hash-link" aria-label="Direct link to 111. 什么是 Java 内存模型（JMM）？" title="Direct link to 111. 什么是 Java 内存模型（JMM）？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--danger">困难</span> <span class="badge badge--secondary">Java并发</span> <span class="badge badge--secondary">Java</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>JMM定义：</strong>
+Java内存模型定义了Java程序中变量的访问规则，以及在JVM中将变量存储到内存和从内存中读取变量的底层细节。</p>
+<p><strong>内存结构：</strong></p>
+<ul>
+<li><strong>主内存</strong>：所有线程共享，存储变量的主副本</li>
+<li><strong>工作内存</strong>：每个线程私有，存储变量的本地副本</li>
+</ul>
+<p><strong>八种操作：</strong></p>
+<ol>
+<li><strong>lock</strong>：锁定主内存变量</li>
+<li><strong>unlock</strong>：释放主内存变量</li>
+<li><strong>read</strong>：从主内存读取到工作内存</li>
+<li><strong>load</strong>：将read的值放入工作内存变量副本</li>
+<li><strong>use</strong>：将工作内存变量传递给执行引擎</li>
+<li><strong>assign</strong>：将执行引擎的值赋给工作内存变量</li>
+<li><strong>store</strong>：将工作内存变量传送到主内存</li>
+<li><strong>write</strong>：将store的值写入主内存变量</li>
+</ol>
+<p><strong>happens-before规则：</strong></p>
+<ul>
+<li>程序次序规则</li>
+<li>锁定规则</li>
+<li>volatile变量规则</li>
+<li>传递性规则</li>
+<li>线程启动规则</li>
+<li>线程终止规则</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="112-redis-和-memcached-有哪些区别">112. Redis 和 Memcached 有哪些区别？<a href="#112-redis-和-memcached-有哪些区别" class="hash-link" aria-label="Direct link to 112. Redis 和 Memcached 有哪些区别？" title="Direct link to 112. Redis 和 Memcached 有哪些区别？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">Redis</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>主要区别：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>对比项</th><th>Redis</th><th>Memcached</th></tr></thead><tbody><tr><td>数据类型</td><td>丰富（String、Hash、List、Set、ZSet）</td><td>只支持简单String</td></tr><tr><td>持久化</td><td>支持RDB、AOF</td><td>不支持</td></tr><tr><td>分布式</td><td>支持集群、主从</td><td>客户端分片</td></tr><tr><td>线程模型</td><td>单线程+IO多路复用</td><td>多线程</td></tr><tr><td>内存使用</td><td>更高效的内存使用</td><td>简单的内存分配</td></tr><tr><td>功能特性</td><td>发布订阅、事务、Lua脚本</td><td>功能简单</td></tr></tbody></table>
+<p><strong>Redis优势：</strong></p>
+<ul>
+<li>数据结构丰富</li>
+<li>持久化能力</li>
+<li>功能强大</li>
+</ul>
+<p><strong>Memcached优势：</strong></p>
+<ul>
+<li>多线程性能好</li>
+<li>内存使用简单高效</li>
+<li>稳定可靠</li>
+</ul>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>Redis：复杂数据结构、持久化需求</li>
+<li>Memcached：简单缓存、高并发读写</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="113-什么是物理地址什么是逻辑地址">113. 什么是物理地址，什么是逻辑地址？<a href="#113-什么是物理地址什么是逻辑地址" class="hash-link" aria-label="Direct link to 113. 什么是物理地址，什么是逻辑地址？" title="Direct link to 113. 什么是物理地址，什么是逻辑地址？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">操作系统</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>逻辑地址（Virtual Address）：</strong></p>
+<ul>
+<li>程序运行时CPU产生的地址</li>
+<li>相对于程序起始位置的偏移地址</li>
+<li>需要通过地址转换机制转为物理地址</li>
+</ul>
+<p><strong>物理地址（Physical Address）：</strong></p>
+<ul>
+<li>内存中真实的存储地址</li>
+<li>CPU访问内存时实际使用的地址</li>
+<li>直接对应内存条上的存储单元</li>
+</ul>
+<p><strong>地址转换过程：</strong></p>
+<ol>
+<li><strong>编译时</strong>：源代码 → 逻辑地址</li>
+<li><strong>装载时</strong>：逻辑地址 → 线性地址（分段）</li>
+<li><strong>运行时</strong>：线性地址 → 物理地址（分页）</li>
+</ol>
+<p><strong>转换机制：</strong></p>
+<ul>
+<li><strong>分段</strong>：逻辑地址 = 段选择子 + 段内偏移</li>
+<li><strong>分页</strong>：线性地址 = 页号 + 页内偏移</li>
+<li><strong>MMU</strong>：内存管理单元负责地址转换</li>
+</ul>
+<p><strong>优势：</strong></p>
+<ul>
+<li>程序重定位</li>
+<li>内存保护</li>
+<li>虚拟内存支持</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="114-说说什么是-api-网关它有什么作用">114. 说说什么是 API 网关？它有什么作用？<a href="#114-说说什么是-api-网关它有什么作用" class="hash-link" aria-label="Direct link to 114. 说说什么是 API 网关？它有什么作用？" title="Direct link to 114. 说说什么是 API 网关？它有什么作用？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">分布式</span> <span class="badge badge--secondary">Spring Cloud</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>API网关定义：</strong>
+API网关是微服务架构中的统一入口，负责请求路由、组合和协议转换。</p>
+<p><strong>主要作用：</strong></p>
+<p><strong>1. 请求路由</strong></p>
+<ul>
+<li>根据请求路径、方法等路由到具体服务</li>
+<li>负载均衡和故障转移</li>
+</ul>
+<p><strong>2. 协议转换</strong></p>
+<ul>
+<li>HTTP/HTTPS转换</li>
+<li>REST API到RPC调用</li>
+</ul>
+<p><strong>3. 安全认证</strong></p>
+<ul>
+<li>统一的身份验证和授权</li>
+<li>API密钥管理</li>
+</ul>
+<p><strong>4. 限流熔断</strong></p>
+<ul>
+<li>接口限流保护后端服务</li>
+<li>熔断机制防止故障扩散</li>
+</ul>
+<p><strong>5. 监控日志</strong></p>
+<ul>
+<li>统一的访问日志</li>
+<li>性能监控和分析</li>
+</ul>
+<p><strong>6. 请求/响应处理</strong></p>
+<ul>
+<li>请求参数校验</li>
+<li>响应数据格式化</li>
+</ul>
+<p><strong>常见实现：</strong></p>
+<ul>
+<li>Spring Cloud Gateway</li>
+<li>Zuul</li>
+<li>Kong</li>
+<li>Nginx+Lua</li>
+</ul>
+<p><strong>架构模式：</strong></p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">客户端 → API网关 → 微服务A/B/C</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="115-什么是-java-的-cascompare-and-swap操作">115. 什么是 Java 的 CAS（Compare-And-Swap）操作？<a href="#115-什么是-java-的-cascompare-and-swap操作" class="hash-link" aria-label="Direct link to 115. 什么是 Java 的 CAS（Compare-And-Swap）操作？" title="Direct link to 115. 什么是 Java 的 CAS（Compare-And-Swap）操作？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--secondary">Java并发</span> <span class="badge badge--secondary">Java</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>CAS定义：</strong>
+Compare-And-Swap是一种无锁的原子操作，比较内存位置的值与期望值，如果相等则更新为新值。</p>
+<p><strong>操作过程：</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">boolean</span><span class="token plain"> </span><span class="token function" style="color:rgb(80, 250, 123)">compareAndSwap</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token operator">*</span><span class="token plain"> memory</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token plain"> expected</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token plain"> newValue</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">if</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token operator">*</span><span class="token plain">memory </span><span class="token operator">==</span><span class="token plain"> expected</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token operator">*</span><span class="token plain">memory </span><span class="token operator">=</span><span class="token plain"> newValue</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">return</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">return</span><span class="token plain"> </span><span class="token boolean">false</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>Java实现：</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token class-name">AtomicInteger</span><span class="token plain"> atomicInt </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">AtomicInteger</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token number">0</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">// CAS操作</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">boolean</span><span class="token plain"> success </span><span class="token operator">=</span><span class="token plain"> atomicInt</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">compareAndSet</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token number">0</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token number">1</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">// 底层实现（简化）</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">public</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">final</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">boolean</span><span class="token plain"> </span><span class="token function" style="color:rgb(80, 250, 123)">compareAndSet</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token plain"> expect</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">int</span><span class="token plain"> update</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">return</span><span class="token plain"> unsafe</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">compareAndSwapInt</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">this</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> valueOffset</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> expect</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> update</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>优势：</strong></p>
+<ul>
+<li>无锁操作，避免线程阻塞</li>
+<li>高性能，适合高并发场景</li>
+<li>避免死锁问题</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li><strong>ABA问题</strong>：值从A变B再变A，CAS检测不到</li>
+<li><strong>循环时间开销</strong>：自旋等待可能消耗CPU</li>
+<li><strong>只能保证单个变量原子性</strong></li>
+</ul>
+<p><strong>解决方案：</strong></p>
+<ul>
+<li>AtomicStampedReference解决ABA问题</li>
+<li>LongAdder优化高并发累加场景</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="116-selectpollepoll-之间有什么区别">116. Select、Poll、Epoll 之间有什么区别？<a href="#116-selectpollepoll-之间有什么区别" class="hash-link" aria-label="Direct link to 116. Select、Poll、Epoll 之间有什么区别？" title="Direct link to 116. Select、Poll、Epoll 之间有什么区别？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">操作系统</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>I/O多路复用机制对比：</strong></p>
+<p><strong>Select：</strong></p>
+<ul>
+<li>基于位图，最大支持1024个文件描述符</li>
+<li>每次调用需要遍历所有文件描述符</li>
+<li>需要在用户态和内核态间复制数据</li>
+<li>跨平台兼容性好</li>
+</ul>
+<p><strong>Poll：</strong></p>
+<ul>
+<li>基于链表，没有文件描述符数量限制</li>
+<li>仍需要遍历所有文件描述符</li>
+<li>性能与select类似</li>
+<li>解决了select的数量限制问题</li>
+</ul>
+<p><strong>Epoll（Linux特有）：</strong></p>
+<ul>
+<li>基于事件驱动，只关注活跃的文件描述符</li>
+<li>支持百万级连接</li>
+<li>内核维护就绪队列，避免轮询</li>
+<li>支持边缘触发（ET）和水平触发（LT）</li>
+</ul>
+<p><strong>性能对比：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>特性</th><th>Select</th><th>Poll</th><th>Epoll</th></tr></thead><tbody><tr><td>最大连接数</td><td>1024</td><td>无限制</td><td>无限制</td></tr><tr><td>时间复杂度</td><td>O(n)</td><td>O(n)</td><td>O(1)</td></tr><tr><td>内存复制</td><td>需要</td><td>需要</td><td>不需要</td></tr><tr><td>跨平台</td><td>是</td><td>是</td><td>否（Linux）</td></tr></tbody></table>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>Select/Poll：连接数较少，需要跨平台</li>
+<li>Epoll：高并发服务器，Linux环境</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="117-什么是-mybatis-plus它有什么作用它和-mybatis-有哪些区别">117. 什么是 MyBatis-Plus？它有什么作用？它和 MyBatis 有哪些区别？<a href="#117-什么是-mybatis-plus它有什么作用它和-mybatis-有哪些区别" class="hash-link" aria-label="Direct link to 117. 什么是 MyBatis-Plus？它有什么作用？它和 MyBatis 有哪些区别？" title="Direct link to 117. 什么是 MyBatis-Plus？它有什么作用？它和 MyBatis 有哪些区别？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">Mybatis-plus</span> <span class="badge badge--secondary">编程导航</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>MyBatis-Plus定义：</strong>
+MyBatis-Plus是MyBatis的增强工具，在MyBatis基础上只做增强不做改变。</p>
+<p><strong>主要功能：</strong></p>
+<p><strong>1. 代码生成器</strong></p>
+<ul>
+<li>自动生成Entity、Mapper、Service、Controller</li>
+<li>支持模板自定义</li>
+</ul>
+<p><strong>2. CRUD接口</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token comment" style="color:rgb(98, 114, 164)">// 继承BaseMapper即可获得CRUD能力</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">public</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">interface</span><span class="token plain"> </span><span class="token class-name">UserMapper</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">extends</span><span class="token plain"> </span><span class="token class-name">BaseMapper</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics class-name">User</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token comment" style="color:rgb(98, 114, 164)">// 使用示例</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">userMapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">selectById</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token number">1</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">userMapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">insert</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">user</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">userMapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">updateById</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">user</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>3. 条件构造器</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token class-name">QueryWrapper</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics class-name">User</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> wrapper </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">QueryWrapper</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">wrapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">eq</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token string" style="color:rgb(255, 121, 198)">&quot;status&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token number">1</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">       </span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">like</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token string" style="color:rgb(255, 121, 198)">&quot;name&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token string" style="color:rgb(255, 121, 198)">&quot;张&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">       </span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">orderByDesc</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token string" style="color:rgb(255, 121, 198)">&quot;create_time&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">List</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics class-name">User</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> users </span><span class="token operator">=</span><span class="token plain"> userMapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">selectList</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">wrapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>4. 分页插件</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token class-name">Page</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics class-name">User</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> page </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">Page</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token number">1</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token number">10</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token class-name">Page</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics class-name">User</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> result </span><span class="token operator">=</span><span class="token plain"> userMapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">selectPage</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">page</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> wrapper</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>与MyBatis区别：</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>特性</th><th>MyBatis</th><th>MyBatis-Plus</th></tr></thead><tbody><tr><td>基础功能</td><td>需要手写XML/注解</td><td>提供通用CRUD</td></tr><tr><td>代码量</td><td>较多</td><td>大幅减少</td></tr><tr><td>学习成本</td><td>高</td><td>低</td></tr><tr><td>自定义SQL</td><td>完全自由</td><td>保持MyBatis特性</td></tr><tr><td>扩展性</td><td>原生支持</td><td>在MyBatis基础上扩展</td></tr></tbody></table>
+<p><strong>优势：</strong></p>
+<ul>
+<li>开发效率高</li>
+<li>减少重复代码</li>
+<li>保持MyBatis灵活性</li>
+<li>丰富的插件生态</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="118-为什么-java-中的-threadlocal-对-key-的引用为弱引用">118. 为什么 Java 中的 ThreadLocal 对 key 的引用为弱引用？<a href="#118-为什么-java-中的-threadlocal-对-key-的引用为弱引用" class="hash-link" aria-label="Direct link to 118. 为什么 Java 中的 ThreadLocal 对 key 的引用为弱引用？" title="Direct link to 118. 为什么 Java 中的 ThreadLocal 对 key 的引用为弱引用？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">Java并发</span> <span class="badge badge--secondary">Java</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>ThreadLocal内部结构：</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token comment" style="color:rgb(98, 114, 164)">// ThreadLocalMap内部类</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">static</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">class</span><span class="token plain"> </span><span class="token class-name">Entry</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">extends</span><span class="token plain"> </span><span class="token class-name">WeakReference</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics class-name">ThreadLocal</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics operator">?</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token class-name">Object</span><span class="token plain"> value</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token class-name">Entry</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token class-name">ThreadLocal</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics operator">?</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> k</span><span class="token punctuation" style="color:rgb(248, 248, 242)">,</span><span class="token plain"> </span><span class="token class-name">Object</span><span class="token plain"> v</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">super</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">k</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(98, 114, 164)">// ThreadLocal作为key，使用弱引用</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        value </span><span class="token operator">=</span><span class="token plain"> v</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>使用弱引用的原因：</strong></p>
+<p><strong>1. 防止内存泄漏</strong></p>
+<ul>
+<li>如果使用强引用，ThreadLocal对象无法被GC回收</li>
+<li>线程长时间运行时，会导致ThreadLocal对象堆积</li>
+</ul>
+<p><strong>2. 自动清理机制</strong></p>
+<ul>
+<li>ThreadLocal对象被GC后，Entry的key变为null</li>
+<li>ThreadLocalMap在get/set/remove时会清理key为null的Entry</li>
+</ul>
+<p><strong>内存泄漏风险：</strong></p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">public</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">class</span><span class="token plain"> </span><span class="token class-name">ThreadLocalExample</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">private</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">static</span><span class="token plain"> </span><span class="token class-name">ThreadLocal</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics class-name">String</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token plain"> threadLocal </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">new</span><span class="token plain"> </span><span class="token class-name">ThreadLocal</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&lt;</span><span class="token generics punctuation" style="color:rgb(248, 248, 242)">&gt;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">public</span><span class="token plain"> </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">void</span><span class="token plain"> </span><span class="token function" style="color:rgb(80, 250, 123)">test</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        threadLocal</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">set</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token string" style="color:rgb(255, 121, 198)">&quot;value&quot;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token comment" style="color:rgb(98, 114, 164)">// 如果忘记remove()，value对象可能无法回收</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token comment" style="color:rgb(98, 114, 164)">// threadLocal.remove(); // 最佳实践</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>最佳实践：</strong></p>
+<ol>
+<li>使用后及时调用remove()</li>
+<li>在finally块中清理</li>
+<li>使用try-with-resources模式</li>
+</ol>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>弱引用只是减少了ThreadLocal对象的泄漏</li>
+<li>value仍可能泄漏，需要手动清理</li>
+<li>线程池环境下尤其要注意清理</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="119-编译执行与解释执行的区别是什么jvm-使用哪种方式">119. 编译执行与解释执行的区别是什么？JVM 使用哪种方式？<a href="#119-编译执行与解释执行的区别是什么jvm-使用哪种方式" class="hash-link" aria-label="Direct link to 119. 编译执行与解释执行的区别是什么？JVM 使用哪种方式？" title="Direct link to 119. 编译执行与解释执行的区别是什么？JVM 使用哪种方式？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">JVM</span> <span class="badge badge--secondary">Java</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>执行方式对比：</strong></p>
+<p><strong>编译执行：</strong></p>
+<ul>
+<li>源代码一次性翻译成机器码</li>
+<li>执行前需要完整编译</li>
+<li>执行速度快，但启动慢</li>
+<li>代表：C、C++、Go</li>
+</ul>
+<p><strong>解释执行：</strong></p>
+<ul>
+<li>逐行翻译并执行源代码</li>
+<li>不需要预编译</li>
+<li>启动快，但执行速度慢</li>
+<li>代表：Python、JavaScript（V8前）</li>
+</ul>
+<p><strong>JVM的执行方式：</strong></p>
+<p><strong>混合模式（HotSpot JVM）：</strong></p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">Java源码 → 字节码（javac编译）</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">           ↓</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      解释执行（解释器）</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">           ↓</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      热点检测（Profiler）</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">           ↓</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      编译执行（JIT编译器）</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>执行流程：</strong></p>
+<ol>
+<li><strong>字节码解释</strong>：初始通过解释器执行</li>
+<li><strong>热点检测</strong>：识别频繁执行的代码</li>
+<li><strong>JIT编译</strong>：热点代码编译为本地机器码</li>
+<li><strong>优化执行</strong>：直接执行机器码</li>
+</ol>
+<p><strong>JIT编译器类型：</strong></p>
+<ul>
+<li><strong>C1（Client编译器）</strong>：快速编译，优化较少</li>
+<li><strong>C2（Server编译器）</strong>：深度优化，编译时间长</li>
+<li><strong>分层编译</strong>：结合C1和C2的优势</li>
+</ul>
+<p><strong>优势：</strong></p>
+<ul>
+<li>启动快：解释执行提供快速启动</li>
+<li>运行快：JIT编译提供高性能</li>
+<li>跨平台：字节码平台无关</li>
+</ul>
+</div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="120-redis-支持事务吗如何实现">120. Redis 支持事务吗？如何实现？<a href="#120-redis-支持事务吗如何实现" class="hash-link" aria-label="Direct link to 120. Redis 支持事务吗？如何实现？" title="Direct link to 120. Redis 支持事务吗？如何实现？">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>展开 <span class="badge badge--info">中等</span> <span class="badge badge--primary">VIP</span> <span class="badge badge--secondary">后端</span> <span class="badge badge--secondary">Redis</span></summary><div><div class="collapsibleContent_i85q">
+<!-- -->
+<p><strong>Redis事务特点：</strong>
+Redis支持简单的事务，但与传统数据库事务有所不同。</p>
+<p><strong>事务命令：</strong></p>
+<div class="language-redis codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-redis codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">MULTI      # 开始事务</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">EXEC       # 执行事务</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">DISCARD    # 取消事务</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">WATCH      # 监控键值</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">UNWATCH    # 取消监控</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>使用示例：</strong></p>
+<div class="language-redis codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-redis codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">MULTI</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">SET key1 &quot;value1&quot;</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">SET key2 &quot;value2&quot;</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">INCR counter</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">EXEC</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>事务特性：</strong></p>
+<p><strong>1. 原子性</strong></p>
+<ul>
+<li>事务中的命令要么全部执行，要么全部不执行</li>
+<li>但不支持回滚，错误命令会被跳过</li>
+</ul>
+<p><strong>2. 隔离性</strong></p>
+<ul>
+<li>事务执行期间不会被其他客户端命令打断</li>
+<li>但不保证一致性读</li>
+</ul>
+<p><strong>3. 一致性</strong></p>
+<ul>
+<li>事务执行前后，数据保持一致状态</li>
+</ul>
+<p><strong>4. 持久性</strong></p>
+<ul>
+<li>取决于Redis的持久化配置</li>
+</ul>
+<p><strong>乐观锁实现：</strong></p>
+<div class="language-redis codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-redis codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">WATCH key1</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">val = GET key1</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">MULTI</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">SET key1 newval</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">EXEC  # 如果key1被修改，事务失败</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><strong>限制：</strong></p>
+<ul>
+<li>不支持嵌套事务</li>
+<li>不支持回滚操作</li>
+<li>语法错误会导致整个事务失败</li>
+<li>运行时错误不会中断事务</li>
+</ul>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>批量操作</li>
+<li>原子性更新多个键</li>
+<li>配合WATCH实现乐观锁</li>
+</ul>
+</div></div></details></div></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/kibou/docs/prepareExam/面试/八股文/综合1-20"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">综合1-20</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/kibou/docs/prepareExam/面试/八股文/综合121-140"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">综合121-140</div></a></nav><div style="margin-top:50px"></div></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#101-什么是分库分表分库分表有哪些类型或策略" class="table-of-contents__link toc-highlight">101. 什么是分库分表？分库分表有哪些类型（或策略）？</a></li><li><a href="#102-mybatis-中--和--的区别是什么" class="table-of-contents__link toc-highlight">102. MyBatis 中 #{} 和 ${} 的区别是什么？</a></li><li><a href="#103-java-中的-final-关键字是否能保证变量的可见性" class="table-of-contents__link toc-highlight">103. Java 中的 final  关键字是否能保证变量的可见性？</a></li><li><a href="#104-redis-的-hash-是什么" class="table-of-contents__link toc-highlight">104. Redis 的 hash 是什么？</a></li><li><a href="#105-从网络角度来看用户从输入网址到网页显示期间发生了什么" class="table-of-contents__link toc-highlight">105. 从网络角度来看，用户从输入网址到网页显示，期间发生了什么？</a></li><li><a href="#106-dubbo-和-spring-cloud-gateway-有什么区别" class="table-of-contents__link toc-highlight">106. Dubbo 和 Spring Cloud Gateway 有什么区别？</a></li><li><a href="#107-什么是-java-中的原子性可见性和有序性" class="table-of-contents__link toc-highlight">107. 什么是 Java 中的原子性、可见性和有序性？</a></li><li><a href="#108-线程和进程有什么区别" class="table-of-contents__link toc-highlight">108. 线程和进程有什么区别？</a></li><li><a href="#109-说说你知道的几种-io-模型" class="table-of-contents__link toc-highlight">109. 说说你知道的几种 I/O 模型</a></li><li><a href="#110-mybatis-与-hibernate-有哪些不同" class="table-of-contents__link toc-highlight">110. MyBatis 与 Hibernate 有哪些不同？</a></li><li><a href="#111-什么是-java-内存模型jmm" class="table-of-contents__link toc-highlight">111. 什么是 Java 内存模型（JMM）？</a></li><li><a href="#112-redis-和-memcached-有哪些区别" class="table-of-contents__link toc-highlight">112. Redis 和 Memcached 有哪些区别？</a></li><li><a href="#113-什么是物理地址什么是逻辑地址" class="table-of-contents__link toc-highlight">113. 什么是物理地址，什么是逻辑地址？</a></li><li><a href="#114-说说什么是-api-网关它有什么作用" class="table-of-contents__link toc-highlight">114. 说说什么是 API 网关？它有什么作用？</a></li><li><a href="#115-什么是-java-的-cascompare-and-swap操作" class="table-of-contents__link toc-highlight">115. 什么是 Java 的 CAS（Compare-And-Swap） 操作？</a></li><li><a href="#116-selectpollepoll-之间有什么区别" class="table-of-contents__link toc-highlight">116. Select、Poll、Epoll 之间有什么区别？</a></li><li><a href="#117-什么是-mybatis-plus它有什么作用它和-mybatis-有哪些区别" class="table-of-contents__link toc-highlight">117. 什么是 MyBatis-Plus？它有什么作用？它和 MyBatis 有哪些区别？</a></li><li><a href="#118-为什么-java-中的-threadlocal-对-key-的引用为弱引用" class="table-of-contents__link toc-highlight">118. 为什么 Java 中的 ThreadLocal 对 key 的引用为弱引用？</a></li><li><a href="#119-编译执行与解释执行的区别是什么jvm-使用哪种方式" class="table-of-contents__link toc-highlight">119. 编译执行与解释执行的区别是什么？JVM 使用哪种方式？</a></li><li><a href="#120-redis-支持事务吗如何实现" class="table-of-contents__link toc-highlight">120. Redis 支持事务吗？如何实现？</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Yuikij's blog, Inc. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
