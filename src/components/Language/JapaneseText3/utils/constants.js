@@ -48,8 +48,7 @@ export const DEFAULT_PREFERENCES = {
     showFurigana: true,
     showTranslation: true,
     showNotes: true,
-    showLineNumbers: false,
-    compactMode: false
+    showLineNumbers: false
   },
   typography: {
     fontSize: FONT_SIZES.MEDIUM,

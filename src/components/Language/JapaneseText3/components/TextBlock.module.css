@@ -12,9 +12,8 @@
     0 4px 12px rgba(0, 0, 0, 0.04),
     0 0 0 1px rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(226, 232, 240, 0.3);
-  transition: none; /* 移除过渡效果 */
+  transition: none;
   position: relative;
-  /* 移除 overflow: hidden 以允许内联笔记面板显示在外部 */
 }
 
 .textBlock::before {
@@ -31,14 +30,7 @@
   transition: none; /* 移除过渡效果 */
 }
 
-/* 移除悬停效果 */
-.textBlockHovered {
-  /* 保持原始样式，不添加额外效果 */
-}
-
-.textBlockHovered::before {
-  /* 保持原始样式，不添加额外效果 */
-}
+/* 移除悬停突起效果 - 保持类名但无特殊样式 */
 
 .compactMode {
   padding: 1rem 1.5rem;
@@ -95,10 +87,7 @@
   transition: none; /* 移除过渡效果 */
 }
 
-/* 移除翻译文本悬停效果 */
-.translationText:hover {
-  /* 保持原始样式 */
-}
+/* 保持翻译文本原始样式，无悬停效果 */
 
 .metadata {
   position: absolute;
@@ -170,19 +159,7 @@
     rgba(139, 92, 246, 0.15) 100%);
 }
 
-[data-theme='dark'] .textBlockHovered {
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.25),
-    0 8px 32px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(51, 65, 85, 0.6);
-}
-
-[data-theme='dark'] .textBlockHovered::before {
-  background: linear-gradient(90deg, 
-    rgba(139, 92, 246, 0.4) 0%, 
-    rgba(99, 102, 241, 0.4) 50%, 
-    rgba(139, 92, 246, 0.4) 100%);
-}
+/* 移除暗色主题悬停突起效果 */
 
 [data-theme='dark'] .japaneseSection {
   border-bottom-color: rgba(51, 65, 85, 0.3);
@@ -194,10 +171,7 @@
   border-left-color: rgba(139, 92, 246, 0.3);
 }
 
-[data-theme='dark'] .translationText:hover {
-  border-left-color: rgba(139, 92, 246, 0.5);
-  background: rgba(15, 23, 42, 0.6);
-}
+/* 移除暗色主题翻译文本悬停效果 */
 
 [data-theme='dark'] .metadataIcon {
   background: rgba(139, 92, 246, 0.2);
@@ -264,9 +238,7 @@
     transition: none;
   }
   
-  .textBlockHovered {
-    transform: none;
-  }
+  /* 移除文本块悬停动画效果 */
 }
 
 /* Print styles */

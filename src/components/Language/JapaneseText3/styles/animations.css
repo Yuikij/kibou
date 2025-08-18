@@ -272,29 +272,29 @@
   transition: box-shadow var(--jt2-duration-200) var(--jt2-ease-in-out);
 }
 
-/* Hover effects */
+/* 移除悬停效果类 */
 .jt2-hover-lift {
-  transition: transform var(--jt2-duration-200) var(--jt2-ease-out);
+  /* 移除悬停抬升效果 */
 }
 
 .jt2-hover-lift:hover {
-  transform: translateY(-2px);
+  /* 无悬停抬升效果 */
 }
 
 .jt2-hover-scale {
-  transition: transform var(--jt2-duration-200) var(--jt2-ease-out);
+  /* 移除悬停缩放效果 */
 }
 
 .jt2-hover-scale:hover {
-  transform: scale(1.05);
+  /* 无悬停缩放效果 */
 }
 
 .jt2-hover-glow {
-  transition: box-shadow var(--jt2-duration-200) var(--jt2-ease-out);
+  /* 移除悬停发光效果 */
 }
 
 .jt2-hover-glow:hover {
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  /* 无悬停发光效果 */
 }
 
 /* Focus effects */
@@ -368,8 +368,7 @@
 }
 
 .jt2-furigana-highlight:hover {
-  color: var(--jt2-primary-500);
-  transform: scale(1.1);
+  /* 移除注音悬停缩放效果 */
 }
 
 /* Note highlight animations */
@@ -392,7 +391,8 @@
 }
 
 .jt2-note-highlight:hover::before {
-  opacity: 0.1;
+  /* 移除笔记悬停高亮效果 */
+  opacity: 0;
 }
 
 /* Toggle animations */
@@ -457,7 +457,7 @@
     transition: none !important;
   }
   
-  /* Keep essential transforms but remove animations */
+  /* 移除所有悬停效果 */
   .jt2-hover-lift:hover {
     transform: none;
   }

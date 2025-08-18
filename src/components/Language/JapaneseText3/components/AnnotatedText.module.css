@@ -29,10 +29,6 @@
 }
 
 /* 移除注音悬停效果 */
-.annotatedWord:hover,
-.annotatedWord.active {
-  /* 保持原始样式 */
-}
 
 .annotatedWord:focus {
   outline: 2px solid #6366f1;
@@ -84,10 +80,7 @@
   z-index: 1;
 }
 
-/* 移除悬停效果 */
-.noteHighlight:hover {
-  /* 保持原始样式，不添加额外效果 */
-}
+/* 移除笔记悬停效果 */
 
 .noteHighlight:focus {
   outline: 2px solid #fbbf24;
@@ -117,18 +110,14 @@
   border-bottom-color: rgba(59, 130, 246, 0.6);
 }
 
-.noteType-vocabulary:hover {
-  /* 保持原始样式 */
-}
+/* 移除词汇类型悬停效果 */
 
 .noteType-grammar {
   background: linear-gradient(120deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
   border-bottom-color: rgba(16, 185, 129, 0.6);
 }
 
-.noteType-grammar:hover {
-  /* 保持原始样式 */
-}
+/* 移除语法类型悬停效果 */
 
 .noteType-cultural {
   background: linear-gradient(120deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.1) 100%);
@@ -315,6 +304,8 @@
   max-height: 80vh;
   overflow-y: auto;
   transition: none; /* 移除过渡效果 */
+  /* 确保笔记面板可以接收点击事件 */
+  pointer-events: auto;
 }
 
 /* 移除悬停效果 */
@@ -542,6 +533,8 @@
     z-index: -1;
     transform: translate(50%, 50%);
     transition: none; /* 移除过渡效果 */
+    /* 遮罩层可以接收点击事件来关闭笔记 */
+    pointer-events: auto;
   }
   
   /* 移动端暗色主题遮罩 */

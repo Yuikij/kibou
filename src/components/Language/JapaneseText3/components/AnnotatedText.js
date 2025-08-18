@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback } from 'react';
+import React, { memo, useState, useCallback, useEffect, useRef } from 'react';
 import { generateAriaLabels } from '../utils/accessibility';
 import styles from './AnnotatedText.module.css';
 
@@ -15,7 +15,9 @@ const AnnotatedText = memo(({
   registerNoteRef,
   className = ''
 }) => {
-  const [activeWordIndex, setActiveWordIndex] = useState(null);
+  const [activeWordIndex, setActiveWordIndex] = useState(null); // 用于注音悬停高亮
+  const [activeNoteIndex, setActiveNoteIndex] = useState(null); // 用于笔记面板显示
+  const containerRef = useRef(null);
   
   const showFurigana = preferences.display?.showFurigana ?? true;
   const showNotes = preferences.display?.showNotes ?? true;
@@ -30,7 +32,45 @@ const AnnotatedText = memo(({
     setActiveWordIndex(null);
   }, []);
 
+  // 点击空白处关闭笔记 + ESC键关闭笔记
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // 如果没有活动的笔记，无需处理
+      if (!activeNoteIndex) return;
+      
+      // 如果点击的是笔记面板内部，不关闭
+      if (event.target.closest(`.${styles.inlineNotePanel}`)) {
+        return;
+      }
+      
+      // 如果点击的是笔记高亮文本本身，不关闭
+      if (event.target.closest(`.${styles.noteHighlight}`)) {
+        return;
+      }
+      
+      // 其他情况都关闭笔记
+      setActiveNoteIndex(null);
+    };
 
+    const handleKeyDown = (event) => {
+      // ESC键关闭笔记
+      if (event.key === 'Escape' && activeNoteIndex) {
+        setActiveNoteIndex(null);
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+
+    // 添加全局监听器
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // 清理函数
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeNoteIndex]);
 
   const renderSegment = (segment, segmentIndex) => {
     const { text: segmentText, type, data, position } = segment;
@@ -80,7 +120,7 @@ const AnnotatedText = memo(({
     const ariaLabel = generateAriaLabels.noteHighlight(noteText, noteContent);
     
     // Check if this note is currently active
-    const isActive = activeWordIndex === `note-${sentenceIndex}-${noteIndex}`;
+    const isActive = activeNoteIndex === `note-${sentenceIndex}-${noteIndex}`;
 
     // Dynamic position adjustment for panel
     const getPanelStyle = () => {
@@ -113,9 +153,9 @@ const AnnotatedText = memo(({
           e.stopPropagation();
           // Toggle note visibility
           if (isActive) {
-            setActiveWordIndex(null);
+            setActiveNoteIndex(null);
           } else {
-            setActiveWordIndex(`note-${sentenceIndex}-${noteIndex}`);
+            setActiveNoteIndex(`note-${sentenceIndex}-${noteIndex}`);
           }
         }}
         onKeyDown={(e) => {
@@ -123,9 +163,9 @@ const AnnotatedText = memo(({
             e.preventDefault();
             // Toggle note visibility
             if (isActive) {
-              setActiveWordIndex(null);
+              setActiveNoteIndex(null);
             } else {
-              setActiveWordIndex(`note-${sentenceIndex}-${noteIndex}`);
+              setActiveNoteIndex(`note-${sentenceIndex}-${noteIndex}`);
             }
           }
         }}
@@ -157,7 +197,7 @@ const AnnotatedText = memo(({
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setActiveWordIndex(null);
+                    setActiveNoteIndex(null);
                   }}
                   aria-label="关闭笔记"
                 >
@@ -266,6 +306,7 @@ const AnnotatedText = memo(({
 
   return (
     <div 
+      ref={containerRef}
       className={`
         ${styles.textContent} 
         ${styles[`fontSize-${fontSize}`] || ''} 

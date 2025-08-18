@@ -15,9 +15,7 @@ const ControlPanel = memo(({
     onPreferenceChange(section, field, event.target.checked);
   };
 
-  const handleSelectChange = (section, field) => (event) => {
-    onPreferenceChange(section, field, event.target.value);
-  };
+
 
   const renderToggle = (section, field, label, shortcut = null) => {
     const isChecked = preferences[section]?.[field] ?? false;
@@ -47,47 +45,16 @@ const ControlPanel = memo(({
     );
   };
 
-  const renderSelect = (section, field, label, options) => {
-    const currentValue = preferences[section]?.[field] ?? options[0].value;
-    
-    return (
-      <div className={styles.selectContainer} key={`${section}-${field}`}>
-        <label className={styles.selectLabel}>
-          <span className={styles.selectText}>{label}</span>
-          <select
-            value={currentValue}
-            onChange={handleSelectChange(section, field)}
-            className={styles.select}
-            aria-label={`选择${label}`}
-          >
-            {options.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-    );
-  };
+
 
   return (
     <div className={`${styles.controlPanel} ${className}`} role="toolbar" aria-label="显示控制面板">
-      {/* 主要控制选项 - 紧凑单行显示 */}
+      {/* 简化控制面板 - 只保留4个基本功能 */}
       <div className={styles.mainControls}>
         {renderToggle('display', 'showFurigana', '注音', 'F')}
         {renderToggle('display', 'showTranslation', '翻译', 'T')}
         {renderToggle('display', 'showNotes', '笔记', 'N')}
-        
-        {/* 字体大小快速调节 */}
-        <div className={styles.fontSizeControls}>
-          <span className={styles.controlLabel}>字体</span>
-          {renderSelect('typography', 'fontSize', '', [
-            { value: 'small', label: '小' },
-            { value: 'medium', label: '中' },
-            { value: 'large', label: '大' }
-          ])}
-        </div>
+        {renderToggle('display', 'showLineNumbers', '行号', 'L')}
       </div>
     </div>
   );
