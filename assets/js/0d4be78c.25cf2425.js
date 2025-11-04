@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkmy_website=globalThis.webpackChunkmy_website||[]).push([[5538],{74338:i=>{i.exports=JSON.parse('{"authors":[{"name":"Yuikji","url":"https://github.com/Yuikij","imageURL":"https://github.com/Yuikij.png","key":"yuikji","page":null,"count":3}]}')}}]);
