@@ -9,6 +9,11 @@ import { DEFAULT_PREFERENCES } from '../utils/constants';
  */
 export const useLocalStorage = (key = 'japaneseText2Preferences', initialValue = DEFAULT_PREFERENCES) => {
   const [storedValue, setStoredValue] = useState(() => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return initialValue;
+    }
+    
     try {
       const item = window.localStorage.getItem(key);
       if (item) {
@@ -90,12 +95,16 @@ export const useLocalStorage = (key = 'japaneseText2Preferences', initialValue =
       }
       
       setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
       
-      // Dispatch custom event for cross-tab synchronization
-      window.dispatchEvent(new CustomEvent('japaneseText2PreferencesChanged', {
-        detail: { key, value }
-      }));
+      // Only access localStorage in browser environment
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(value));
+        
+        // Dispatch custom event for cross-tab synchronization
+        window.dispatchEvent(new CustomEvent('japaneseText2PreferencesChanged', {
+          detail: { key, value }
+        }));
+      }
       
       return true;
     } catch (error) {
@@ -115,16 +124,18 @@ export const useLocalStorage = (key = 'japaneseText2Preferences', initialValue =
         }
       };
       
-      // Save to localStorage
-      try {
-        window.localStorage.setItem(key, JSON.stringify(newPrefs));
-        
-        // Dispatch custom event
-        window.dispatchEvent(new CustomEvent('japaneseText2PreferencesChanged', {
-          detail: { key, value: newPrefs }
-        }));
-      } catch (error) {
-        console.error(`Error updating localStorage key "${key}":`, error);
+      // Save to localStorage only in browser environment
+      if (typeof window !== 'undefined') {
+        try {
+          window.localStorage.setItem(key, JSON.stringify(newPrefs));
+          
+          // Dispatch custom event
+          window.dispatchEvent(new CustomEvent('japaneseText2PreferencesChanged', {
+            detail: { key, value: newPrefs }
+          }));
+        } catch (error) {
+          console.error(`Error updating localStorage key "${key}":`, error);
+        }
       }
       
       return newPrefs;
@@ -134,13 +145,17 @@ export const useLocalStorage = (key = 'japaneseText2Preferences', initialValue =
   // Clear preferences
   const clearPreferences = useCallback(() => {
     try {
-      window.localStorage.removeItem(key);
       setStoredValue(initialValue);
       
-      // Dispatch custom event
-      window.dispatchEvent(new CustomEvent('japaneseText2PreferencesCleared', {
-        detail: { key }
-      }));
+      // Only access localStorage in browser environment
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(key);
+        
+        // Dispatch custom event
+        window.dispatchEvent(new CustomEvent('japaneseText2PreferencesCleared', {
+          detail: { key }
+        }));
+      }
       
       return true;
     } catch (error) {
@@ -180,6 +195,11 @@ export const useLocalStorage = (key = 'japaneseText2Preferences', initialValue =
 
   // Listen for storage changes (cross-tab synchronization)
   useEffect(() => {
+    // Only add event listeners in browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
     const handleStorageChange = (e) => {
       if (e.key === key && e.newValue) {
         try {
@@ -209,6 +229,15 @@ export const useLocalStorage = (key = 'japaneseText2Preferences', initialValue =
 
   // Get storage info
   const getStorageInfo = useCallback(() => {
+    // Return default info in non-browser environment
+    if (typeof window === 'undefined') {
+      return {
+        exists: false,
+        size: 0,
+        lastModified: null
+      };
+    }
+    
     try {
       const item = window.localStorage.getItem(key);
       return {
