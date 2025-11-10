@@ -426,16 +426,6 @@ const InteractiveCodeEditor = ({
           ) : (
             <div className={styles.expressionResult}>
               <div className={styles.emptyOutput}>
-                💡 在下方输入表达式来执行代码
-                <br />
-                <br />
-                例如：
-                <br />
-                • 调用函数查看返回值
-                <br />
-                • 输入变量名查看值
-                <br />
-                • 执行 JavaScript 表达式
               </div>
             </div>
           )}
