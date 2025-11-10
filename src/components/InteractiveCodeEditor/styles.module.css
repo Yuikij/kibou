@@ -1,0 +1,261 @@
+.container {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem 0;
+  background: var(--ifm-background-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container[data-theme="dark"] {
+  border-color: var(--ifm-color-emphasis-300);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.editorWrapper {
+  position: relative;
+  overflow: auto;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.editor {
+  height: 100%;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+}
+
+.editor :global(.cm-editor) {
+  height: 100%;
+  outline: none;
+}
+
+.editor :global(.cm-scroller) {
+  overflow: auto;
+}
+
+.editor :global(.cm-content) {
+  padding: 10px 0;
+}
+
+.editor :global(.cm-line) {
+  padding: 0 10px;
+}
+
+.controls {
+  padding: 0.75rem 1rem;
+  background: var(--ifm-background-surface-color);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.runButton {
+  background: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.runButton:hover:not(:disabled) {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.runButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.runButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.outputSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+}
+
+@media (min-width: 768px) {
+  .outputSection {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.consoleOutput,
+.expressionEval {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.outputLabel {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 0.25rem;
+}
+
+.outputContent {
+  background: var(--ifm-code-background);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  padding: 0.75rem;
+  min-height: 120px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.emptyOutput {
+  color: var(--ifm-color-emphasis-600);
+  font-style: italic;
+}
+
+.logLine {
+  margin-bottom: 0.5rem;
+  color: var(--ifm-font-color-base);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.logLine:last-child {
+  margin-bottom: 0;
+}
+
+.expressionInputWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.expressionInput {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.expressionInput:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--ifm-color-primary-rgb), 0.1);
+}
+
+.expressionInput::placeholder {
+  color: var(--ifm-color-emphasis-500);
+}
+
+.evalButton {
+  background: var(--ifm-color-secondary);
+  color: var(--ifm-font-color-base-inverse);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.evalButton:hover:not(:disabled) {
+  background: var(--ifm-color-secondary-dark);
+  transform: translateY(-1px);
+}
+
+.evalButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.evalButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.expressionResult {
+  background: var(--ifm-code-background);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  padding: 0.75rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.expressionResult pre {
+  margin: 0;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ifm-font-color-base);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Scrollbar styling */
+.outputContent::-webkit-scrollbar,
+.expressionResult::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.outputContent::-webkit-scrollbar-track,
+.expressionResult::-webkit-scrollbar-track {
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 4px;
+}
+
+.outputContent::-webkit-scrollbar-thumb,
+.expressionResult::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-emphasis-400);
+  border-radius: 4px;
+}
+
+.outputContent::-webkit-scrollbar-thumb:hover,
+.expressionResult::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-emphasis-500);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .controls {
+    padding: 0.5rem;
+  }
+  
+  .runButton {
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+  }
+  
+  .outputSection {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+  
+  .expressionInputWrapper {
+    flex-direction: column;
+  }
+  
+  .evalButton {
+    width: 100%;
+  }
+}
+

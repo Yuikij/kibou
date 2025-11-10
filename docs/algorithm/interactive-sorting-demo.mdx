@@ -1,0 +1,227 @@
+---
+sidebar_position: 2
+title: 交互式排序算法演示
+description: 在浏览器中直接运行和测试排序算法
+---
+
+import InteractiveCodeEditor from '@site/src/components/InteractiveCodeEditor';
+
+# 交互式排序算法演示
+
+这个页面展示了如何使用交互式代码编辑器来学习和测试各种排序算法。你可以直接在浏览器中编辑代码、运行并查看结果。
+
+## 冒泡排序 (Bubble Sort)
+
+冒泡排序是一种简单的排序算法。它重复地遍历要排序的数列，一次比较两个元素，如果顺序错误就交换。
+
+**时间复杂度**: O(n²)  
+**空间复杂度**: O(1)  
+**稳定性**: 稳定
+
+export const bubbleSortCode = `function bubbleSort(arr) {
+  const a = arr.slice();
+  const n = a.length;
+  let swapped;
+  
+  for (let i = 0; i < n - 1; i++) {
+    swapped = false;
+    for (let j = 0; j < n - 1 - i; j++) {
+      if (a[j] > a[j + 1]) {
+        [a[j], a[j + 1]] = [a[j + 1], a[j]];
+        swapped = true;
+      }
+    }
+    if (!swapped) break; // 已有序提早结束
+  }
+  return a;
+}
+
+console.log(bubbleSort([5, 2, 8, 1, 9, 3]));`;
+
+<InteractiveCodeEditor 
+  defaultCode={bubbleSortCode}
+  height="380px"
+/>
+
+:::tip 试试看
+在"输出"框中输入 `bubbleSort([3, 1, 2])` 然后点击"执行"按钮！
+:::
+
+---
+
+## 快速排序 (Quick Sort)
+
+快速排序使用分治法策略，选择一个基准元素，将数组分为小于和大于基准的两部分，然后递归排序。
+
+**时间复杂度**: 平均 O(n log n)，最坏 O(n²)  
+**空间复杂度**: O(log n)  
+**稳定性**: 不稳定
+
+export const quickSortCode = `function quickSort(arr) {
+  if (arr.length <= 1) return arr;
+  
+  const pivot = arr[arr.length - 1];
+  const left = [];
+  const right = [];
+  
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+  
+  console.log(\`pivot: \${pivot}, left: [\${left}], right: [\${right}]\`);
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+
+console.log('最终结果:', quickSort([5, 2, 8, 1, 9, 3]));`;
+
+<InteractiveCodeEditor 
+  defaultCode={quickSortCode}
+  height="400px"
+/>
+
+---
+
+## 归并排序 (Merge Sort)
+
+归并排序也是分治法的应用，将数组分成两半，递归排序后再合并。
+
+**时间复杂度**: O(n log n)  
+**空间复杂度**: O(n)  
+**稳定性**: 稳定
+
+export const mergeSortCode = `function mergeSort(arr) {
+  if (arr.length <= 1) return arr;
+  
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));
+  const right = mergeSort(arr.slice(mid));
+  
+  return merge(left, right);
+}
+
+function merge(left, right) {
+  const result = [];
+  let i = 0, j = 0;
+  
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) {
+      result.push(left[i]);
+      i++;
+    } else {
+      result.push(right[j]);
+      j++;
+    }
+  }
+  
+  return result.concat(left.slice(i)).concat(right.slice(j));
+}
+
+console.log('排序结果:', mergeSort([64, 34, 25, 12, 22, 11, 90]));`;
+
+<InteractiveCodeEditor 
+  defaultCode={mergeSortCode}
+  height="420px"
+/>
+
+---
+
+## 堆排序 (Heap Sort)
+
+堆排序利用堆这种数据结构来进行排序，首先建立大顶堆，然后依次取出堆顶元素。
+
+**时间复杂度**: O(n log n)  
+**空间复杂度**: O(1)  
+**稳定性**: 不稳定
+
+export const heapSortCode = `function heapSort(arr) {
+  const n = arr.length;
+  
+  // 建堆
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    heapify(arr, n, i);
+  }
+  
+  console.log('建堆后:', [...arr]);
+  
+  // 排序
+  for (let i = n - 1; i > 0; i--) {
+    [arr[0], arr[i]] = [arr[i], arr[0]];
+    heapify(arr, i, 0);
+  }
+  
+  return arr;
+}
+
+function heapify(arr, n, i) {
+  let largest = i;
+  const left = 2 * i + 1;
+  const right = 2 * i + 2;
+  
+  if (left < n && arr[left] > arr[largest]) {
+    largest = left;
+  }
+  
+  if (right < n && arr[right] > arr[largest]) {
+    largest = right;
+  }
+  
+  if (largest !== i) {
+    [arr[i], arr[largest]] = [arr[largest], arr[i]];
+    heapify(arr, n, largest);
+  }
+}
+
+const testArr = [12, 11, 13, 5, 6, 7];
+console.log('原数组:', [...testArr]);
+console.log('排序结果:', heapSort(testArr));`;
+
+<InteractiveCodeEditor 
+  defaultCode={heapSortCode}
+  height="480px"
+/>
+
+---
+
+## 使用说明
+
+### 运行代码
+1. 点击 **"运行代码"** 按钮执行代码
+2. 查看 **"控制台输出"** 区域的 `console.log` 输出
+
+### 表达式求值
+1. 在 **"输出"** 输入框中输入表达式
+2. 例如: `bubbleSort([9, 7, 5, 3, 1])`
+3. 点击 **"执行"** 按钮或按 **回车键**
+4. 结果会显示在下方
+
+### 编辑代码
+- 直接在编辑器中修改代码
+- 支持语法高亮和行号显示
+- 可以添加更多的 `console.log` 来调试
+
+:::info 更多算法示例
+访问 [算法演练场](/algorithm-playground) 查看更多算法示例，包括最短路径算法等。
+:::
+
+## 性能对比
+
+不同排序算法的性能对比：
+
+| 算法 | 最好 | 平均 | 最坏 | 空间 | 稳定性 |
+|------|------|------|------|------|--------|
+| 冒泡排序 | O(n) | O(n²) | O(n²) | O(1) | ✅ |
+| 快速排序 | O(n log n) | O(n log n) | O(n²) | O(log n) | ❌ |
+| 归并排序 | O(n log n) | O(n log n) | O(n log n) | O(n) | ✅ |
+| 堆排序 | O(n log n) | O(n log n) | O(n log n) | O(1) | ❌ |
+
+:::warning 注意
+在浏览器中运行代码时，避免：
+- 死循环代码（会导致浏览器卡死）
+- 过大的数组（可能导致性能问题）
+- 恶意代码
+:::
+

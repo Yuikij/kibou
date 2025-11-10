@@ -1,0 +1,82 @@
+# 堆(Heap)
+堆是一种基于数组实现的特殊树形数据结构，它满足父节点的键值总是大于（或小于）它的子节点的键值，被称为大根堆（或小根堆）。堆经常用来实现优先队列和堆排序等算法。
+
+## 特性
+* 很容易找到父节点索引：`parentIndex = (index - 1) / 2;`
+
+## ADT(MinHeap)
+```java
+public void add(Item x);
+public Item getSmallest();
+public Item removeSmallest();
+public int size();
+```
+
+## 堆排序实现
+
+import InteractiveCodeEditor from '@site/src/components/InteractiveCodeEditor';
+
+export const heapSortCode = `function heapSort(arr) {
+  const n = arr.length;
+  
+  // 建堆 - 从最后一个非叶子节点开始
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    heapify(arr, n, i);
+  }
+  
+  console.log('建堆后:', [...arr]);
+  
+  // 排序 - 依次取出最大元素放到末尾
+  for (let i = n - 1; i > 0; i--) {
+    // 将堆顶元素与末尾元素交换
+    [arr[0], arr[i]] = [arr[i], arr[0]];
+    console.log(\`交换后: [\${arr}], 待排序长度: \${i}\`);
+    
+    // 重新调整堆
+    heapify(arr, i, 0);
+  }
+  
+  return arr;
+}
+
+function heapify(arr, n, i) {
+  let largest = i;      // 初始化最大值为根节点
+  const left = 2 * i + 1;   // 左子节点
+  const right = 2 * i + 2;  // 右子节点
+  
+  // 如果左子节点大于根节点
+  if (left < n && arr[left] > arr[largest]) {
+    largest = left;
+  }
+  
+  // 如果右子节点大于当前最大值
+  if (right < n && arr[right] > arr[largest]) {
+    largest = right;
+  }
+  
+  // 如果最大值不是根节点，交换并继续heapify
+  if (largest !== i) {
+    [arr[i], arr[largest]] = [arr[largest], arr[i]];
+    heapify(arr, n, largest);
+  }
+}
+
+const testArr = [12, 11, 13, 5, 6, 7];
+console.log('原数组:', [...testArr]);
+console.log('排序结果:', heapSort(testArr));`;
+
+<InteractiveCodeEditor 
+  defaultCode={heapSortCode}
+  height="500px"
+/>
+
+:::tip 试试看
+在"输出"框中输入 `heapSort([64, 34, 25, 12, 22, 11, 90])` 来测试不同的数组！
+:::
+
+**堆排序特点**:
+- 时间复杂度: O(n log n)
+- 空间复杂度: O(1)
+- 不稳定排序
+- 原地排序算法
+
