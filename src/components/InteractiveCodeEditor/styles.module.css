@@ -86,11 +86,13 @@
   gap: 1rem;
   padding: 1rem;
   background: var(--ifm-background-surface-color);
+  align-items: start;
 }
 
 @media (min-width: 768px) {
   .outputSection {
     grid-template-columns: 1fr 1fr;
+    align-items: stretch;
   }
 }
 
@@ -99,13 +101,15 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  height: 100%;
 }
 
 .outputLabel {
   font-weight: 600;
   font-size: 13px;
   color: var(--ifm-color-emphasis-700);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 .outputContent {
@@ -113,17 +117,22 @@
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 6px;
   padding: 0.75rem;
-  min-height: 120px;
-  max-height: 200px;
+  min-height: 150px;
+  flex: 1;
   overflow-y: auto;
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   font-size: 13px;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
 }
 
 .emptyOutput {
   color: var(--ifm-color-emphasis-600);
   font-style: italic;
+  text-align: center;
+  padding: 1rem;
+  line-height: 1.8;
 }
 
 .logLine {
@@ -140,6 +149,8 @@
 .expressionInputWrapper {
   display: flex;
   gap: 0.5rem;
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 .expressionInput {
@@ -153,6 +164,7 @@
   font-size: 13px;
   outline: none;
   transition: border-color 0.2s;
+  height: 38px;
 }
 
 .expressionInput:focus {
@@ -175,6 +187,9 @@
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  height: 38px;
+  display: flex;
+  align-items: center;
 }
 
 .evalButton:hover:not(:disabled) {
@@ -196,8 +211,9 @@
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 6px;
   padding: 0.75rem;
-  max-height: 200px;
+  flex: 1;
   overflow-y: auto;
+  margin-bottom: 0.5rem;
 }
 
 .expressionResult pre {
