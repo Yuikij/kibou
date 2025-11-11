@@ -133,16 +133,23 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
     const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
 
     // 处理 blog 文章
-    // blog/2025-03-17-两个人的话，去1912散步也是可以的.mdx -> /kibou/blog/两个人的话，去1912散步也是可以的
+    // blog/2025-03-17-两个人的话，去1912散步也是可以的.mdx -> /kibou/blog/2025/03/17/两个人的话，去1912散步也是可以的
     if (filePath.startsWith('blog/')) {
       const fileName = filePath.replace('blog/', '').replace(/\.(mdx?|md)$/, '');
-      // 移除日期前缀 (YYYY-MM-DD-)
-      const withoutDate = fileName.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-      return `${normalizedBaseUrl}blog/${withoutDate}`;
+      // 提取日期前缀 (YYYY-MM-DD-) 并转换为 /YYYY/MM/DD/ 格式
+      const dateMatch = fileName.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)$/);
+      if (dateMatch) {
+        const [, year, month, day, title] = dateMatch;
+        return `${normalizedBaseUrl}blog/${year}/${month}/${day}/${title}`;
+      }
+      // 如果没有日期前缀，直接使用文件名
+      return `${normalizedBaseUrl}blog/${fileName}`;
     }
 
-    // 处理 docs 文档
+    // 处理 docs 文档（支持多层嵌套）
     // docs/intro.md -> /kibou/docs/intro
+    // docs/algorithm/index.mdx -> /kibou/docs/algorithm/
+    // docs/basicKnowledge/framework/Mybatis/缓存.md -> /kibou/docs/basicKnowledge/framework/Mybatis/缓存
     if (filePath.startsWith('docs/')) {
       const docPath = filePath.replace('docs/', '').replace(/\.(mdx?|md)$/, '');
       return `${normalizedBaseUrl}docs/${docPath}`;

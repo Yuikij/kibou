@@ -37,6 +37,8 @@
     "markmap-html-parser": "^0.18.9",
     "markmap-lib": "^0.18.9",
     "markmap-view": "^0.18.9",
+    "pixi-live2d-display-lipsyncpatch": "^0.5.0-ls-8",
+    "pixi.js": "^7.4.3",
     "prism-react-renderer": "^2.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
