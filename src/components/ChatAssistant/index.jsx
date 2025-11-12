@@ -238,7 +238,7 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
           {/* 头部 */}
           <div className={styles.chatHeader}>
             <div className={styles.headerLeft}>
-              <h3 className={styles.chatTitle}>AI 助手</h3>
+              <h3 className={styles.chatTitle}>喵帕斯</h3>
               {sessionId && (
                 <span className={styles.sessionIndicator} title={`会话ID: ${sessionId}`}>
                   会话中
