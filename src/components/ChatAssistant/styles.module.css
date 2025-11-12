@@ -1,57 +1,283 @@
-/* 浮动按钮 */
-.floatingButton {
+/* 浮动按钮容器 */
+.floatingButtonContainer {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  color: white;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* 消息气泡 */
+.messageBubble {
+  position: relative;
+  animation: bubbleSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  max-width: 260px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.messageBubble:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes bubbleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.bubbleContent {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  display: flex;
+  align-items: center;
+  animation: bubblePulse 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.bubbleContent::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: bubbleShine 3s ease-in-out infinite;
+}
+
+@keyframes bubbleShine {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-20px, 20px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes bubblePulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+  }
+}
+
+.bubbleText {
+  font-size: 14px;
+  line-height: 1.5;
+  flex: 1;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  animation: textFade 0.5s ease-in-out;
+}
+
+@keyframes textFade {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bubbleArrow {
+  position: absolute;
+  bottom: -6px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #764ba2;
+}
+
+/* 浮动按钮 */
+.floatingButton {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-clip: padding-box;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  overflow: hidden;
+  box-shadow: 
+    0 8px 24px rgba(102, 126, 234, 0.4),
+    0 0 0 0 rgba(102, 126, 234, 0.3);
+  animation: buttonFloat 3s ease-in-out infinite;
+}
+
+@keyframes buttonFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .floatingButton:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 
+    0 12px 32px rgba(102, 126, 234, 0.5),
+    0 0 40px rgba(102, 126, 234, 0.3);
 }
 
 .floatingButton.open {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  box-shadow: 
+    0 8px 24px rgba(245, 87, 108, 0.4),
+    0 0 0 0 rgba(245, 87, 108, 0.3);
+  animation: none;
+}
+
+.floatingButton.open:hover {
+  box-shadow: 
+    0 12px 32px rgba(245, 87, 108, 0.5),
+    0 0 40px rgba(245, 87, 108, 0.3);
+}
+
+/* 头像图片 */
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.floatingButton:hover .avatarImage {
+  transform: scale(1.05);
+}
+
+/* 在线状态指示器 */
+.statusIndicator {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  background: #4ade80;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.9);
+  }
+}
+
+/* 发光效果 */
+.glowEffect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(1);
+  animation: glowPulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* 打开状态时的样式调整 */
+.floatingButton.open .avatarImage {
+  filter: brightness(1.1);
+}
+
+.floatingButton.open .statusIndicator {
+  background: #f5576c;
+  box-shadow: 0 0 10px rgba(245, 87, 108, 0.6);
+}
+
+.floatingButton.open .glowEffect {
+  background: radial-gradient(circle, rgba(245, 87, 108, 0.4) 0%, transparent 70%);
 }
 
 /* 聊天容器 */
 .chatContainer {
   position: fixed;
-  bottom: 100px;
+  bottom: 110px;
   right: 30px;
   width: 420px;
-  height: 600px;
-  background-color: var(--ifm-background-color);
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  height: 620px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(102, 126, 234, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
+  z-index: 999;
   overflow: hidden;
-  animation: slideIn 0.3s ease;
+  animation: chatSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-@keyframes slideIn {
+/* 暗色模式下的聊天容器 */
+[data-theme='dark'] .chatContainer {
+  background: rgba(30, 30, 40, 0.95);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(102, 126, 234, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+@keyframes chatSlideIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px) scale(0.9);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -59,56 +285,128 @@
 
 /* 头部 */
 .chatHeader {
-  padding: 16px 20px;
+  padding: 20px 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 头部背景装饰 */
+.chatHeader::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: headerGlow 4s ease-in-out infinite;
+}
+
+@keyframes headerGlow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(1.2);
+    opacity: 0.8;
+  }
 }
 
 .headerLeft {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  z-index: 1;
 }
 
 .chatTitle {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sessionIndicator {
-  font-size: 12px;
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 2px 8px;
-  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(74, 222, 128, 0.25);
+  color: #4ade80;
+  padding: 4px 10px;
+  border-radius: 12px;
   backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: sessionPulse 2s ease-in-out infinite;
+}
+
+.sessionIndicator::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #4ade80;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+  animation: dotBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes sessionPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0);
+  }
+}
+
+@keyframes dotBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .headerActions {
   display: flex;
   gap: 8px;
+  z-index: 1;
 }
 
 .headerButton {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .headerButton:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.headerButton:active {
+  transform: translateY(0) scale(0.98);
 }
 
 /* 过滤器面板 */
@@ -206,45 +504,69 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  animation: fadeIn 0.3s ease;
+  animation: messageSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-@keyframes fadeIn {
+@keyframes messageSlideIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px) scale(0.9);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .messageContent {
-  padding: 12px 16px;
-  border-radius: 12px;
+  padding: 14px 18px;
+  border-radius: 16px;
   max-width: 85%;
   word-wrap: break-word;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.messageContent:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .message.user .messageContent {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   margin-left: auto;
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 6px;
+  box-shadow: 
+    0 4px 12px rgba(102, 126, 234, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.message.user .messageContent:hover {
+  box-shadow: 
+    0 6px 16px rgba(102, 126, 234, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .message.assistant .messageContent {
-  background-color: var(--ifm-color-emphasis-100);
+  background: linear-gradient(145deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.15);
   color: var(--ifm-font-color-base);
-  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 6px;
+  backdrop-filter: blur(10px);
 }
 
+[data-theme='dark'] .message.assistant .messageContent {
+  background: linear-gradient(145deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.25);
+}
 
 .message.error .messageContent {
-  background-color: #fee;
+  background: linear-gradient(135deg, #fee 0%, #fdd 100%);
   color: #c33;
-  border: 1px solid #fcc;
+  border: 1px solid rgba(204, 51, 51, 0.3);
+  box-shadow: 0 4px 12px rgba(204, 51, 51, 0.2);
 }
 
 
@@ -490,32 +812,52 @@
 
 /* 输入区域 */
 .inputContainer {
-  padding: 16px 20px;
-  background-color: var(--ifm-background-surface-color);
-  border-top: 1px solid var(--ifm-color-emphasis-200);
+  padding: 20px 24px;
+  background: linear-gradient(180deg, transparent 0%, rgba(102, 126, 234, 0.02) 100%);
+  border-top: 1px solid rgba(102, 126, 234, 0.15);
   display: flex;
   gap: 12px;
   align-items: flex-end;
+  position: relative;
 }
 
+[data-theme='dark'] .inputContainer {
+  background: linear-gradient(180deg, transparent 0%, rgba(102, 126, 234, 0.05) 100%);
+  border-top: 1px solid rgba(102, 126, 234, 0.2);
+}
 
 .input {
   flex: 1;
-  padding: 10px 14px;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 10px;
+  padding: 12px 16px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 14px;
   font-size: 14px;
   resize: none;
   max-height: 120px;
   font-family: inherit;
-  background-color: var(--ifm-background-color);
+  background: rgba(255, 255, 255, 0.8);
   color: var(--ifm-font-color-base);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+[data-theme='dark'] .input {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(102, 126, 234, 0.3);
+}
 
 .input:focus {
   outline: none;
   border-color: #667eea;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 4px 16px rgba(102, 126, 234, 0.15),
+    0 0 0 4px rgba(102, 126, 234, 0.08);
+  transform: translateY(-2px);
+}
+
+[data-theme='dark'] .input:focus {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .input:disabled {
@@ -523,10 +865,15 @@
   cursor: not-allowed;
 }
 
+.input::placeholder {
+  color: var(--ifm-color-emphasis-500);
+  opacity: 0.7;
+}
+
 .sendButton {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
   color: white;
@@ -534,32 +881,104 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   flex-shrink: 0;
-}
-
-.sendButton:hover:not(:disabled) {
-  transform: scale(1.05);
+  position: relative;
+  overflow: hidden;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+.sendButton::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.sendButton:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.sendButton:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.sendButton:active:not(:disabled) {
+  transform: translateY(-1px) scale(1);
+}
+
 .sendButton:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  box-shadow: none;
+}
+
+.sendButton svg {
+  position: relative;
+  z-index: 1;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
   .chatContainer {
     width: calc(100vw - 20px);
-    height: calc(100vh - 120px);
+    height: calc(100vh - 140px);
     right: 10px;
-    bottom: 80px;
+    bottom: 90px;
+    border-radius: 20px;
+  }
+
+  .floatingButtonContainer {
+    right: 10px;
+    bottom: 20px;
   }
 
   .floatingButton {
-    right: 20px;
-    bottom: 20px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .messageBubble {
+    max-width: 220px;
+  }
+
+  .bubbleContent {
+    padding: 10px 14px;
+  }
+
+  .bubbleText {
+    font-size: 13px;
+  }
+
+  .chatHeader {
+    padding: 16px 20px;
+  }
+
+  .chatTitle {
+    font-size: 18px;
+  }
+
+  .inputContainer {
+    padding: 16px 20px;
+  }
+
+  .input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .sendButton {
+    width: 40px;
+    height: 40px;
   }
 }
 

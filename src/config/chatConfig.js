@@ -6,7 +6,7 @@
 
 const chatConfig = {
   // API 端点配置
-  apiEndpoint: 'http://127.0.0.1:8080/api/v1/chat',
+  apiEndpoint: 'http://47.114.104.13:18082/api/v1/chat',
   
   // Docusaurus baseUrl（根据 docusaurus.config.js 中的 baseUrl 配置）
   // 如果你的网站部署在根目录，设置为 '/'

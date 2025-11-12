@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import chatConfig from '@site/src/config/chatConfig';
 import styles from './styles.module.css';
+import avatar from '@site/static/img/avatar.jpg';
 
 const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,8 +13,20 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
   const [showFilters, setShowFilters] = useState(false);
   const [filePathFilter, setFilePathFilter] = useState('');
   const [fileExtensionFilter, setFileExtensionFilter] = useState('');
+  const [showNotification, setShowNotification] = useState(true);
+  const [currentBubbleMessage, setCurrentBubbleMessage] = useState(0);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  // 气泡消息列表
+  const bubbleMessages = [
+    "Hi! 有什么可以帮你的吗？",
+    "需要帮助吗？",
+    "有啥想跟我聊聊？",
+    "来聊聊天吧~",
+    "有问题尽管问我！",
+    "我在这里等你哦~",
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -117,7 +130,28 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
+    if (!isOpen) {
+      setShowNotification(false);
+    }
   };
+
+  // 自动切换气泡消息和隐藏通知
+  useEffect(() => {
+    // 每5秒切换一次气泡消息
+    const messageInterval = setInterval(() => {
+      setCurrentBubbleMessage((prev) => (prev + 1) % bubbleMessages.length);
+    }, 5000);
+
+    // 30秒后隐藏气泡通知
+    const hideTimer = setTimeout(() => {
+      setShowNotification(false);
+    }, 30000);
+
+    return () => {
+      clearInterval(messageInterval);
+      clearTimeout(hideTimer);
+    };
+  }, [bubbleMessages.length]);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -166,23 +200,37 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
 
   return (
     <>
-      {/* 浮动按钮 */}
-      <button
-        className={`${styles.floatingButton} ${isOpen ? styles.open : ''}`}
-        onClick={toggleChat}
-        aria-label="打开聊天助手"
-      >
-        {isOpen ? (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        ) : (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
+      {/* 浮动按钮容器 */}
+      <div className={styles.floatingButtonContainer}>
+        {/* 消息气泡提示 */}
+        {!isOpen && showNotification && (
+          <div 
+            className={styles.messageBubble}
+            onClick={() => setShowNotification(false)}
+          >
+            <div className={styles.bubbleContent}>
+              <span className={styles.bubbleText}>{bubbleMessages[currentBubbleMessage]}</span>
+            </div>
+            <div className={styles.bubbleArrow}></div>
+          </div>
         )}
-      </button>
+        
+        {/* 浮动按钮 - 使用头像 */}
+        <button
+          className={`${styles.floatingButton} ${isOpen ? styles.open : ''}`}
+          onClick={toggleChat}
+          aria-label="AI 智能助手"
+        >
+          <img 
+            src={avatar} 
+            alt="AI Assistant" 
+            className={styles.avatarImage}
+          />
+          {/* 在线状态指示器和发光效果 */}
+          <div className={styles.statusIndicator}></div>
+          <div className={styles.glowEffect}></div>
+        </button>
+      </div>
 
       {/* 聊天窗口 */}
       {isOpen && (
