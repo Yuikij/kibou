@@ -1,673 +1,283 @@
-/* AnnotatedText.module.css */
+/* AnnotatedText — furigana, notes, and inline note panel */
 
 .textContent {
-  font-size: 1.125rem;
-  line-height: 1.8;
-  color: #1a202c;
+  font-size: var(--jt-text-lg);
+  line-height: 2;
+  color: var(--jt-text);
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.125rem;
+  gap: 0.0625rem;
   word-break: break-word;
-  overflow-wrap: break-word;
 }
 
 .plainText {
-  color: #2d3748;
-  font-weight: 400;
+  color: var(--jt-text);
   white-space: pre-line;
 }
 
+/* ── Annotated word (with furigana) ── */
 .annotatedWord {
   display: inline-block;
   position: relative;
-  cursor: pointer;
-  transition: none; /* 移除过渡效果 */
-  padding: 0.125rem 0.25rem;
-  border-radius: 4px;
-  margin: 0 0.0625rem;
+  cursor: default;
+  padding: 0.0625rem 0.125rem;
+  border-radius: 3px;
+  margin: 0 0.03125rem;
 }
 
-/* 移除注音悬停效果 */
-
 .annotatedWord:focus {
-  outline: 2px solid #6366f1;
-  outline-offset: 2px;
-  background: rgba(99, 102, 241, 0.1);
+  outline: 2px solid var(--jt-accent);
+  outline-offset: 1px;
 }
 
 .ruby {
-  font-size: 1.125rem;
+  font-size: inherit;
   line-height: 1.2;
   display: inline-block;
-  position: relative;
 }
 
 .kanjiText {
   font-weight: 500;
-  color: #1a202c;
-  position: relative;
-  z-index: 1;
+  color: var(--jt-text);
 }
 
 .rubyText {
-  font-size: 0.75rem;
-  color: #64748b;
+  font-size: var(--jt-ruby-size);
+  color: var(--jt-text-tertiary);
   font-weight: 400;
-  transition: none; /* 移除过渡效果 */
-  opacity: 0.7;
+  opacity: 0.75;
   line-height: 1;
+  transition: opacity var(--jt-duration) var(--jt-ease);
 }
 
-/* 移除注音激活效果 */
 .rubyTextActive {
-  color: #6366f1;
+  color: var(--jt-accent);
   opacity: 1;
   font-weight: 500;
-  /* 移除缩放效果 */
 }
 
-/* Note highlighting styles - 移除悬停效果 */
+/* ── Note highlight ── */
 .noteHighlight {
-  background: linear-gradient(120deg, rgba(255, 233, 43, 0.3) 0%, rgba(255, 233, 43, 0.1) 100%);
-  border-bottom: 2px solid rgba(255, 193, 7, 0.6);
-  padding: 0.125rem 0.25rem;
-  margin: 0 0.0625rem;
-  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 60%,
+    rgba(var(--_note-rgb, 245, 158, 11), 0.18) 60%
+  );
+  border-bottom: 1.5px solid rgba(var(--_note-rgb, 245, 158, 11), 0.5);
+  padding: 0.0625rem 0.125rem;
+  margin: 0 0.03125rem;
+  border-radius: 1px;
   cursor: pointer;
-  transition: none; /* 移除过渡效果 */
   position: relative;
   z-index: 1;
+  transition: background var(--jt-duration) var(--jt-ease),
+              border-color var(--jt-duration) var(--jt-ease);
 }
 
-/* 移除笔记悬停效果 */
+.noteHighlight:hover {
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(var(--_note-rgb, 245, 158, 11), 0.28) 50%
+  );
+  border-bottom-color: rgba(var(--_note-rgb, 245, 158, 11), 0.75);
+}
 
 .noteHighlight:focus {
-  outline: 2px solid #fbbf24;
-  outline-offset: 2px;
-  background: linear-gradient(120deg, rgba(255, 233, 43, 0.6) 0%, rgba(255, 233, 43, 0.3) 100%);
+  outline: 2px solid rgba(var(--_note-rgb, 245, 158, 11), 0.5);
+  outline-offset: 1px;
 }
 
-.noteHighlight::after {
-  content: '📝';
-  position: absolute;
-  right: -0.5rem;
-  top: -0.25rem;
-  font-size: 0.6rem;
-  opacity: 0;
-  transition: none; /* 移除动画 */
-  pointer-events: none;
-}
+/* Note type colors — using CSS variables for DRY */
+.noteType-vocabulary { --_note-rgb: 59, 130, 246; }
+.noteType-grammar { --_note-rgb: 16, 185, 129; }
+.noteType-cultural { --_note-rgb: 139, 92, 246; }
+.noteType-pronunciation { --_note-rgb: 236, 72, 153; }
 
-/* 移除悬停时的图标显示 */
-.noteHighlight:hover::after {
-  opacity: 0; /* 始终隐藏 */
-}
-
-/* Note type variations - 移除悬停效果 */
-.noteType-vocabulary {
-  background: linear-gradient(120deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
-  border-bottom-color: rgba(59, 130, 246, 0.6);
-}
-
-/* 移除词汇类型悬停效果 */
-
-.noteType-grammar {
-  background: linear-gradient(120deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
-  border-bottom-color: rgba(16, 185, 129, 0.6);
-}
-
-/* 移除语法类型悬停效果 */
-
-.noteType-cultural {
-  background: linear-gradient(120deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.1) 100%);
-  border-bottom-color: rgba(139, 92, 246, 0.6);
-}
-
-.noteType-cultural:hover {
-  /* 保持原始样式 */
-}
-
-.noteType-pronunciation {
-  background: linear-gradient(120deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
-  border-bottom-color: rgba(236, 72, 153, 0.6);
-}
-
-.noteType-pronunciation:hover {
-  /* 保持原始样式 */
-}
-
-/* Font size variations */
-.fontSize-small {
-  font-size: 1rem;
-}
-
-.fontSize-small .ruby {
-  font-size: 1rem;
-}
-
-.fontSize-small .rubyText {
-  font-size: 0.6875rem;
-}
-
-.fontSize-medium {
-  font-size: 1.125rem;
-}
-
-.fontSize-medium .ruby {
-  font-size: 1.125rem;
-}
-
-.fontSize-medium .rubyText {
-  font-size: 0.75rem;
-}
-
-.fontSize-large {
-  font-size: 1.25rem;
-}
-
-.fontSize-large .ruby {
-  font-size: 1.25rem;
-}
-
-.fontSize-large .rubyText {
-  font-size: 0.875rem;
-}
-
-/* Line spacing variations */
-.lineSpacing-compact {
-  line-height: 1.4;
-}
-
-.lineSpacing-normal {
-  line-height: 1.6;
-}
-
-.lineSpacing-relaxed {
-  line-height: 1.8;
-}
-
-/* Dark mode styles - 移除悬停效果 */
-[data-theme='dark'] .textContent {
-  color: #f1f5f9;
-}
-
-[data-theme='dark'] .plainText {
-  color: #cbd5e1;
-}
-
-/* 移除暗色主题注音悬停效果 */
-[data-theme='dark'] .annotatedWord:hover,
-[data-theme='dark'] .annotatedWord.active {
-  /* 保持原始样式 */
-}
-
-[data-theme='dark'] .annotatedWord:focus {
-  outline-color: #a78bfa;
-  background: rgba(139, 92, 246, 0.15);
-}
-
-[data-theme='dark'] .kanjiText {
-  color: #f1f5f9;
-}
-
-[data-theme='dark'] .rubyText {
-  color: #94a3b8;
-}
-
-[data-theme='dark'] .rubyTextActive {
-  color: #a78bfa;
-}
-
-/* Note highlights - dark mode enhanced */
-[data-theme='dark'] .noteHighlight {
-  background: linear-gradient(120deg, rgba(255, 193, 7, 0.25) 0%, rgba(255, 193, 7, 0.12) 100%);
-  border-bottom-color: rgba(255, 193, 7, 0.7);
-  box-shadow: 0 0 0 1px rgba(255, 193, 7, 0.1); /* 添加微妙边框 */
-}
-
-/* 移除暗色主题划线词悬停效果 */
-[data-theme='dark'] .noteHighlight:hover {
-  /* 保持原始样式 */
-}
-
-[data-theme='dark'] .noteHighlight:focus {
-  outline-color: #fbbf24;
-  background: linear-gradient(120deg, rgba(255, 193, 7, 0.5) 0%, rgba(255, 193, 7, 0.25) 100%);
-  box-shadow: 
-    0 0 0 2px rgba(255, 193, 7, 0.4),
-    0 2px 16px rgba(255, 193, 7, 0.3);
-}
-
-[data-theme='dark'] .noteType-vocabulary {
-  background: linear-gradient(120deg, rgba(96, 165, 250, 0.25) 0%, rgba(96, 165, 250, 0.12) 100%);
-  border-bottom-color: rgba(96, 165, 250, 0.7);
-  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.1);
-}
-
-/* 移除暗色主题词汇类型悬停效果 */
-[data-theme='dark'] .noteType-vocabulary:hover {
-  /* 保持原始样式 */
-}
-
-[data-theme='dark'] .noteType-grammar {
-  background: linear-gradient(120deg, rgba(52, 211, 153, 0.25) 0%, rgba(52, 211, 153, 0.12) 100%);
-  border-bottom-color: rgba(52, 211, 153, 0.7);
-  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.1);
-}
-
-/* 移除暗色主题语法类型悬停效果 */
-[data-theme='dark'] .noteType-grammar:hover {
-  /* 保持原始样式 */
-}
-
-[data-theme='dark'] .noteType-cultural {
-  background: linear-gradient(120deg, rgba(168, 85, 247, 0.25) 0%, rgba(168, 85, 247, 0.12) 100%);
-  border-bottom-color: rgba(168, 85, 247, 0.7);
-  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.1);
-}
-
-/* 移除暗色主题文化类型悬停效果 */
-[data-theme='dark'] .noteType-cultural:hover {
-  /* 保持原始样式 */
-}
-
-[data-theme='dark'] .noteType-pronunciation {
-  background: linear-gradient(120deg, rgba(244, 114, 182, 0.25) 0%, rgba(244, 114, 182, 0.12) 100%);
-  border-bottom-color: rgba(244, 114, 182, 0.7);
-  box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.1);
-}
-
-/* 移除暗色主题发音类型悬停效果 */
-[data-theme='dark'] .noteType-pronunciation:hover {
-  /* 保持原始样式 */
-}
-
-/* Inline note panel - positioned relative to the highlighted word - 移除悬停效果 */
+/* ── Inline note panel ── */
 .inlineNotePanel {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
   z-index: 9999;
-  margin-top: 8px;
-  min-width: 250px;
-  max-width: 350px;
-  background: white;
-  border: 1px solid #e0e0e0;
+  min-width: 220px;
+  max-width: 320px;
+  background: var(--jt-bg);
+  border: 1px solid var(--jt-border);
   border-radius: 8px;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.8);
-  font-size: 0.9rem;
-  animation: notePopIn 0.2s ease-out;
-  max-height: 80vh;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+  font-size: var(--jt-text-sm);
+  animation: noteReveal 0.18s var(--jt-ease);
+  max-height: 70vh;
   overflow-y: auto;
-  transition: none; /* 移除过渡效果 */
-  /* 确保笔记面板可以接收点击事件 */
   pointer-events: auto;
 }
 
-/* 移除悬停效果 */
-.inlineNotePanel:hover {
-  /* 保持原始样式 */
-}
-
-/* 当笔记面板接近右边界时，向左偏移 */
-.noteHighlight:nth-last-child(-n+2) .inlineNotePanel,
-.noteHighlight:last-child .inlineNotePanel {
-  left: auto;
-  right: 0;
-}
-
-/* 当在行末时，调整箭头位置 */
-.noteHighlight:nth-last-child(-n+2) .notePanelArrow,
-.noteHighlight:last-child .notePanelArrow {
-  left: auto;
-  right: 12px;
+@keyframes noteReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .notePanelArrow {
   position: absolute;
-  top: -6px;
-  left: 12px;
-  width: 12px;
-  height: 12px;
-  background: white;
-  border: 1px solid #e0e0e0;
+  top: -5px;
+  left: 14px;
+  width: 10px;
+  height: 10px;
+  background: var(--jt-bg);
+  border: 1px solid var(--jt-border);
   border-bottom: none;
   border-right: none;
   transform: rotate(45deg);
   z-index: 10000;
-  transition: none; /* 移除过渡效果 */
 }
 
 .notePanelContent {
   position: relative;
-  background: white;
+  background: var(--jt-bg);
   border-radius: 8px;
   overflow: hidden;
   z-index: 10001;
-  transition: none; /* 移除过渡效果 */
 }
 
 .notePanelHeader {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.03) 100%);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.4);
-  transition: none; /* 移除过渡效果 */
-}
-
-/* 移除悬停效果 */
-.notePanelHeader:hover {
-  /* 保持原始样式 */
+  gap: 6px;
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--jt-border);
 }
 
 .noteTypeIcon {
-  font-size: 1rem;
+  font-size: 0.875rem;
   flex-shrink: 0;
-  transition: none; /* 移除过渡效果 */
-}
-
-/* 移除图标缩放效果 */
-.inlineNotePanel:hover .noteTypeIcon {
-  /* 保持原始样式 */
 }
 
 .notePanelHeader strong {
   flex: 1;
   font-weight: 600;
-  color: #1e293b;
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 193, 7, 0.6);
-  transition: none; /* 移除过渡效果 */
+  font-size: var(--jt-text-sm);
+  color: var(--jt-text);
 }
 
 .closeNoteButton {
   background: none;
   border: none;
-  font-size: 1.2rem;
-  color: #6b7280;
+  font-size: 1.1rem;
+  color: var(--jt-text-tertiary);
   cursor: pointer;
-  padding: 4px;
+  padding: 2px 4px;
   line-height: 1;
   border-radius: 4px;
-  transition: none; /* 移除过渡效果 */
+  transition: color var(--jt-duration) var(--jt-ease),
+              background var(--jt-duration) var(--jt-ease);
 }
 
-/* 移除关闭按钮悬停效果 */
 .closeNoteButton:hover {
-  /* 保持原始样式 */
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
 }
 
 .closeNoteButton:focus {
   outline: 2px solid #ef4444;
-  outline-offset: 2px;
+  outline-offset: 1px;
 }
 
 .notePanelBody {
-  padding: 12px 16px;
-  color: #374151;
-  line-height: 1.5;
-  transition: none; /* 移除过渡效果 */
+  padding: 0.625rem 0.875rem;
+  color: var(--jt-text-secondary);
+  line-height: 1.6;
 }
 
-/* Dark mode styles for inline note panel - 移除悬停效果 */
-[data-theme='dark'] .inlineNotePanel {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
-  border: 1px solid rgba(51, 65, 85, 0.6);
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    0 8px 32px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(51, 65, 85, 0.8);
-}
+/* ── Font size variations ── */
+.fontSize-small { font-size: var(--jt-text-base); }
+.fontSize-medium { font-size: var(--jt-text-lg); }
+.fontSize-large { font-size: var(--jt-text-xl); }
 
-/* 移除暗色主题悬停效果 */
-[data-theme='dark'] .inlineNotePanel:hover {
-  /* 保持原始样式 */
-}
+.fontSize-small .ruby { font-size: var(--jt-text-base); }
+.fontSize-medium .ruby { font-size: var(--jt-text-lg); }
+.fontSize-large .ruby { font-size: var(--jt-text-xl); }
 
-[data-theme='dark'] .notePanelArrow {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
-  border-color: rgba(51, 65, 85, 0.6);
-}
+/* ── Line spacing variations ── */
+.lineSpacing-compact { line-height: 1.6; }
+.lineSpacing-normal { line-height: 2; }
+.lineSpacing-relaxed { line-height: 2.4; }
 
-[data-theme='dark'] .notePanelContent {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
-}
-
-[data-theme='dark'] .notePanelHeader {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(99, 102, 241, 0.05) 100%);
-  border-bottom-color: rgba(51, 65, 85, 0.4);
-}
-
-/* 移除暗色主题头部悬停效果 */
-[data-theme='dark'] .notePanelHeader:hover {
-  /* 保持原始样式 */
-}
-
-[data-theme='dark'] .notePanelHeader strong {
-  color: #f1f5f9;
-  text-decoration-color: rgba(255, 193, 7, 0.8);
-}
-
-[data-theme='dark'] .closeNoteButton {
-  color: #94a3b8;
-}
-
-/* 移除暗色主题关闭按钮悬停效果 */
-[data-theme='dark'] .closeNoteButton:hover {
-  /* 保持原始样式 */
-}
-
-[data-theme='dark'] .notePanelBody {
-  color: #cbd5e1;
-}
-
-/* Animation for note popup - enhanced */
-@keyframes notePopIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.95);
-    filter: blur(2px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-/* Theme transition animations */
-.noteHighlight,
-.inlineNotePanel,
-.notePanelContent,
-.notePanelHeader,
-.notePanelBody,
-.closeNoteButton {
-  transition: 
-    all 0.2s ease,
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease,
-    text-shadow 0.3s ease;
-}
-
-/* Responsive positioning for small screens - 移除悬停效果 */
+/* ── Mobile ── */
 @media (max-width: 640px) {
+  .textContent {
+    font-size: var(--jt-text-base);
+    line-height: 1.8;
+  }
+
   .inlineNotePanel {
     position: fixed;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    width: 90vw;
-    max-width: 320px;
-    z-index: 99999;
-    backdrop-filter: blur(4px);
-    transition: none; /* 移除过渡效果 */
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    min-width: 100%;
+    border-radius: 12px 12px 0 0;
+    max-height: 50vh;
+    animation: noteSlideUp 0.25s var(--jt-ease);
   }
-  
-  /* 移除移动端悬停效果 */
-  .inlineNotePanel:hover {
-    transform: translate(-50%, -50%); /* 保持居中，不上移 */
+
+  @keyframes noteSlideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
   }
-  
+
   .notePanelArrow {
     display: none;
   }
-  
-  /* 添加移动端遮罩层 */
-  .inlineNotePanel::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: -1;
-    transform: translate(50%, 50%);
-    transition: none; /* 移除过渡效果 */
-    /* 遮罩层可以接收点击事件来关闭笔记 */
-    pointer-events: auto;
+
+  .notePanelHeader {
+    padding: 0.875rem 1rem;
   }
-  
-  /* 移动端暗色主题遮罩 */
-  [data-theme='dark'] .inlineNotePanel::before {
-    background: rgba(0, 0, 0, 0.6);
-  }
-  
-  /* 移动端暗色主题面板优化 */
-  [data-theme='dark'] .inlineNotePanel {
-    backdrop-filter: blur(8px);
-    border-color: rgba(139, 92, 246, 0.3);
+
+  .notePanelBody {
+    padding: 0.75rem 1rem 1.5rem;
   }
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .textContent {
-    font-size: 1rem;
-    gap: 0.0625rem;
-  }
-  
-  .fontSize-small {
-    font-size: 0.875rem;
-  }
-  
-  .fontSize-medium {
-    font-size: 1rem;
-  }
-  
-  .fontSize-large {
-    font-size: 1.125rem;
-  }
-  
-  .annotatedWord {
-    padding: 0.0625rem 0.125rem;
-    margin: 0 0.03125rem;
-  }
-  
-  .noteHighlight {
-    padding: 0.0625rem 0.125rem;
-    margin: 0 0.03125rem;
-  }
-  
-  .noteHighlight::after {
-    display: none;
-  }
-  
-  .ruby {
-    font-size: inherit;
-  }
-  
-  .rubyText {
-    font-size: 0.6875rem;
-  }
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .annotatedWord:hover,
-  .annotatedWord.active {
-    background: rgba(0, 0, 0, 0.1);
-    border: 1px solid #000;
-  }
-  
-  .noteHighlight {
-    border-bottom-width: 3px;
-    border-bottom-style: solid;
-  }
-  
-  .rubyText {
-    opacity: 1;
-    font-weight: 600;
-  }
-}
-
-/* Reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .noteHighlight,
-  .inlineNotePanel,
-  .notePanelContent,
-  .notePanelHeader,
-  .notePanelBody,
-  .closeNoteButton,
-  .noteTypeIcon {
-    transition: none;
-    animation: none;
-  }
-  
-  .noteHighlight:hover,
-  .inlineNotePanel:hover {
-    transform: none;
-  }
-  
-  .notePopIn {
-    animation: none;
-  }
-}
-
-/* Print styles */
+/* ── Print ── */
 @media print {
   .textContent {
     color: #000;
     font-size: 12pt;
-    line-height: 1.4;
   }
-  
-  .plainText {
-    color: #000;
-  }
-  
-  .kanjiText {
-    color: #000;
-  }
-  
+
   .rubyText {
-    opacity: 1 !important;
+    opacity: 1;
     color: #666;
-    font-size: 8pt;
   }
-  
+
   .noteHighlight {
-    background: #f0f0f0 !important;
-    border-bottom: 1px solid #666 !important;
+    background: none;
+    border-bottom: 1px solid #999;
   }
-  
-  .noteHighlight::after {
+
+  .inlineNotePanel {
     display: none;
   }
-  
-  .annotatedWord:hover,
-  .annotatedWord.active,
-  .noteHighlight:hover {
-    background: transparent !important;
-    transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inlineNotePanel {
+    animation: none;
   }
 }

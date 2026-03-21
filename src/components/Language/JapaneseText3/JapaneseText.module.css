@@ -1,0 +1,191 @@
+/* JapaneseText — main container styles */
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  font-family: var(--jt-font);
+  color: var(--jt-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Control panel spacing ── */
+.controlPanel {
+  margin-bottom: 1.5rem;
+}
+
+/* ── Content flow ── */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jt-gap);
+}
+
+/* ── Loading ── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.loadingContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--jt-text-secondary);
+  font-size: var(--jt-text-sm);
+}
+
+.loadingSpinner {
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid var(--jt-border);
+  border-top-color: var(--jt-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Empty state ── */
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.emptyContent {
+  text-align: center;
+  color: var(--jt-text-tertiary);
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.emptyContent h3 {
+  margin: 0 0 0.25rem;
+  font-size: var(--jt-text-base);
+  font-weight: 500;
+  color: var(--jt-text-secondary);
+}
+
+.emptyContent p {
+  margin: 0;
+  font-size: var(--jt-text-sm);
+}
+
+/* ── Error ── */
+.errorMessage {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: var(--jt-radius);
+  padding: 1rem 1.25rem;
+}
+
+.errorMessage h3 {
+  margin: 0 0 0.25rem;
+  font-size: var(--jt-text-sm);
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.errorMessage p {
+  margin: 0;
+  font-size: var(--jt-text-sm);
+  color: var(--jt-text-secondary);
+}
+
+/* ── Dev tools ── */
+.devTools {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  z-index: 50;
+  max-width: 260px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.devTools summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.devToolsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.devToolsContent h4 {
+  margin: 0.5rem 0 0.125rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.devToolsContent p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.7rem;
+}
+
+.devToolsContent button {
+  background: #334155;
+  color: #e2e8f0;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.devToolsContent button:hover {
+  background: #475569;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem 0.75rem;
+  }
+
+  .content {
+    gap: 1rem;
+  }
+
+  .devTools {
+    position: static;
+    margin-top: 1rem;
+    max-width: none;
+  }
+}
+
+/* ── Print ── */
+@media print {
+  .container {
+    max-width: none;
+    padding: 0;
+    color: #000;
+  }
+
+  .controlPanel,
+  .devTools {
+    display: none;
+  }
+}

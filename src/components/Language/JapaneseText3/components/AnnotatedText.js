@@ -1,11 +1,10 @@
 import React, { memo, useState, useCallback, useEffect, useRef } from 'react';
-import { generateAriaLabels } from '../utils/accessibility';
 import styles from './AnnotatedText.module.css';
 
 /**
- * Component for rendering text with furigana annotations and note highlights
+ * Renders text with furigana annotations and clickable note highlights
  */
-const AnnotatedText = memo(({ 
+const AnnotatedText = memo(({
   text,
   segments,
   annotation = {},
@@ -15,91 +14,69 @@ const AnnotatedText = memo(({
   registerNoteRef,
   className = ''
 }) => {
-  const [activeWordIndex, setActiveWordIndex] = useState(null); // 用于注音悬停高亮
-  const [activeNoteIndex, setActiveNoteIndex] = useState(null); // 用于笔记面板显示
+  const [activeWordIndex, setActiveWordIndex] = useState(null);
+  const [activeNoteIndex, setActiveNoteIndex] = useState(null);
   const containerRef = useRef(null);
-  
+
   const showFurigana = preferences.display?.showFurigana ?? true;
   const showNotes = preferences.display?.showNotes ?? true;
   const fontSize = preferences.typography?.fontSize ?? 'medium';
   const lineSpacing = preferences.typography?.lineSpacing ?? 'normal';
 
-  const handleWordMouseEnter = useCallback((wordIndex) => {
-    setActiveWordIndex(wordIndex);
-  }, []);
+  const handleWordEnter = useCallback((idx) => setActiveWordIndex(idx), []);
+  const handleWordLeave = useCallback(() => setActiveWordIndex(null), []);
 
-  const handleWordMouseLeave = useCallback(() => {
-    setActiveWordIndex(null);
-  }, []);
-
-  // 点击空白处关闭笔记 + ESC键关闭笔记
+  // Close note on click outside or Escape
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      // 如果没有活动的笔记，无需处理
-      if (!activeNoteIndex) return;
-      
-      // 如果点击的是笔记面板内部，不关闭
-      if (event.target.closest(`.${styles.inlineNotePanel}`)) {
-        return;
-      }
-      
-      // 如果点击的是笔记高亮文本本身，不关闭
-      if (event.target.closest(`.${styles.noteHighlight}`)) {
-        return;
-      }
-      
-      // 其他情况都关闭笔记
+    if (!activeNoteIndex) return;
+
+    const onClickOutside = (e) => {
+      if (e.target.closest(`.${styles.inlineNotePanel}`) || e.target.closest(`.${styles.noteHighlight}`)) return;
       setActiveNoteIndex(null);
     };
 
-    const handleKeyDown = (event) => {
-      // ESC键关闭笔记
-      if (event.key === 'Escape' && activeNoteIndex) {
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
         setActiveNoteIndex(null);
-        event.preventDefault();
-        event.stopPropagation();
+        e.preventDefault();
       }
     };
 
-    // 添加全局监听器
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
-    
-    // 清理函数
+    document.addEventListener('mousedown', onClickOutside);
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [activeNoteIndex]);
 
+  const toggleNote = useCallback((noteId, e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    setActiveNoteIndex(prev => prev === noteId ? null : noteId);
+  }, []);
+
   const renderSegment = (segment, segmentIndex) => {
-    const { text: segmentText, type, data, position } = segment;
-    
+    const { text: segText, type, data, position } = segment;
     switch (type) {
-      case 'annotation':
-        return renderAnnotatedWord(segmentText, data, segmentIndex);
-      case 'note':
-        return renderNoteHighlight(segmentText, data, segmentIndex, position);
-      case 'plain':
-      default:
-        return renderPlainText(segmentText, segmentIndex);
+      case 'annotation': return renderAnnotated(segText, data, segmentIndex);
+      case 'note': return renderNote(segText, data, segmentIndex, position);
+      default: return <span key={`p-${segmentIndex}`} className={styles.plainText}>{segText}</span>;
     }
   };
 
-  const renderAnnotatedWord = (word, furigana, wordIndex) => {
-    const currentWordIndex = `${sentenceIndex}-${wordIndex}`;
-    const isActive = activeWordIndex === currentWordIndex;
-    const ariaLabel = generateAriaLabels.annotatedText(word, furigana);
+  const renderAnnotated = (word, furigana, wordIndex) => {
+    const id = `${sentenceIndex}-${wordIndex}`;
+    const isActive = activeWordIndex === id;
 
     return (
       <span
-        key={`annotated-${wordIndex}`}
+        key={`a-${wordIndex}`}
         className={`${styles.annotatedWord} ${isActive ? styles.active : ''}`}
-        onMouseEnter={() => handleWordMouseEnter(currentWordIndex)}
-        onMouseLeave={handleWordMouseLeave}
-        role="button"
+        onMouseEnter={() => handleWordEnter(id)}
+        onMouseLeave={handleWordLeave}
         tabIndex={0}
-        aria-label={ariaLabel}
+        aria-label={`${word}, 读音: ${furigana}`}
       >
         <ruby className={styles.ruby}>
           <span className={styles.kanjiText}>{word}</span>
@@ -113,92 +90,49 @@ const AnnotatedText = memo(({
     );
   };
 
-  const renderNoteHighlight = (noteText, noteData, noteIndex, position) => {
-    const noteKey = `${noteText}_${position}`;
-    const noteContent = typeof noteData === 'string' ? noteData : noteData.content;
-    const noteType = typeof noteData === 'object' ? noteData.type : 'vocabulary';
-    const ariaLabel = generateAriaLabels.noteHighlight(noteText, noteContent);
-    
-    // Check if this note is currently active
-    const isActive = activeNoteIndex === `note-${sentenceIndex}-${noteIndex}`;
+  const renderNote = (noteText, noteData, noteIndex, position) => {
+    if (!showNotes) {
+      return <span key={`n-${noteIndex}`} className={styles.plainText}>{noteText}</span>;
+    }
 
-    // Dynamic position adjustment for panel
-    const getPanelStyle = () => {
-      if (!isActive) return {};
-      
-      const viewportWidth = window.innerWidth;
-      const panelWidth = 300; // 预估面板宽度
-      
-      // 简单的边界检测
-      const rect = document.querySelector(`[data-note-key="${noteKey}"]`)?.getBoundingClientRect();
-      if (rect) {
-        const spaceRight = viewportWidth - rect.right;
-        const spaceLeft = rect.left;
-        
-        if (spaceRight < panelWidth && spaceLeft > panelWidth) {
-          // 右侧空间不足，左侧有空间，向左偏移
-          return { left: 'auto', right: '0' };
-        }
-      }
-      
-      return {};
+    const noteKey = `${noteText}_${position}`;
+    const noteContent = typeof noteData === 'string' ? noteData : noteData?.content;
+    const noteType = typeof noteData === 'object' ? noteData?.type : 'vocabulary';
+    const noteId = `note-${sentenceIndex}-${noteIndex}`;
+    const isActive = activeNoteIndex === noteId;
+
+    const getTypeIcon = (t) => {
+      const icons = { vocabulary: '📚', grammar: '📝', cultural: '🏮', pronunciation: '🔊' };
+      return icons[t] || '💡';
     };
 
     return (
       <span
-        key={`note-${noteIndex}`}
+        key={`n-${noteIndex}`}
         className={`${styles.noteHighlight} ${styles[`noteType-${noteType}`] || ''}`}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          // Toggle note visibility
-          if (isActive) {
-            setActiveNoteIndex(null);
-          } else {
-            setActiveNoteIndex(`note-${sentenceIndex}-${noteIndex}`);
-          }
-        }}
+        onClick={(e) => toggleNote(noteId, e)}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            // Toggle note visibility
-            if (isActive) {
-              setActiveNoteIndex(null);
-            } else {
-              setActiveNoteIndex(`note-${sentenceIndex}-${noteIndex}`);
-            }
-          }
+          if (e.key === 'Enter' || e.key === ' ') toggleNote(noteId, e);
         }}
-        ref={(el) => registerNoteRef && registerNoteRef(sentenceIndex, noteKey, el)}
+        ref={(el) => registerNoteRef?.(sentenceIndex, noteKey, el)}
         role="button"
         tabIndex={0}
-        aria-label={ariaLabel}
-        data-note-type={noteType}
+        aria-label={`${noteText}: ${noteContent}`}
         data-note-key={noteKey}
         style={{ position: 'relative' }}
       >
         {noteText}
-        
-        {/* Inline note panel with relative positioning */}
+
         {isActive && (
-          <div className={styles.inlineNotePanel} style={getPanelStyle()}>
+          <div className={styles.inlineNotePanel}>
             <div className={styles.notePanelArrow} />
             <div className={styles.notePanelContent}>
               <div className={styles.notePanelHeader}>
-                <span className={styles.noteTypeIcon}>
-                  {noteType === 'vocabulary' ? '📚' : 
-                   noteType === 'grammar' ? '📝' : 
-                   noteType === 'cultural' ? '🏮' : 
-                   noteType === 'pronunciation' ? '🔊' : '💡'}
-                </span>
+                <span className={styles.noteTypeIcon}>{getTypeIcon(noteType)}</span>
                 <strong>{noteText}</strong>
-                <button 
+                <button
                   className={styles.closeNoteButton}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setActiveNoteIndex(null);
-                  }}
+                  onClick={(e) => toggleNote(noteId, e)}
                   aria-label="关闭笔记"
                 >
                   ×
@@ -214,110 +148,65 @@ const AnnotatedText = memo(({
     );
   };
 
-  const renderPlainText = (plainText, textIndex) => {
-    return (
-      <span key={`plain-${textIndex}`} className={styles.plainText}>
-        {plainText}
-      </span>
-    );
-  };
-
-  // Fallback rendering if segments are not available
+  // Fallback rendering when segments aren't available
   const renderFallback = () => {
     if (!annotation || Object.keys(annotation).length === 0) {
-      // Check for notes in plain text
       const noteKeys = Object.keys(notes);
       if (noteKeys.length === 0) {
         return <span className={styles.plainText}>{text}</span>;
       }
-      
-      // Simple note highlighting for fallback
+
       let result = [];
       let currentIndex = 0;
-      
       noteKeys.forEach((noteKey, index) => {
         const noteText = noteKey.includes('_') ? noteKey.split('_')[0] : noteKey;
         const noteIndex = text.indexOf(noteText, currentIndex);
-        
         if (noteIndex !== -1) {
-          // Add text before note
           if (noteIndex > currentIndex) {
-            result.push(
-              <span key={`text-${index}`} className={styles.plainText}>
-                {text.substring(currentIndex, noteIndex)}
-              </span>
-            );
+            result.push(<span key={`t-${index}`} className={styles.plainText}>{text.substring(currentIndex, noteIndex)}</span>);
           }
-          
-          // Add note highlight
-          result.push(renderNoteHighlight(noteText, notes[noteKey], index, noteIndex));
+          result.push(renderNote(noteText, notes[noteKey], index, noteIndex));
           currentIndex = noteIndex + noteText.length;
         }
       });
-      
-      // Add remaining text
       if (currentIndex < text.length) {
-        result.push(
-          <span key="text-end" className={styles.plainText}>
-            {text.substring(currentIndex)}
-          </span>
-        );
+        result.push(<span key="end" className={styles.plainText}>{text.substring(currentIndex)}</span>);
       }
-      
       return result;
     }
-    
-    // Handle annotations without segments
+
     let result = [];
     let currentIndex = 0;
     let wordIndex = 0;
-    
     Object.keys(annotation).forEach((word) => {
       const index = text.indexOf(word, currentIndex);
       if (index !== -1) {
-        // Add text before annotation
         if (index > currentIndex) {
-          result.push(
-            <span key={`plain-${index}`} className={styles.plainText}>
-              {text.substring(currentIndex, index)}
-            </span>
-          );
+          result.push(<span key={`p-${index}`} className={styles.plainText}>{text.substring(currentIndex, index)}</span>);
         }
-        
-        // Add annotated word
-        result.push(renderAnnotatedWord(word, annotation[word], wordIndex));
-        
+        result.push(renderAnnotated(word, annotation[word], wordIndex));
         currentIndex = index + word.length;
         wordIndex++;
       }
     });
-    
-    // Add remaining text
     if (currentIndex < text.length) {
-      result.push(
-        <span key="plain-end" className={styles.plainText}>
-          {text.substring(currentIndex)}
-        </span>
-      );
+      result.push(<span key="end" className={styles.plainText}>{text.substring(currentIndex)}</span>);
     }
-    
     return result;
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`
-        ${styles.textContent} 
-        ${styles[`fontSize-${fontSize}`] || ''} 
+        ${styles.textContent}
+        ${styles[`fontSize-${fontSize}`] || ''}
         ${styles[`lineSpacing-${lineSpacing}`] || ''}
         ${className}
       `}
-      role="text"
-      aria-label={`日文文本: ${text}`}
       data-sentence-index={sentenceIndex}
     >
-      {segments && segments.length > 0 
+      {segments && segments.length > 0
         ? segments.map(renderSegment)
         : renderFallback()
       }

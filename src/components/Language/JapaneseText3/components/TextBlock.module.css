@@ -1,57 +1,46 @@
-/* TextBlock.module.css */
+/* TextBlock — each sentence container */
 
 .textBlock {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(248, 250, 252, 0.98) 100%);
-  border-radius: var(--radius-xl, 16px);
-  padding: 1.5rem 2rem;
-  margin-bottom: 1rem;
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    0 4px 12px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(226, 232, 240, 0.3);
-  transition: none;
   position: relative;
+  padding: 1rem 1.25rem;
+  border-radius: var(--jt-radius);
+  background: var(--jt-bg);
+  border: 1px solid transparent;
+  transition: border-color var(--jt-duration) var(--jt-ease);
 }
 
+.textBlock:hover {
+  border-color: var(--jt-border);
+}
+
+/* ── Left accent line ── */
 .textBlock::before {
   content: '';
   position: absolute;
-  top: 0;
+  top: 0.75rem;
+  bottom: 0.75rem;
   left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, 
-    rgba(99, 102, 241, 0.1) 0%, 
-    rgba(139, 92, 246, 0.1) 50%, 
-    rgba(99, 102, 241, 0.1) 100%);
-  transition: none; /* 移除过渡效果 */
+  width: 2px;
+  background: var(--jt-accent);
+  opacity: 0;
+  border-radius: 1px;
+  transition: opacity var(--jt-duration) var(--jt-ease);
 }
 
-/* 移除悬停突起效果 - 保持类名但无特殊样式 */
+.textBlock:hover::before {
+  opacity: 0.3;
+}
 
+/* ── Compact mode ── */
 .compactMode {
-  padding: 1rem 1.5rem;
-  margin-bottom: 0.5rem;
+  padding: 0.625rem 1rem;
 }
 
-.compactMode .japaneseSection {
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.compactMode .translationSection {
-  padding-top: 0.25rem;
-}
-
+/* ── Layout ── */
 .lineContainer {
   display: flex;
   align-items: baseline;
-  gap: 1rem;
-  min-height: 2.5rem;
-  position: relative;
+  gap: 0.75rem;
 }
 
 .lineNumberArea {
@@ -63,238 +52,62 @@
   min-width: 0;
 }
 
+/* ── Japanese text section ── */
 .japaneseSection {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.2);
+  margin-bottom: 0;
 }
 
+/* ── Translation ── */
 .translationSection {
-  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .translationText {
-  font-size: 0.975rem;
-  color: #4a5568;
-  line-height: 1.6;
-  font-weight: 400;
+  font-size: 0.9rem;
+  color: var(--jt-text-secondary);
+  line-height: 1.5;
   font-style: italic;
-  padding: 0.75rem 1rem;
-  background: rgba(248, 250, 252, 0.3);
-  border-left: 3px solid rgba(99, 102, 241, 0.2);
-  border-radius: 0 8px 8px 0;
-  margin-top: 0.5rem;
-  transition: none; /* 移除过渡效果 */
+  padding-left: 0.875rem;
+  border-left: 2px solid var(--jt-accent);
+  opacity: 0.7;
+  transition: opacity var(--jt-duration) var(--jt-ease);
 }
 
-/* 保持翻译文本原始样式，无悬停效果 */
+.textBlock:hover .translationText {
+  opacity: 0.9;
+}
 
+/* ── Metadata badges ── */
 .metadata {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  display: flex;
-  gap: 0.25rem;
-  opacity: 1; /* 始终显示，不再依赖悬停 */
-  transition: none; /* 移除过渡效果 */
+  display: none;
 }
 
-/* 移除元数据悬停显示效果 */
-.textBlockHovered .metadata {
-  opacity: 1; /* 始终显示 */
-}
-
-.metadataIcon {
-  font-size: 0.75rem;
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366f1;
-  padding: 0.25rem;
-  border-radius: 4px;
-  line-height: 1;
-  cursor: help;
-}
-
-/* Font size variations */
-.textBlock[data-font-size="small"] {
-  font-size: 0.875rem;
-}
-
-.textBlock[data-font-size="medium"] {
-  font-size: 1rem;
-}
-
-.textBlock[data-font-size="large"] {
-  font-size: 1.125rem;
-}
-
-/* Line spacing variations */
-.textBlock[data-line-spacing="compact"] {
-  line-height: 1.4;
-}
-
-.textBlock[data-line-spacing="normal"] {
-  line-height: 1.6;
-}
-
-.textBlock[data-line-spacing="relaxed"] {
-  line-height: 1.8;
-}
-
-/* Dark mode styles */
-[data-theme='dark'] .textBlock {
-  background: linear-gradient(135deg, 
-    rgba(30, 41, 59, 0.95) 0%, 
-    rgba(15, 23, 42, 0.98) 100%);
-  border-color: rgba(51, 65, 85, 0.3);
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(51, 65, 85, 0.4);
-}
-
-[data-theme='dark'] .textBlock::before {
-  background: linear-gradient(90deg, 
-    rgba(139, 92, 246, 0.15) 0%, 
-    rgba(99, 102, 241, 0.15) 50%, 
-    rgba(139, 92, 246, 0.15) 100%);
-}
-
-/* 移除暗色主题悬停突起效果 */
-
-[data-theme='dark'] .japaneseSection {
-  border-bottom-color: rgba(51, 65, 85, 0.3);
-}
-
-[data-theme='dark'] .translationText {
-  color: #94a3b8;
-  background: rgba(15, 23, 42, 0.4);
-  border-left-color: rgba(139, 92, 246, 0.3);
-}
-
-/* 移除暗色主题翻译文本悬停效果 */
-
-[data-theme='dark'] .metadataIcon {
-  background: rgba(139, 92, 246, 0.2);
-  color: #a78bfa;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
+/* ── Mobile ── */
+@media (max-width: 640px) {
   .textBlock {
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .compactMode {
     padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
   }
-  
-  .lineContainer {
-    gap: 0.75rem;
-    min-height: 2rem;
-  }
-  
+
   .translationText {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .metadata {
-    position: static;
-    opacity: 1;
-    margin-top: 0.5rem;
-    justify-content: flex-end;
-  }
-  
-  .metadataIcon {
-    font-size: 0.6875rem;
-    padding: 0.1875rem;
+    font-size: 0.85rem;
+    padding-left: 0.625rem;
   }
 }
 
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .textBlock {
-    border-width: 2px;
-    border-color: #000;
-  }
-  
-  .translationText {
-    border-left-width: 4px;
-  }
-  
-  .metadataIcon {
-    border: 1px solid currentColor;
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .textBlock,
-  .textBlock::before,
-  .translationText,
-  .metadata {
-    transition: none;
-  }
-  
-  /* 移除文本块悬停动画效果 */
-}
-
-/* Print styles */
+/* ── Print ── */
 @media print {
   .textBlock {
-    box-shadow: none;
     border: 1px solid #e2e8f0;
-    background: white;
     page-break-inside: avoid;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
-  
+
   .textBlock::before {
     display: none;
   }
-  
-  .metadata {
-    display: none;
-  }
-  
+
   .translationText {
-    background: #f8fafc;
-    border-left-color: #6366f1;
-  }
-}
-
-/* Animation for text blocks */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
     opacity: 1;
-    transform: translateY(0);
+    color: #666;
   }
-}
-
-.textBlock {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.textBlock:nth-child(even) {
-  animation-delay: 0.1s;
-}
-
-.textBlock:nth-child(odd) {
-  animation-delay: 0.05s;
-}
-
-/* Focus styles for accessibility */
-.textBlock:focus-within {
-  outline: 2px solid #6366f1;
-  outline-offset: 2px;
-}
-
-[data-theme='dark'] .textBlock:focus-within {
-  outline-color: #a78bfa;
 }
