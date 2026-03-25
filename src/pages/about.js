@@ -13,10 +13,10 @@ export default function About() {
     },
     {
       title: 'Shiori',
-      description: '个人项目管理和知识整理系统',
-      link: '#',
-      tech: ['Node.js', 'React', 'MongoDB'],
-      image: '/kibou/img/avatar.jpg'
+      description: '出前一汤 - AI海龟汤',
+      link: 'https://haiguitang.net',
+      tech: [],
+      image: '/kibou/img/image.png'
     }
   ];
 
