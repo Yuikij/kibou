@@ -1,0 +1,82 @@
+## Mempalace
+
+### 基本概念
+
+#### 记忆的几个维度
+
+* **Wing (侧翼/顶级项目区)**: 记忆的最高物理隔绝边界。通常代表一个独立的项目。
+* **Room (房间/话题域)**: Wing 下的子分类。依靠命名（如 `frontend`, `general`, `database`）来聚集相关的记忆碎片。
+* **Drawer (抽屉/记忆切片)**: 真正存储原文的载体。存入 ChromaDB。
+* **Hall (大厅/特殊模态)**: 用于特殊类型记忆的标记（如 `hall_diary`）。用以将带有主观情绪的AI日记与客观的项目文档在查询时彻底隔离防污染。
+
+### RAG之外的概念
+
+* **KG (知识图谱)**: 独立于向量库的 SQLite 图谱数据库。存放绝对的逻辑三元组（主语-关系-宾语），作为向量模糊检索无法精确表达事实时的定向兜底。
+* **Tunnel (隧道/跨界桥梁)**: 虚拟的关联机制。当且仅当完全相同的 `Room` 名字出现在两个不同的 `Wing` 时，系统在内存中临时构建一条跨项目的连线，从而赋予 AI “触类旁通”的机制。
+
+
+### 写读流程
+
+**写入流程**
+* 组装对话，存入向量数据库
+```json
+{
+  "method": "mempalace/add_drawer",
+  "params": {
+    "wing": "test_project",
+    "room": "frontend",
+    "content": "明天需要把登录页面的按钮改成蓝色。补充说明细节：..."
+  }
+}
+```
+* 记录今日总结：tool_diary_write
+```json
+{
+  "method": "mempalace/tool_diary_write",
+  "params": {
+    "agent_name": "Claude-3.5-Sonnet",
+    "topic": "frontend",
+    "entry": "发现登录页面的 Argon2 加密逻辑有问题，今天修复了验证部分的盐值计算。"
+  }
+}
+```
+* 提取关系约束：tool_kg_add
+> 主谓宾，以主语为中心，绝对匹配，只能通过主语当参数查询
+```json
+{
+  "method": "mempalace/tool_kg_add",
+  "params": {
+    "subject": "LoginButton",
+    "predicate": "depends_on",
+    "object": "AuthService"
+  }
+}
+```
+
+
+**读取流程 (Retrieve / Read - 典型的L0~L3分层抽取)**
+* **L0 (Identity)**: 全局基础身份。死板读取 `~/.mempalace/identity.txt` 作为最高级的 System Prompt。
+* **L1 (Essential Story)**: 统直接拉取前 15 个拥有最高权重的记忆碎片作为开局常驻上下文送给模型。这个原项目没实现
+    * 读"importance", "emotional_weight", "weight"的权重，排他性取最重要的那个
+* **L2 (On-demand)**: 先尝试根据某一话题查找，即搜索具体Room的原文本数据。
+* **L3 (Semantic Search)**: 深度矢量搜索。主动发起 `tool_search` 。
+
+### 向量存储的metadata
+
+```jsonc
+{
+    "wing": "test_project",           // 物理隔离基座（必填）
+    "room": "frontend",               // 话题分类（必填），跨wing同名将形成 Tunnel
+    "hall": "hall_diary",             // 【针对特定通道】用于隔离客观文件与主观反思日记
+    "source_file": "backend_notes.txt", // 法医级溯源证据，提供复查路径
+    "chunk_index": 0,                 // 长文本分块位置
+    "added_by": "mcp / AgentName",    // 责任倒查：标识动作是扫描系统发起还是具体的AI角色注入
+    "filed_at": "2026-04-13T...",     // 绝对时间戳，保留记忆演进的历史脉络，解决新旧设定冲撞
+    "ingest_mode": "convos",          // 【仅CLI扫描模式拥有】数据来源模式
+    "extract_mode": "exchange",       // 【仅CLI扫描模式拥有】特定的提取切片颗粒度
+    "type": "diary_entry"  ,           // 【仅日记模式拥有】标记自身模态为主观感想
+    "weight":10                       // 权重，衡量该记忆的重要性，用于排序
+}
+```
+
+## Generative Agents
