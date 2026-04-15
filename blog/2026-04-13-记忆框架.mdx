@@ -58,8 +58,11 @@
 * **L0 (Identity)**: 全局基础身份。死板读取 `~/.mempalace/identity.txt` 作为最高级的 System Prompt。
 * **L1 (Essential Story)**: 统直接拉取前 15 个拥有最高权重的记忆碎片作为开局常驻上下文送给模型。这个原项目没实现
     * 读"importance", "emotional_weight", "weight"的权重，排他性取最重要的那个
+    * 然后排序取前15个
 * **L2 (On-demand)**: 先尝试根据某一话题查找，即搜索具体Room的原文本数据。
 * **L3 (Semantic Search)**: 深度矢量搜索。主动发起 `tool_search` 。
+* **KG Query**: 逻辑关系读取。当向量模糊搜索（L3）不靠谱，或者需要查询明确关系（如“组件A到底依不依赖服务B？”）时，主动发起 `tool_kg_query` 查 SQLite 里存好的三元组，做 100% 精确的节点关系验证。
+* **Tunnel Traverse**: 发散与灵感寻找。主动发起 `tool_find_tunnels` 或 `mempalace_traverse`。通过在不同 Wing 之间寻找同名的 Room，实现跨项目的经验借用（比如在处理当前项目的前端问题时，顺着 `Room: frontend` 这根管子，摸到别的项目里以前写过的前端踩坑日记）。
 
 ### 向量存储的metadata
 
