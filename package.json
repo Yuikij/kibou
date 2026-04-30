@@ -7,11 +7,12 @@
     "start": "docusaurus start --host 0.0.0.0",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
+    "deploy": "yarn run build && wrangler deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids"
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "preview": "yarn run build && wrangler dev"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -53,7 +54,8 @@
     "@babel/core": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@docusaurus/module-type-aliases": "3.7",
-    "@waline/client": "^3.5.1"
+    "@waline/client": "^3.5.1",
+    "wrangler": "^4.86.0"
   },
   "browserslist": {
     "production": [
