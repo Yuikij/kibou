@@ -9,14 +9,14 @@ export default function About() {
       description: '基于Docusaurus构建的个人技术博客，记录学习心得和技术分享',
       link: 'https://github.com/Yuikij/kibou',
       tech: ['React', 'Docusaurus', 'JavaScript'],
-      image: '/kibou/img/avatar.jpg'
+      image: '/img/avatar.jpg'
     },
     {
       title: 'Shiori',
       description: '出前一汤 - AI海龟汤',
       link: 'https://haiguitang.net',
       tech: [],
-      image: '/kibou/img/image.png'
+      image: '/img/image.png'
     }
   ];
 
@@ -27,7 +27,7 @@ export default function About() {
       <div className={styles.aboutContainer}>
         <div className={styles.hero}>
           <img 
-            src="/kibou/img/avatar.jpg" 
+            src="/img/avatar.jpg" 
             alt="Yuikij" 
             className={styles.avatar}
           />
