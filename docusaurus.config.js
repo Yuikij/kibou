@@ -215,6 +215,12 @@ const config = {
                         position: 'right',
                       },
                     {
+                        type: 'docSidebar',
+                        label: '上站SEO',
+                        sidebarId: 'websiteSeo',
+                        position: 'right',
+                      },
+                    {
                         type: 'dropdown',
                         label: '备忘录',
                         position: 'right',
