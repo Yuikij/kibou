@@ -698,6 +698,41 @@
   margin: 1em 0;
 }
 
+/* 行内引用标注 */
+.citation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 8px;
+  background: rgba(102, 126, 234, 0.15);
+  color: #667eea !important;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: super;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+}
+
+.citation:hover {
+  background: #667eea;
+  color: white !important;
+}
+
+[data-theme='dark'] .citation {
+  background: rgba(102, 126, 234, 0.25);
+  color: #a5b4fc !important;
+}
+
+[data-theme='dark'] .citation:hover {
+  background: #667eea;
+  color: white !important;
+}
+
 .messageTime {
   font-size: 11px;
   color: var(--ifm-color-emphasis-500);
@@ -738,6 +773,27 @@
   gap: 8px;
   margin-bottom: 4px;
   flex-wrap: wrap;
+}
+
+/* 来源编号,与行内引用编号对应 */
+.sourceNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: rgba(102, 126, 234, 0.15);
+  color: #667eea;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .sourceNumber {
+  background: rgba(102, 126, 234, 0.25);
+  color: #a5b4fc;
 }
 
 .fileName {

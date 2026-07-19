@@ -10,6 +10,24 @@ const SCOPES = [
   { value: 'blog', label: '博客' },
 ];
 
+/**
+ * 把回答里的 [n](模型看到的材料编号)换算成来源编号的引用链接
+ * [k](#cite-k),相邻的重复引用只保留一个。跳过普通 markdown 链接。
+ */
+const renderCitations = (content, refMap) => {
+  if (!content || !refMap || Object.keys(refMap).length === 0) return content;
+  let lastEnd = -1;
+  let lastSource = 0;
+  return content.replace(/\[(\d{1,2})\](?!\()/g, (match, num, offset) => {
+    const source = refMap[num];
+    if (!source) return match;
+    const isAdjacentDuplicate = offset === lastEnd && source === lastSource;
+    lastEnd = offset + match.length;
+    lastSource = source;
+    return isAdjacentDuplicate ? '' : `[${source}](#cite-${source})`;
+  });
+};
+
 const ChatAssistant = ({ apiEndpoint = '/api/chat' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -77,6 +95,7 @@ const ChatAssistant = ({ apiEndpoint = '/api/chat' }) => {
       type: 'assistant',
       content: '',
       sources: [],
+      refMap: {},
       metadata: null,
       timestamp: new Date().toISOString(),
       streaming: true,
@@ -130,7 +149,9 @@ const ChatAssistant = ({ apiEndpoint = '/api/chat' }) => {
         if (!data || data === '[DONE]') return;
         if (eventName === 'sources') {
           try {
-            patchAssistant({ sources: JSON.parse(data) });
+            const parsed = JSON.parse(data);
+            const payload = Array.isArray(parsed) ? { sources: parsed, refMap: {} } : parsed;
+            patchAssistant({ sources: payload.sources ?? [], refMap: payload.refMap ?? {} });
           } catch {
             // 忽略
           }
@@ -367,7 +388,37 @@ const ChatAssistant = ({ apiEndpoint = '/api/chat' }) => {
                     <div className={styles.messageText}>
                       {message.type === 'assistant' ? (
                         message.content ? (
-                          <ReactMarkdown>{message.content}</ReactMarkdown>
+                          <ReactMarkdown
+                            components={{
+                              a: ({ node, href, children, ...props }) => {
+                                const cite = href?.match(/^#cite-(\d+)$/);
+                                if (cite) {
+                                  const idx = Number(cite[1]);
+                                  const source = message.sources?.[idx - 1];
+                                  const url = source ? convertFilePathToUrl(source.filePath) : null;
+                                  return (
+                                    <a
+                                      className={styles.citation}
+                                      href={url ?? '#'}
+                                      target={url ? '_blank' : undefined}
+                                      rel="noopener noreferrer"
+                                      title={source?.fileName}
+                                      onClick={url ? undefined : (e) => e.preventDefault()}
+                                    >
+                                      {idx}
+                                    </a>
+                                  );
+                                }
+                                return (
+                                  <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                                    {children}
+                                  </a>
+                                );
+                              },
+                            }}
+                          >
+                            {renderCitations(message.content, message.refMap)}
+                          </ReactMarkdown>
                         ) : (
                           <div className={styles.loadingDots}>
                             <span></span>
@@ -387,6 +438,7 @@ const ChatAssistant = ({ apiEndpoint = '/api/chat' }) => {
                           return (
                             <div key={idx} className={styles.sourceItem}>
                               <div className={styles.sourceHeader}>
+                                <span className={styles.sourceNumber}>{idx + 1}</span>
                                 {url ? (
                                   <a
                                     href={url}

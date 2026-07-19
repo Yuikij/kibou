@@ -19,6 +19,7 @@
 
 - 多轮对话(前端携带历史,后端查询重写)
 - 回答流式输出(SSE)
+- 行内引用角标 [1][2],点击直达对应原文
 - 参考来源展示,可点击跳转原文(blog/docs 路径自动转站内 URL)
 - 检索范围切换:全部 / 文档(docs)/ 博客(blog)
 - Markdown 渲染,深浅色主题自适应,移动端适配
@@ -47,13 +48,16 @@
 
 ```
 event: sources
-data: [{"filePath":"docs/database/MySQL/事务/隔离级别.md","fileName":"隔离级别.md","snippet":"...","score":0.82}]
+data: {"sources":[{"filePath":"docs/database/MySQL/事务/隔离级别.md","fileName":"隔离级别.md","snippet":"...","score":0.82}],"refMap":{"1":1,"2":1,"3":2}}
 
 data: {"delta":"MySQL"}
-data: {"delta":" 的隔离级别"}
+data: {"delta":" 的隔离级别 [1]"}
 ...
 data: [DONE]
 ```
+
+- `sources` 按文件去重,顺序即来源编号(1 起)。
+- 回答文本里的 `[n]` 是模型对检索材料(分块)的引用,`refMap` 把材料编号换算成来源编号;前端渲染成可点击的角标,点击直达原文。
 
 ## 配置
 
