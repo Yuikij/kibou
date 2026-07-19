@@ -1,25 +1,17 @@
 /**
  * 聊天助手配置
- * 
- * 在这里可以配置 RAG 聊天服务的各项参数
+ *
+ * RAG 后端与站点同源,由 Cloudflare Worker(worker/index.js)提供,
+ * 检索与生成托管在 Cloudflare AI Search(实例 kibou-rag)。
  */
 
 const chatConfig = {
-  // API 端点配置
-  // apiEndpoint: 'http://47.114.104.13:18082/api/v1/chat',
-  apiEndpoint: 'https://blog.yuisama.top:8000/api/v1/chat',
-  
-  // Docusaurus baseUrl（根据 docusaurus.config.js 中的 baseUrl 配置）
-  // 如果你的网站部署在根目录，设置为 '/'
-  // 如果部署在子路径（如 GitHub Pages），设置为对应的路径（如 '/kibou/'）
-  baseUrl: '/kibou/',
-  
-  // 默认过滤器（可选）
-  defaultFilters: {
-    filePathFilter: '',
-    fileExtensionFilter: '',
-  },
-  
+  // 同源 API 端点(SSE 流式)
+  apiEndpoint: '/api/chat',
+
+  // Docusaurus baseUrl(与 docusaurus.config.js 保持一致)
+  baseUrl: '/',
+
   // UI 配置
   ui: {
     // 浮动按钮位置
@@ -27,29 +19,28 @@ const chatConfig = {
       bottom: '30px',
       right: '30px',
     },
-    
+
     // 聊天窗口大小
     chatWindow: {
       width: '420px',
       height: '600px',
     },
-    
+
     // 是否默认展开
     defaultOpen: false,
   },
-  
+
   // 功能开关
   features: {
-    // 是否显示过滤器
+    // 是否显示检索范围切换
     showFilters: true,
-    
+
     // 是否显示来源信息
     showSources: true,
-    
-    // 是否显示元数据（搜索文档数、响应时间等）
+
+    // 是否显示元数据(检索文档数、响应时间等)
     showMetadata: true,
   },
 };
 
 export default chatConfig;
-

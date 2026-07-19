@@ -1,159 +1,79 @@
 # ChatAssistant 组件
 
-一个支持多轮 RAG（检索增强生成）对话的聊天助手组件。
+博客右下角的 RAG(检索增强生成)聊天助手。检索与生成由 **Cloudflare AI Search** 托管,后端是与站点同源的 Cloudflare Worker(`worker/index.js`),无需任何自建服务器。
+
+## 架构
+
+```
+浏览器聊天窗 ──POST /api/chat(SSE 流)──▶ kibou Worker(worker/index.js)
+                                              │
+                                              ▼
+                            Cloudflare AI Search 实例 kibou-rag
+                    (内置存储 + qwen3 embedding + 混合检索 + Workers AI 生成)
+```
+
+- 知识库内容:仓库的 `docs/` 与 `blog/` markdown,通过 `yarn sync-rag`(`scripts/sync-knowledge.mjs`)增量同步。
+- 多轮对话:无状态设计,前端每次把完整消息历史发给后端,由 AI Search 的 query rewrite 结合上下文改写检索词。
 
 ## 功能特性
 
-- ✨ 支持多轮对话，自动维护会话上下文
-- 🎨 响应式设计，适配移动端和桌面端
-- 🌓 自动适配浅色/深色主题
-- 📚 显示答案的参考来源和文档
-- 🔗 参考来源可点击跳转到原文（blog/docs）
-- 📝 Markdown 格式渲染（列表、粗体、代码等）
-- 🔍 支持文件路径和扩展名过滤
-- ⚡ 实时消息流式显示
-- 🎯 优雅的用户交互体验
+- 多轮对话(前端携带历史,后端查询重写)
+- 回答流式输出(SSE)
+- 参考来源展示,可点击跳转原文(blog/docs 路径自动转站内 URL)
+- 检索范围切换:全部 / 文档(docs)/ 博客(blog)
+- Markdown 渲染,深浅色主题自适应,移动端适配
 
-## 使用方法
+## API 协议
 
-### 基础使用
+### 请求
 
-组件已经通过 `src/theme/Root.js` 集成到全局，无需额外导入。
-
-### 自定义 API 端点
-
-如果需要自定义 API 端点，可以修改 `Root.js`:
-
-```jsx
-<ChatAssistant apiEndpoint="http://your-custom-endpoint:8080/api/v1/chat" />
-```
-
-### Props
-
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `apiEndpoint` | `string` | `http://127.0.0.1:8080/api/v1/chat` | RAG 服务的 API 端点 |
-
-## API 接口说明
-
-### 请求格式
+`POST /api/chat`
 
 ```json
 {
-  "question": "你的问题",
-  "sessionId": "session_abc123...",  // 可选，用于多轮对话
-  "filePathFilter": "/path/to/file.md",  // 可选，过滤特定文件
-  "fileExtensionFilter": "md"  // 可选，过滤特定扩展名
-}
-```
-
-### 响应格式
-
-```json
-{
-  "answer": "回答内容...",
-  "sessionId": "session_abc123...",
-  "sources": [
-    {
-      "filePath": "/path/to/document.md",
-      "fileName": "document.md",
-      "section": "Introduction",
-      "snippet": "This document describes..."
-    }
+  "messages": [
+    { "role": "user", "content": "博客里怎么讲 MySQL 隔离级别的?" },
+    { "role": "assistant", "content": "..." },
+    { "role": "user", "content": "默认是哪一种?" }
   ],
-  "metadata": {
-    "documentsSearched": 5,
-    "responseTimeMs": 1234
-  }
+  "scope": "docs"
 }
 ```
 
-## 功能说明
+- `messages`:必填,最后一条必须是 `user`;后端只保留最近 16 条,单条截断到 4000 字符。
+- `scope`:可选,`docs` 或 `blog`,按 folder 前缀过滤检索范围。
 
-### 多轮对话
+### 响应(SSE)
 
-组件会自动管理 `sessionId`，实现多轮对话功能：
+```
+event: sources
+data: [{"filePath":"docs/database/MySQL/事务/隔离级别.md","fileName":"隔离级别.md","snippet":"...","score":0.82}]
 
-1. 首次对话不传 `sessionId`，服务器会返回新的会话 ID
-2. 后续对话自动使用该会话 ID，保持上下文连贯
-3. 点击"清空对话"按钮可以重置会话
+data: {"delta":"MySQL"}
+data: {"delta":" 的隔离级别"}
+...
+data: [DONE]
+```
 
-### 过滤器
+## 配置
 
-点击头部的过滤器图标可以设置：
+`src/config/chatConfig.js`:
 
-- **文件路径过滤**：只在指定路径的文件中搜索
-- **文件扩展名过滤**：只搜索特定类型的文件（如 md, txt 等）
+| 配置 | 说明 |
+|------|------|
+| `apiEndpoint` | API 地址,默认同源 `/api/chat` |
+| `baseUrl` | 站点 baseUrl,用于把来源文件路径转成站内链接 |
+| `ui` / `features` | 浮窗位置、窗口大小、功能开关 |
 
-### 消息类型
+注意:`yarn start` 本地开发时没有 Worker,聊天接口会 404;可用 `yarn preview`(build + wrangler dev)完整联调。
 
-组件支持三种消息类型：
+## 知识库同步
 
-- **用户消息**：蓝紫色渐变背景，靠右显示
-- **助手消息**：浅灰色背景，靠左显示，包含来源信息
-- **错误消息**：红色背景，显示错误信息
+```bash
+# 需要 .dev.vars 里有 SYNC_SECRET(与 `wrangler secret put SYNC_SECRET` 一致)
+yarn sync-rag            # 增量同步 docs/ + blog/ 到 AI Search
+node scripts/sync-knowledge.mjs --dry-run   # 预览变更
+node scripts/sync-knowledge.mjs --full      # 强制全量重传
+```
 
-### 来源信息
-
-助手的回答会显示参考来源，包括：
-
-- **可点击的文件名**：自动识别 blog 和 docs 文章，点击跳转到原文
-- 章节信息
-- 相关文本片段
-- 完整文件路径
-- 搜索的文档数量和响应时间
-
-#### 支持的路径格式
-
-- `blog/YYYY-MM-DD-文章标题.mdx` → `/kibou/blog/文章标题`
-- `docs/路径/文件.md` → `/kibou/docs/路径/文件`
-- `documents/` 开头的路径：显示但不可点击（外部文档）
-
-## 样式定制
-
-组件使用 CSS Modules，样式文件位于 `styles.module.css`。
-
-主要的 CSS 变量：
-
-- 浮动按钮位置：`bottom: 30px; right: 30px;`
-- 聊天窗口大小：`width: 420px; height: 600px;`
-- 主题色：渐变色 `#667eea` 到 `#764ba2`
-
-可以通过修改这些变量来自定义样式。
-
-## 键盘快捷键
-
-- `Enter`：发送消息
-- `Shift + Enter`：换行
-
-## 浏览器兼容性
-
-- Chrome/Edge: ✅
-- Firefox: ✅
-- Safari: ✅
-- 移动浏览器: ✅
-
-## 注意事项
-
-1. 确保 RAG 服务已启动并可访问
-2. 检查 CORS 配置，确保前端可以访问后端 API
-3. 会话会在服务器端自动清理（默认 30 分钟无活动后）
-4. 组件使用 `fetch` API，需要现代浏览器支持
-
-## 开发调试
-
-在开发环境中，可以通过浏览器控制台查看：
-
-- API 请求和响应
-- 错误信息
-- 会话 ID
-
-## 未来改进
-
-- [ ] 支持流式响应
-- [ ] 添加消息编辑和重新生成功能
-- [ ] 导出对话历史
-- [ ] 语音输入支持
-- [ ] 代码块语法高亮
-- [ ] Markdown 渲染支持
-
+内容变更(新增/修改/删除文章)后跑一次即可,上传的文档几秒到几分钟内完成索引。

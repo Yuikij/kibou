@@ -1,31 +1,36 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import chatConfig from '@site/src/config/chatConfig';
 import styles from './styles.module.css';
 import avatar from '@site/static/img/avatar.jpg';
 
-const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) => {
+const SCOPES = [
+  { value: '', label: '全部' },
+  { value: 'docs', label: '文档' },
+  { value: 'blog', label: '博客' },
+];
+
+const ChatAssistant = ({ apiEndpoint = '/api/chat' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [filePathFilter, setFilePathFilter] = useState('');
-  const [fileExtensionFilter, setFileExtensionFilter] = useState('');
+  const [scope, setScope] = useState('');
   const [showNotification, setShowNotification] = useState(true);
   const [currentBubbleMessage, setCurrentBubbleMessage] = useState(0);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const abortRef = useRef(null);
 
   // 气泡消息列表
   const bubbleMessages = [
-    "Hi! 有什么可以帮你的吗？",
-    "需要帮助吗？",
-    "有啥想跟我聊聊？",
-    "来聊聊天吧~",
-    "有问题尽管问我！",
-    "我在这里等你哦~",
+    'Hi! 有什么可以帮你的吗？',
+    '可以问我博客里的内容哦',
+    '有啥想跟我聊聊？',
+    '来聊聊天吧~',
+    '有问题尽管问我！',
+    '我在这里等你哦~',
   ];
 
   const scrollToBottom = () => {
@@ -42,77 +47,144 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
     }
   }, [isOpen]);
 
-  const sendMessage = async () => {
+  // 组件卸载时中断进行中的请求
+  useEffect(() => () => abortRef.current?.abort(), []);
+
+  const sendMessage = useCallback(async () => {
     if (!inputValue.trim() || isLoading) return;
 
     const userMessage = {
       type: 'user',
-      content: inputValue,
+      content: inputValue.trim(),
       timestamp: new Date().toISOString(),
     };
+
+    // 发送给后端的历史:只保留正常的 user/assistant 消息
+    const history = [...messages, userMessage]
+      .filter((m) => m.type === 'user' || (m.type === 'assistant' && m.content))
+      .map((m) => ({ role: m.type, content: m.content }));
 
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
 
+    const startedAt = Date.now();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    // 占位的助手消息,流式填充
+    const assistantMessage = {
+      type: 'assistant',
+      content: '',
+      sources: [],
+      metadata: null,
+      timestamp: new Date().toISOString(),
+      streaming: true,
+    };
+    setMessages((prev) => [...prev, assistantMessage]);
+
+    const patchAssistant = (patch) => {
+      setMessages((prev) => {
+        const next = [...prev];
+        for (let i = next.length - 1; i >= 0; i--) {
+          if (next[i].type === 'assistant') {
+            next[i] = { ...next[i], ...(typeof patch === 'function' ? patch(next[i]) : patch) };
+            break;
+          }
+        }
+        return next;
+      });
+    };
+
     try {
-      const requestBody = {
-        question: inputValue,
-      };
-
-      // 添加 sessionId（如果存在）
-      if (sessionId) {
-        requestBody.sessionId = sessionId;
-      }
-
-      // 添加过滤器（如果有值）
-      if (filePathFilter.trim()) {
-        requestBody.filePathFilter = filePathFilter.trim();
-      }
-      if (fileExtensionFilter.trim()) {
-        requestBody.fileExtensionFilter = fileExtensionFilter.trim();
-      }
-
       const response = await fetch(apiEndpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history, ...(scope ? { scope } : {}) }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        let detail = `HTTP ${response.status}`;
+        try {
+          const err = await response.json();
+          if (err?.error) detail = err.error;
+        } catch {
+          // 忽略解析失败
+        }
+        throw new Error(detail);
       }
 
-      const data = await response.json();
+      // 解析 SSE 流
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
 
-      // 更新 sessionId
-      if (data.sessionId) {
-        setSessionId(data.sessionId);
-      }
-
-      const assistantMessage = {
-        type: 'assistant',
-        content: data.answer,
-        sources: data.sources || [],
-        metadata: data.metadata || {},
-        timestamp: new Date().toISOString(),
+      const handleEvent = (rawEvent) => {
+        let eventName = '';
+        let data = '';
+        for (const line of rawEvent.split('\n')) {
+          if (line.startsWith('event:')) eventName = line.slice(6).trim();
+          else if (line.startsWith('data:')) data += line.slice(5).trim();
+        }
+        if (!data || data === '[DONE]') return;
+        if (eventName === 'sources') {
+          try {
+            patchAssistant({ sources: JSON.parse(data) });
+          } catch {
+            // 忽略
+          }
+          return;
+        }
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.delta) {
+            patchAssistant((m) => ({ content: m.content + parsed.delta }));
+          }
+        } catch {
+          // 忽略
+        }
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const events = buffer.split('\n\n');
+        buffer = events.pop() ?? '';
+        events.forEach(handleEvent);
+      }
+      if (buffer.trim()) handleEvent(buffer);
+
+      patchAssistant((m) => ({
+        streaming: false,
+        content: m.content || '(没有生成回答,请换个问法试试)',
+        metadata: {
+          documentsSearched: m.sources?.length ?? 0,
+          responseTimeMs: Date.now() - startedAt,
+        },
+      }));
     } catch (error) {
+      if (error.name === 'AbortError') return;
       console.error('Error sending message:', error);
-      const errorMessage = {
-        type: 'error',
-        content: `发送消息时出错：${error.message}`,
-        timestamp: new Date().toISOString(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      // 移除空的占位消息,追加错误提示
+      setMessages((prev) => {
+        const next = prev.filter((m) => !(m.type === 'assistant' && m.streaming && !m.content));
+        return [
+          ...next,
+          {
+            type: 'error',
+            content: `发送消息时出错：${error.message}`,
+            timestamp: new Date().toISOString(),
+          },
+        ];
+      });
     } finally {
+      abortRef.current = null;
       setIsLoading(false);
     }
-  };
+  }, [apiEndpoint, inputValue, isLoading, messages, scope]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -122,10 +194,9 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
   };
 
   const clearChat = () => {
+    abortRef.current?.abort();
     setMessages([]);
-    setSessionId(null);
-    setFilePathFilter('');
-    setFileExtensionFilter('');
+    setIsLoading(false);
   };
 
   const toggleChat = () => {
@@ -137,12 +208,10 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
 
   // 自动切换气泡消息和隐藏通知
   useEffect(() => {
-    // 每5秒切换一次气泡消息
     const messageInterval = setInterval(() => {
       setCurrentBubbleMessage((prev) => (prev + 1) % bubbleMessages.length);
     }, 5000);
 
-    // 30秒后隐藏气泡通知
     const hideTimer = setTimeout(() => {
       setShowNotification(false);
     }, 30000);
@@ -158,41 +227,33 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
     return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
   };
 
-  // 将文件路径转换为 Docusaurus URL
+  // 将知识库文件路径(docs/xxx.md、blog/YYYY-MM-DD-xxx.md)转换为站内 URL
   const convertFilePathToUrl = (filePath) => {
     if (!filePath) return null;
 
     const baseUrl = chatConfig.baseUrl || '/';
-    // 确保 baseUrl 以 / 开头和结尾
     const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
 
-    // 处理 blog 文章
-    // blog/2025-03-17-两个人的话，去1912散步也是可以的.mdx -> /kibou/blog/2025/03/17/两个人的话，去1912散步也是可以的
     if (filePath.startsWith('blog/')) {
       const fileName = filePath.replace('blog/', '').replace(/\.(mdx?|md)$/, '');
-      // 提取日期前缀 (YYYY-MM-DD-) 并转换为 /YYYY/MM/DD/ 格式
       const dateMatch = fileName.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)$/);
       if (dateMatch) {
         const [, year, month, day, title] = dateMatch;
-        return `${normalizedBaseUrl}blog/${year}/${month}/${day}/${title}`;
+        return encodeURI(`${normalizedBaseUrl}blog/${year}/${month}/${day}/${title}`);
       }
-      // 如果没有日期前缀，直接使用文件名
-      return `${normalizedBaseUrl}blog/${fileName}`;
+      return encodeURI(`${normalizedBaseUrl}blog/${fileName}`);
     }
 
-    // 处理 docs 文档（支持多层嵌套）
-    // docs/intro.md -> /kibou/docs/intro
-    // docs/algorithm/index.mdx -> /kibou/docs/algorithm/
-    // docs/basicKnowledge/framework/Mybatis/缓存.md -> /kibou/docs/basicKnowledge/framework/Mybatis/缓存
     if (filePath.startsWith('docs/')) {
-      const docPath = filePath.replace('docs/', '').replace(/\.(mdx?|md)$/, '');
-      return `${normalizedBaseUrl}docs/${docPath}`;
-    }
-
-    // 处理 documents 目录（可能是外部文档）
-    if (filePath.startsWith('documents/')) {
-      // 这种情况可能没有对应的页面，返回 null
-      return null;
+      let docPath = filePath.replace('docs/', '').replace(/\.(mdx?|md)$/, '');
+      // index/README 以及与目录同名的文件是分类首页,链接到目录
+      const segments = docPath.split('/');
+      const last = segments[segments.length - 1];
+      const parent = segments.length > 1 ? segments[segments.length - 2] : null;
+      if (last === 'index' || last === 'README' || (parent && last === parent)) {
+        docPath = segments.slice(0, -1).join('/');
+      }
+      return encodeURI(`${normalizedBaseUrl}docs/${docPath}`);
     }
 
     return null;
@@ -204,7 +265,7 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
       <div className={styles.floatingButtonContainer}>
         {/* 消息气泡提示 */}
         {!isOpen && showNotification && (
-          <div 
+          <div
             className={styles.messageBubble}
             onClick={() => setShowNotification(false)}
           >
@@ -214,16 +275,16 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
             <div className={styles.bubbleArrow}></div>
           </div>
         )}
-        
+
         {/* 浮动按钮 - 使用头像 */}
         <button
           className={`${styles.floatingButton} ${isOpen ? styles.open : ''}`}
           onClick={toggleChat}
           aria-label="AI 智能助手"
         >
-          <img 
-            src={avatar} 
-            alt="AI Assistant" 
+          <img
+            src={avatar}
+            alt="AI Assistant"
             className={styles.avatarImage}
           />
           {/* 在线状态指示器和发光效果 */}
@@ -239,17 +300,15 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
           <div className={styles.chatHeader}>
             <div className={styles.headerLeft}>
               <h3 className={styles.chatTitle}>喵帕斯</h3>
-              {sessionId && (
-                <span className={styles.sessionIndicator} title={`会话ID: ${sessionId}`}>
-                  会话中
-                </span>
+              {messages.length > 0 && (
+                <span className={styles.sessionIndicator}>会话中</span>
               )}
             </div>
             <div className={styles.headerActions}>
               <button
                 className={styles.headerButton}
                 onClick={() => setShowFilters(!showFilters)}
-                title="过滤器"
+                title="检索范围"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
@@ -268,28 +327,22 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
             </div>
           </div>
 
-          {/* 过滤器面板 */}
+          {/* 检索范围面板 */}
           {showFilters && (
             <div className={styles.filterPanel}>
               <div className={styles.filterItem}>
-                <label className={styles.filterLabel}>文件路径:</label>
-                <input
-                  type="text"
-                  className={styles.filterInput}
-                  value={filePathFilter}
-                  onChange={(e) => setFilePathFilter(e.target.value)}
-                  placeholder="/path/to/file.md"
-                />
-              </div>
-              <div className={styles.filterItem}>
-                <label className={styles.filterLabel}>文件扩展名:</label>
-                <input
-                  type="text"
-                  className={styles.filterInput}
-                  value={fileExtensionFilter}
-                  onChange={(e) => setFileExtensionFilter(e.target.value)}
-                  placeholder="md"
-                />
+                <label className={styles.filterLabel}>检索范围:</label>
+                <div className={styles.scopeGroup}>
+                  {SCOPES.map((item) => (
+                    <button
+                      key={item.value}
+                      className={`${styles.scopeButton} ${scope === item.value ? styles.scopeButtonActive : ''}`}
+                      onClick={() => setScope(item.value)}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -302,7 +355,7 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
                 <p>开始对话吧！</p>
-                <span>支持多轮对话，我会记住上下文。</span>
+                <span>我会检索博客内容来回答,也支持多轮追问。</span>
               </div>
             ) : (
               messages.map((message, index) => (
@@ -313,7 +366,15 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
                   <div className={styles.messageContent}>
                     <div className={styles.messageText}>
                       {message.type === 'assistant' ? (
-                        <ReactMarkdown>{message.content}</ReactMarkdown>
+                        message.content ? (
+                          <ReactMarkdown>{message.content}</ReactMarkdown>
+                        ) : (
+                          <div className={styles.loadingDots}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                          </div>
+                        )
                       ) : (
                         message.content
                       )}
@@ -327,20 +388,20 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
                             <div key={idx} className={styles.sourceItem}>
                               <div className={styles.sourceHeader}>
                                 {url ? (
-                                  <a 
-                                    href={url} 
+                                  <a
+                                    href={url}
                                     className={styles.fileNameLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     title={`打开 ${source.fileName}`}
                                   >
                                     {source.fileName}
-                                    <svg 
-                                      width="12" 
-                                      height="12" 
-                                      viewBox="0 0 24 24" 
-                                      fill="none" 
-                                      stroke="currentColor" 
+                                    <svg
+                                      width="12"
+                                      height="12"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
                                       strokeWidth="2"
                                       style={{ marginLeft: '4px', verticalAlign: 'middle' }}
                                     >
@@ -351,9 +412,6 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
                                   </a>
                                 ) : (
                                   <span className={styles.fileName}>{source.fileName}</span>
-                                )}
-                                {source.section && (
-                                  <span className={styles.section}>{source.section}</span>
                                 )}
                               </div>
                               {source.snippet && (
@@ -371,7 +429,7 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
                     )}
                     {message.type === 'assistant' && message.metadata && (
                       <div className={styles.metadata}>
-                        搜索了 {message.metadata.documentsSearched} 个文档 · 
+                        检索到 {message.metadata.documentsSearched} 篇相关内容 ·
                         耗时 {message.metadata.responseTimeMs}ms
                       </div>
                     )}
@@ -381,17 +439,6 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
                   </div>
                 </div>
               ))
-            )}
-            {isLoading && (
-              <div className={`${styles.message} ${styles.assistant}`}>
-                <div className={styles.messageContent}>
-                  <div className={styles.loadingDots}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
-              </div>
             )}
             <div ref={messagesEndRef} />
           </div>
@@ -427,4 +474,3 @@ const ChatAssistant = ({ apiEndpoint = 'http://127.0.0.1:8080/api/v1/chat' }) =>
 };
 
 export default ChatAssistant;
-

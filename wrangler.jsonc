@@ -1,13 +1,23 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "kibou",
+  "main": "worker/index.js",
   "compatibility_date": "2026-05-14",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "build"
+    "directory": "build",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
   },
+  "ai_search_namespaces": [
+    {
+      "binding": "AI_SEARCH",
+      "namespace": "default",
+      "remote": true
+    }
+  ],
   "compatibility_flags": [
     "nodejs_compat"
   ]

@@ -59,26 +59,19 @@ export default function ChatDemo() {
               <div className={styles.step}>
                 <div className={styles.stepNumber}>1</div>
                 <div className={styles.stepContent}>
-                  <h3>启动后端服务</h3>
-                  <p>确保你的 RAG 服务正在运行</p>
-                  <pre className={styles.code}>
-                    {`# 默认端口 8080
-http://127.0.0.1:8080/api/v1/chat`}
-                  </pre>
-                </div>
-              </div>
-              <div className={styles.step}>
-                <div className={styles.stepNumber}>2</div>
-                <div className={styles.stepContent}>
                   <h3>点击浮动按钮</h3>
                   <p>在页面右下角找到聊天图标按钮</p>
                 </div>
               </div>
               <div className={styles.step}>
-                <div className={styles.stepNumber}>3</div>
+                <div className={styles.stepNumber}>2</div>
                 <div className={styles.stepContent}>
                   <h3>开始对话</h3>
-                  <p>输入你的问题，助手会从文档库中检索相关内容并回答</p>
+                  <p>输入你的问题，助手会从博客文档库中检索相关内容并流式回答</p>
+                  <pre className={styles.code}>
+                    {`检索与生成由 Cloudflare AI Search 托管
+接口: POST /api/chat (同源)`}
+                  </pre>
                 </div>
               </div>
             </div>
@@ -93,8 +86,8 @@ http://127.0.0.1:8080/api/v1/chat`}
                 再问"它的默认值是多少？"，助手能理解"它"指的是 chunk size。
               </div>
               <div className={styles.tip}>
-                <strong>使用过滤器：</strong>
-                点击头部的过滤器图标，可以限制搜索范围。比如只在特定目录或特定类型的文件中搜索。
+                <strong>切换检索范围：</strong>
+                点击头部的过滤器图标，可以把检索范围限定在「文档」或「博客」内。
               </div>
               <div className={styles.tip}>
                 <strong>查看来源：</strong>
@@ -144,11 +137,10 @@ http://127.0.0.1:8080/api/v1/chat`}
               可以在 <code>src/config/chatConfig.js</code> 中自定义配置：
             </p>
             <ul className={styles.configList}>
-              <li><strong>apiEndpoint:</strong> RAG 服务的 API 地址</li>
-              <li><strong>defaultFilters:</strong> 默认的过滤器设置</li>
+              <li><strong>apiEndpoint:</strong> RAG 服务的 API 地址（默认同源 /api/chat）</li>
               <li><strong>ui.position:</strong> 浮动按钮的位置</li>
               <li><strong>ui.chatWindow:</strong> 聊天窗口的大小</li>
-              <li><strong>features:</strong> 功能开关（过滤器、来源、元数据等）</li>
+              <li><strong>features:</strong> 功能开关（检索范围、来源、元数据等）</li>
             </ul>
           </section>
 

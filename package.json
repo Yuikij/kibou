@@ -7,7 +7,8 @@
     "start": "docusaurus start --host 0.0.0.0",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "yarn run build && wrangler deploy",
+    "deploy": "yarn run build && wrangler deploy && yarn run sync-rag",
+    "sync-rag": "node scripts/sync-knowledge.mjs",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
@@ -55,7 +56,7 @@
     "@babel/preset-react": "^7.22.15",
     "@docusaurus/module-type-aliases": "3.7",
     "@waline/client": "^3.5.1",
-    "wrangler": "^4.90.1"
+    "wrangler": "^4.112.0"
   },
   "browserslist": {
     "production": [

@@ -18,10 +18,10 @@ This is a personal blog and knowledge repository built with Docusaurus 3.7. The 
 - `yarn write-translations` - Generate translation files
 - `yarn write-heading-ids` - Generate heading IDs for documents
 
-### Deployment
-- `yarn deploy` - Deploy to GitHub Pages
-- `USE_SSH=true yarn deploy` - Deploy using SSH
-- `GIT_USER=<username> yarn deploy` - Deploy with specific GitHub user
+### Deployment (Cloudflare Workers)
+- `yarn deploy` - Build and deploy site + chat API to Cloudflare Workers (kibou Worker, serves yuisama.top), then sync the RAG knowledge base
+- `yarn preview` - Build and run locally with wrangler dev
+- `yarn sync-rag` - Incrementally sync docs/ + blog/ markdown into the Cloudflare AI Search knowledge base on its own (requires SYNC_SECRET in .dev.vars); already included in `yarn deploy`
 
 ## Architecture
 
@@ -45,6 +45,7 @@ Located in `src/components/`:
 - `SnakeGame/` - Game implementation
 - `Waline/` - Comment system integration
 - `MarkmapComponent.js` - Mind map rendering
+- `ChatAssistant/` - RAG chat widget (bottom-right); talks to same-origin `/api/chat` served by `worker/index.js`, backed by Cloudflare AI Search instance `kibou-rag` (see its README)
 
 ### Blog System
 Uses custom blog plugin (`plugins/blog-plugin.js`) that extends Docusaurus's default blog functionality to extract and process blog metadata and tags.

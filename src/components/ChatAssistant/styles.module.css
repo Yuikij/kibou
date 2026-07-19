@@ -449,6 +449,38 @@
   border-color: #667eea;
 }
 
+/* 检索范围切换 */
+.scopeGroup {
+  display: flex;
+  gap: 6px;
+}
+
+.scopeButton {
+  padding: 5px 14px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-color-emphasis-700);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scopeButton:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.scopeButtonActive {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.scopeButtonActive:hover {
+  color: white;
+}
+
 /* 消息容器 */
 .messagesContainer {
   flex: 1;
