@@ -249,6 +249,8 @@ async function handleAdmin(request, env, url) {
       // trigram 分词对中日文关键词检索友好
       indexing_options: { keyword_tokenizer: 'trigram' },
       cache: false,
+      // 记录源文件内容 md5,同步脚本据此做无状态增量比对
+      custom_metadata: [{ field_name: 'md5', data_type: 'text' }],
     };
     try {
       await env.AI_SEARCH.create({ id: INSTANCE_ID, ...config });
@@ -261,6 +263,7 @@ async function handleAdmin(request, env, url) {
           ai_search_model: config.ai_search_model,
           max_num_results: config.max_num_results,
           cache: config.cache,
+          custom_metadata: config.custom_metadata,
         });
         return Response.json({ updated: INSTANCE_ID, result: updated });
       }
@@ -268,14 +271,19 @@ async function handleAdmin(request, env, url) {
     }
   }
 
-  // 列出全部文档
+  // 列出全部文档(含内容 md5,供同步脚本增量比对)
   if (path === '/api/rag/items' && request.method === 'GET') {
     const items = [];
     let page = 1;
     for (;;) {
       const { result, result_info } = await instance(env).items.list({ page, per_page: 50 });
       for (const item of result) {
-        items.push({ id: item.id, key: item.key, status: item.status });
+        items.push({
+          id: item.id,
+          key: item.key,
+          status: item.status,
+          md5: item.metadata?.md5 ?? null,
+        });
       }
       if (items.length >= (result_info?.total_count ?? 0) || result.length === 0) break;
       page += 1;
@@ -283,14 +291,15 @@ async function handleAdmin(request, env, url) {
     return Response.json({ items });
   }
 
-  // 上传文档
+  // 上传文档(x-content-md5 头会存为 item metadata)
   if (path.startsWith('/api/rag/items/') && request.method === 'PUT') {
     const key = decodeURIComponent(path.slice('/api/rag/items/'.length));
     if (!key) return jsonError('缺少文档 key', 400);
     const content = await request.arrayBuffer();
     if (content.byteLength === 0) return jsonError('内容为空', 400);
     if (content.byteLength > 4 * 1024 * 1024) return jsonError('超过 4MB 限制', 413);
-    const result = await instance(env).items.upload(key, content);
+    const md5 = request.headers.get('x-content-md5');
+    const result = await instance(env).items.upload(key, content, md5 ? { metadata: { md5 } } : undefined);
     return Response.json({ uploaded: result });
   }
 

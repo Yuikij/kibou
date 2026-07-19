@@ -6,26 +6,27 @@
  * 通过已部署 Worker 的管理接口(/api/rag/*,Bearer SYNC_SECRET 鉴权)操作,
  * 上传后立即索引,无需等待定时任务。
  *
+ * 增量机制(无状态,本地和 CI 都可跑):上传时把文件内容 md5 存进
+ * item metadata,每次同步拉取远端列表比对 md5,只上传新增/变更文件,
+ * 删除仓库里已不存在的远端文档。
+ *
  * 用法: node scripts/sync-knowledge.mjs [--dry-run] [--full]
  *   --dry-run  只打印将要执行的操作
- *   --full     忽略本地 manifest,强制重新上传全部文件
+ *   --full     忽略 md5 比对,强制重新上传全部文件
  *
- * 配置(环境变量或 .dev.vars 文件):
- *   SYNC_SECRET     管理接口密钥(必需,与 wrangler secret 一致)
+ * 配置(环境变量,本地可写在 .dev.vars;CI 在 Workers Builds 的
+ * 构建环境变量里配置 SYNC_SECRET):
+ *   SYNC_SECRET     管理接口密钥(必需,与 Worker secret 一致)
  *   KIBOU_SYNC_URL  Worker 地址,默认 https://yuisama.top
- *
- * 增量机制:本地 manifest(.rag-sync-manifest.json,已 gitignore)记录每个
- * 文件的 md5,只上传新增/变更文件;远端多出的文档会被删除。
  */
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE_DIRS = ['docs', 'blog'];
 const EXTENSIONS = new Set(['.md', '.mdx']);
-const MANIFEST_PATH = path.join(ROOT, '.rag-sync-manifest.json');
 const CONCURRENCY = 6;
 
 const dryRun = process.argv.includes('--dry-run');
@@ -41,12 +42,12 @@ function readSecretFromDevVars() {
   return match ? match[1] : '';
 }
 
-async function api(method, apiPath, body, contentType = 'application/json') {
+async function api(method, apiPath, { body, headers } = {}) {
   const response = await fetch(`${BASE_URL}${apiPath}`, {
     method,
     headers: {
       authorization: `Bearer ${SECRET}`,
-      ...(body ? { 'content-type': contentType } : {}),
+      ...(headers ?? {}),
     },
     body: body ?? undefined,
   });
@@ -91,15 +92,6 @@ function collectLocalFiles() {
   return files;
 }
 
-function loadManifest() {
-  if (fullSync || !existsSync(MANIFEST_PATH)) return {};
-  try {
-    return JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
-  } catch {
-    return {};
-  }
-}
-
 async function runPool(tasks, concurrency) {
   const failures = [];
   let index = 0;
@@ -123,7 +115,7 @@ async function runPool(tasks, concurrency) {
 
 async function main() {
   if (!SECRET) {
-    console.error('缺少 SYNC_SECRET(设置环境变量,或写入 .dev.vars)');
+    console.error('缺少 SYNC_SECRET(本地写入 .dev.vars;CI 在 Workers Builds 构建环境变量里配置)');
     process.exit(1);
   }
 
@@ -135,7 +127,6 @@ async function main() {
   }
 
   const local = collectLocalFiles();
-  const manifest = loadManifest();
 
   console.log('拉取远端文档列表...');
   const { items: remoteItems } = await api('GET', '/api/rag/items');
@@ -143,7 +134,8 @@ async function main() {
 
   const toUpload = [];
   for (const [key, { absPath, hash }] of local) {
-    if (!remoteByKey.has(key) || manifest[key] !== hash) {
+    const remote = remoteByKey.get(key);
+    if (fullSync || !remote || remote.md5 !== hash) {
       toUpload.push({ key, absPath, hash });
     }
   }
@@ -160,31 +152,24 @@ async function main() {
     return;
   }
 
-  const newManifest = { ...manifest };
   const uploadTasks = toUpload.map(({ key, absPath, hash }) => ({
     label: `PUT ${key}`,
     run: async () => {
-      const content = readFileSync(absPath);
-      await api('PUT', `/api/rag/items/${encodeURIComponent(key)}`, content, 'text/markdown');
-      newManifest[key] = hash;
+      await api('PUT', `/api/rag/items/${encodeURIComponent(key)}`, {
+        body: readFileSync(absPath),
+        headers: { 'content-type': 'text/markdown', 'x-content-md5': hash },
+      });
     },
   }));
   const deleteTasks = toDelete.map((item) => ({
     label: `DELETE ${item.key}`,
     run: async () => {
       await api('DELETE', `/api/rag/items/${encodeURIComponent(item.id)}`);
-      delete newManifest[item.key];
     },
   }));
 
   console.log('开始同步...');
   const failures = await runPool([...uploadTasks, ...deleteTasks], CONCURRENCY);
-
-  for (const key of Object.keys(newManifest)) {
-    if (!local.has(key)) delete newManifest[key];
-  }
-  const sorted = Object.fromEntries(Object.entries(newManifest).sort(([a], [b]) => a.localeCompare(b)));
-  writeFileSync(MANIFEST_PATH, JSON.stringify(sorted, null, 2) + '\n');
 
   if (failures.length > 0) {
     console.error(`\n${failures.length} 个操作失败:`);

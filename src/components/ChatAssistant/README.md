@@ -70,10 +70,11 @@ data: [DONE]
 ## 知识库同步
 
 ```bash
-# 需要 .dev.vars 里有 SYNC_SECRET(与 `wrangler secret put SYNC_SECRET` 一致)
-yarn sync-rag            # 增量同步 docs/ + blog/ 到 AI Search
+yarn sync-rag            # 增量同步 docs/ + blog/ 到 AI Search(已包含在 yarn deploy 里)
 node scripts/sync-knowledge.mjs --dry-run   # 预览变更
 node scripts/sync-knowledge.mjs --full      # 强制全量重传
 ```
 
-内容变更(新增/修改/删除文章)后跑一次即可,上传的文档几秒到几分钟内完成索引。
+- 密钥:脚本读环境变量 `SYNC_SECRET`(本地放 `.dev.vars`;Workers Builds CI 里配置同名构建环境变量),值需与 Worker 的 secret 一致。
+- 增量机制是无状态的:上传时把文件内容 md5 写进 item metadata,每次同步拉远端列表比对 md5,只传新增/变更、删除仓库里已不存在的文档。本地、CI、任何机器跑效果一致。
+- 索引失败(status=error)的文档不会记录 md5,每次同步会自动重试。

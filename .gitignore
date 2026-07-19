@@ -25,6 +25,3 @@ yarn-error.log*
 .dev.vars*
 !.dev.vars.example
 !.env.example
-
-# RAG 知识库同步状态(本机增量记录)
-.rag-sync-manifest.json
