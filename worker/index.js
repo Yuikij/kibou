@@ -210,7 +210,7 @@ function translateStream() {
 /**
  * 由检索分块构造引用信息:
  * - sources:按来源文件去重(保持首次出现顺序,与回答中的引用编号对应),
- *   每个文件保留得分最高的片段;
+ *   每个文件保留得分最高的片段,链接带该片段所属小节的锚点;
  * - refMap:材料编号(分块在上下文中的顺序,1 起)→ 来源编号(1 起),
  *   前端用它把回答里的 [n] 换算成对应来源。
  */
@@ -222,14 +222,17 @@ function buildCitations(chunks) {
   chunks.forEach((chunk, i) => {
     const key = chunk?.item?.key;
     if (!key) return;
-    const snippet = (chunk.text ?? '').replace(/\s+/g, ' ').trim().slice(0, 160);
+    const text = chunk.text ?? '';
+    const snippet = text.replace(/\s+/g, ' ').trim().slice(0, 160);
     const score = chunk.score ?? 0;
+    const baseUrl = chunk?.item?.metadata?.url ?? null;
+    const url = withAnchor(baseUrl, text);
     let idx = indexByFile.get(key);
     if (!idx) {
       sources.push({
         filePath: key,
         fileName: key.split('/').pop(),
-        url: chunk?.item?.metadata?.url ?? null,
+        url,
         snippet,
         score,
       });
@@ -238,10 +241,33 @@ function buildCitations(chunks) {
     } else if (score > sources[idx - 1].score) {
       sources[idx - 1].score = score;
       sources[idx - 1].snippet = snippet;
+      sources[idx - 1].url = url;
     }
     refMap[i + 1] = idx;
   });
   return { sources, refMap };
+}
+
+/** 给页面 URL 追加分块所属小节的锚点(取分块内第一个 2-6 级标题) */
+function withAnchor(baseUrl, chunkText) {
+  if (!baseUrl) return null;
+  const heading = chunkText.match(/^\s{0,3}#{2,6}\s+(.+)$/m);
+  if (!heading) return baseUrl;
+  let title = heading[1].trim();
+  // 显式锚点语法 {#custom-id}
+  const explicit = title.match(/\{#([^}]+)\}\s*$/);
+  if (explicit) return `${baseUrl}#${encodeURIComponent(explicit[1])}`;
+  // 去掉行内 markdown 格式:链接、粗体/斜体、行内代码
+  title = title
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[*_`~]/g, '');
+  // 复刻 Docusaurus(github-slugger)规则:小写、去标点、空格转连字符
+  const slug = title
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .trim()
+    .replace(/\s+/g, '-');
+  return slug ? `${baseUrl}#${encodeURIComponent(slug)}` : baseUrl;
 }
 
 /* ---------------------------- 知识库管理 ---------------------------- */
