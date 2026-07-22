@@ -80,5 +80,7 @@ node scripts/sync-knowledge.mjs --full      # 强制全量重传
 ```
 
 - 密钥:脚本读环境变量 `SYNC_SECRET`(本地放 `.dev.vars`;Workers Builds CI 里配置同名构建环境变量),值需与 Worker 的 secret 一致。
-- 增量机制是无状态的:上传时把文件内容 md5 写进 item metadata,每次同步拉远端列表比对 md5,只传新增/变更、删除仓库里已不存在的文档。本地、CI、任何机器跑效果一致。
+- 增量机制是无状态的:上传时把内容 md5 写进 item metadata,每次同步拉远端列表比对 md5,只传新增/变更、删除仓库里已不存在的文档。本地、CI、任何机器跑效果一致。
+- 上传正文前会注入一行 `[文档信息] 标题: … | 日期: … | 位置: …`(从 frontmatter/文件名推导):标题和日期常常只在文件名里,不注入则"哪天去了1912"这类问题检索不到也答不出。系统提示词教会了模型使用这一行。
+- 每篇文档的真实 permalink(来自 `.docusaurus` 构建元数据)也存进 item metadata,来源链接以它为准。
 - 索引失败(status=error)的文档不会记录 md5,每次同步会自动重试。

@@ -249,6 +249,7 @@ const config = {
                             // ... more items
                         ],
                     },
+                    {to: '/chat', label: 'AI问答', position: 'right'},
                     {to: '/about', label: '关于', position: 'right'},
                     {
                         type: 'search',

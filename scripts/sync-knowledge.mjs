@@ -6,9 +6,14 @@
  * 通过已部署 Worker 的管理接口(/api/rag/*,Bearer SYNC_SECRET 鉴权)操作,
  * 上传后立即索引,无需等待定时任务。
  *
- * 增量机制(无状态,本地和 CI 都可跑):上传时把文件内容 md5 存进
+ * 增量机制(无状态,本地和 CI 都可跑):上传时把内容 md5 存进
  * item metadata,每次同步拉取远端列表比对 md5,只上传新增/变更文件,
  * 删除仓库里已不存在的远端文档。
+ *
+ * 上传的正文会注入一行元数据头(标题/日期/位置):标题和日期往往只存在
+ * 于文件名或 frontmatter,不注入的话检索不到("哪天去了1912"这类问题)。
+ * 元数据全部从文件自身推导(不依赖构建产物和 mtime),md5 对注入后的
+ * 内容计算,因此头部格式变更也会自动触发重传。
  *
  * 用法: node scripts/sync-knowledge.mjs [--dry-run] [--full]
  *   --dry-run  只打印将要执行的操作
@@ -71,25 +76,99 @@ function walk(dir) {
   return results;
 }
 
+/** 提取 frontmatter 里的某个字段(简单单行值) */
+function frontmatterField(content, field) {
+  const fm = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!fm) return null;
+  const line = fm[1].match(new RegExp(`^${field}\\s*:\\s*(.+)$`, 'm'));
+  if (!line) return null;
+  return line[1].trim().replace(/^["']|["']$/g, '') || null;
+}
+
+function extractTitle(key, content) {
+  const fmTitle = frontmatterField(content, 'title');
+  if (fmTitle) return fmTitle;
+  const heading = content.match(/^#\s+(.+)$/m);
+  if (heading) return heading[1].trim();
+  const base = key.split('/').pop().replace(/\.(mdx?|md)$/, '');
+  return base.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+}
+
+function extractDate(key, content) {
+  const base = key.split('/').pop();
+  const fromName = base.match(/^(\d{4}-\d{2}-\d{2})-/);
+  if (fromName) return fromName[1];
+  const fmDate = frontmatterField(content, 'date');
+  if (fmDate) return fmDate.slice(0, 10);
+  return null;
+}
+
+/** 注入到正文前的元数据头:让标题/日期/所属栏目参与检索与问答 */
+function buildHeader(key, content) {
+  const parts = [`标题: ${extractTitle(key, content)}`];
+  const date = extractDate(key, content);
+  if (date) parts.push(`日期: ${date}`);
+  parts.push(`位置: ${key.split('/').slice(0, -1).join('/')}`);
+  return `[文档信息] ${parts.join(' | ')}\n\n`;
+}
+
 function collectLocalFiles() {
-  const files = new Map(); // key(POSIX 风格相对路径) -> { absPath, hash }
+  const files = new Map(); // key(POSIX 风格相对路径) -> { body, hash }
   let skippedEmpty = 0;
   for (const dir of SOURCE_DIRS) {
     const abs = path.join(ROOT, dir);
     if (!existsSync(abs)) continue;
     for (const file of walk(abs)) {
-      const content = readFileSync(file);
-      if (content.toString('utf8').trim().length === 0) {
+      const content = readFileSync(file, 'utf8');
+      if (content.trim().length === 0) {
         skippedEmpty += 1;
         continue;
       }
       const key = path.relative(ROOT, file).split(path.sep).join('/');
-      const hash = createHash('md5').update(content).digest('hex');
-      files.set(key, { absPath: file, hash });
+      const body = buildHeader(key, content) + content;
+      const hash = createHash('md5').update(body).digest('hex');
+      files.set(key, { body, hash });
     }
   }
   if (skippedEmpty > 0) console.log(`跳过 ${skippedEmpty} 个空文件`);
   return files;
+}
+
+/**
+ * 从 .docusaurus 构建产物里读取「源文件 → 站点真实 permalink」映射。
+ * Docusaurus 会剥离目录/文件名的数字前缀、应用 frontmatter slug 等规则,
+ * 自己拼 URL 会 404,以构建元数据为准。
+ */
+function loadRouteMap() {
+  const map = new Map();
+  const docsDir = path.join(ROOT, '.docusaurus', 'docusaurus-plugin-content-docs', 'default');
+  if (existsSync(docsDir)) {
+    for (const name of readdirSync(docsDir)) {
+      if (!name.startsWith('site-docs-') || !name.endsWith('.json')) continue;
+      try {
+        const meta = JSON.parse(readFileSync(path.join(docsDir, name), 'utf8'));
+        if (meta.source?.startsWith('@site/') && meta.permalink) {
+          map.set(meta.source.slice('@site/'.length), meta.permalink);
+        }
+      } catch {
+        // 忽略解析失败的文件
+      }
+    }
+  }
+  const blogMeta = path.join(ROOT, '.docusaurus', 'docusaurus-plugin-content-blog', 'default', 'blog-posts-metadata.json');
+  if (existsSync(blogMeta)) {
+    try {
+      for (const post of JSON.parse(readFileSync(blogMeta, 'utf8'))) {
+        const meta = post.metadata ?? post;
+        if (meta.source?.startsWith('@site/') && meta.permalink) {
+          map.set(meta.source.slice('@site/'.length), meta.permalink);
+        }
+      }
+    } catch {
+      // 忽略
+    }
+  }
+  return map;
 }
 
 async function runPool(tasks, concurrency) {
@@ -127,16 +206,24 @@ async function main() {
   }
 
   const local = collectLocalFiles();
+  const routeMap = loadRouteMap();
+  if (routeMap.size === 0) {
+    console.warn('警告: 没有找到 .docusaurus 构建元数据(先跑 yarn build),本次同步不更新来源链接。');
+  } else {
+    console.log(`已加载 ${routeMap.size} 条 permalink 映射`);
+  }
 
   console.log('拉取远端文档列表...');
   const { items: remoteItems } = await api('GET', '/api/rag/items');
   const remoteByKey = new Map(remoteItems.map((item) => [item.key, item]));
 
   const toUpload = [];
-  for (const [key, { absPath, hash }] of local) {
+  for (const [key, { body, hash }] of local) {
     const remote = remoteByKey.get(key);
-    if (fullSync || !remote || remote.md5 !== hash) {
-      toUpload.push({ key, absPath, hash });
+    const url = routeMap.get(key) ?? null;
+    const urlOutdated = url !== null && remote?.url !== url;
+    if (fullSync || !remote || remote.md5 !== hash || urlOutdated) {
+      toUpload.push({ key, body, hash, url });
     }
   }
   const toDelete = remoteItems.filter((item) => !local.has(item.key));
@@ -152,11 +239,12 @@ async function main() {
     return;
   }
 
-  const uploadTasks = toUpload.map(({ key, absPath, hash }) => ({
+  const uploadTasks = toUpload.map(({ key, body, hash, url }) => ({
     label: `PUT ${key}`,
     run: async () => {
-      await api('PUT', `/api/rag/items/${encodeURIComponent(key)}`, {
-        body: readFileSync(absPath),
+      const query = url ? `?url=${encodeURIComponent(url)}` : '';
+      await api('PUT', `/api/rag/items/${encodeURIComponent(key)}${query}`, {
+        body,
         headers: { 'content-type': 'text/markdown', 'x-content-md5': hash },
       });
     },
